@@ -6,6 +6,10 @@ variable "api_url" {
 
 variable "paas_app_route_name" {}
 
+variable "paas_app_api_route_name" {
+  default = "monitor-my-satellites-api"
+}
+
 variable "paas_app_fe_name" {
   default = "monitor-my-satellites-fe"
 }
@@ -59,7 +63,7 @@ variable "paas_app_api_build_artefact" {
 }
 
 variable "paas_app_api_command" {
-  default = "node main.js"
+  default = "node dist/apps/api/node.js"
 }
 
 variable "paas_db_name" {
@@ -75,7 +79,7 @@ variable "paas_db_plan" {
 }
 
 variable "paas_s3_name" {
-  default = "monitor-my-statellites-s3"
+  default = "monitor-my-satellites-s3"
 }
 
 variable "paas_s3_service" {

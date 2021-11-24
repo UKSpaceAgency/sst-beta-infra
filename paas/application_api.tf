@@ -9,7 +9,7 @@ resource "cloudfoundry_app" "api" {
   command    = var.paas_app_api_command
 
   routes {
-    route = cloudfoundry_route.app_route_internal.id
+    route = cloudfoundry_route.api_route_internal.id
   }
 
   service_binding {

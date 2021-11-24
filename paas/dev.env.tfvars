@@ -1,10 +1,2 @@
-paas_app_fe_name          = "monitor-my-satellites-fe-dev"
-paas_app_fe_instances     = 1
-paas_app_api_name         = "monitor-my-satellites-api-dev"
-paas_app_api_instances    = 1
-paas_app_api_timeout      = 300
-paas_app_route_name       = "monitor-my-satellites-dev"
-paas_db_name              = "monitor-my-satellites-db-dev"
-paas_db_service           = "postgres"
-paas_db_plan              = "tiny-unencrypted-13-high-iops"
-paas_space                = "monitor-my-satellites-dev"
+paas_app_route_name       = "monitor-my-satellites-stage"
+paas_space                = "monitor-my-satellites-stage"
