@@ -34,6 +34,10 @@ variable "paas_app_fe_build_artefact" {
   default = "https://github.com/UKSpaceAgency/sst-beta/releases/download/latest/sst.zip"
 }
 
+variable "paas_app_fe_proxy_conf" {
+  default = "nginx/conf/includes/proxy.conf"
+}
+
 variable "paas_app_api_name" {
   default = "monitor-my-satellites-api"
 }
@@ -63,7 +67,7 @@ variable "paas_app_api_build_artefact" {
 }
 
 variable "paas_app_api_command" {
-  default = "node dist/apps/api/node.js"
+  default = "node dist/apps/api/main.js"
 }
 
 variable "paas_db_name" {

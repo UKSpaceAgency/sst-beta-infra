@@ -1,4 +1,13 @@
 resource "cloudfoundry_app" "api" {
+
+  provisioner "local-exec" {
+    command = "./download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_api_asset} ./${var.github_fe_api_asset}"
+
+    environment = {
+      GIT_TOKEN = var.github_token
+    }
+  }
+
   name       = var.paas_app_api_name
   space      = data.cloudfoundry_space.space.id
   memory     = var.paas_app_api_memory

@@ -1,2 +1,7 @@
+paas_app_fe_name          = "monitor-my-satellites-fe-stage"
+paas_app_api_name         = "monitor-my-satellites-api-stage"
 paas_app_route_name       = "monitor-my-satellites-stage"
+paas_app_api_route_name   = "monitor-my-satellites-api-stage"
+paas_db_name              = "monitor-my-satellites-db-stage"
+paas_s3_name              = "monitor-my-satellites-s3-stage"
 paas_space                = "monitor-my-satellites-stage"
