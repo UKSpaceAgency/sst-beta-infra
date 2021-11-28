@@ -10,6 +10,10 @@ variable "paas_app_api_route_name" {
   default = "monitor-my-satellites-api"
 }
 
+variable "paas_app_be_route_name" {
+  default = "monitor-my-satellites-be"
+}
+
 variable "paas_app_fe_name" {
   default = "monitor-my-satellites-fe"
 }
@@ -70,6 +74,38 @@ variable "paas_app_api_command" {
   default = "node dist/apps/api/main.js"
 }
 
+variable "paas_app_be_name" {
+  default = "monitor-my-satellites-be"
+}
+
+variable "paas_app_be_memory" {
+  default = 1024
+}
+
+variable "pass_app_be_disk_quota" {
+  default = 2048
+}
+
+variable "paas_app_be_instances" {
+  default = 1
+}
+
+variable "paas_app_be_timeout" {
+  default = 300
+}
+
+variable "paas_app_be_buildpack" {
+  default = "python_buildpack"
+}
+
+variable "paas_app_be_build_artefact" {
+  default = "https://github.com/the-psc/sst-beta-python-backend/releases/download/latest/be.zip"
+}
+
+variable "paas_app_be_command" {
+  default = "uvicorn app.main:app --port 8080 --host 0.0.0.0"
+}
+
 variable "paas_db_name" {
   default = "monitor-my-satellites-db"
 }
@@ -105,7 +141,7 @@ variable "paas_password" {
 variable "paas_username" {}
 
 variable "github_token" {
-  sensitive = true
+  //sensitive = true
 }
 
 variable "github_owner" {
@@ -114,6 +150,14 @@ variable "github_owner" {
 
 variable "github_fe_repo" {
   default = "sst-beta"
+}
+
+variable "github_thepsc" {
+  default = "the-psc"
+}
+
+variable "github_be_repo" {
+  default = "sst-beta-python-backend"
 }
 
 variable "github_release_tag" {
@@ -126,4 +170,8 @@ variable "github_fe_api_asset" {
 
 variable "github_fe_sst_asset" {
   default = "sst.zip"
+}
+
+variable "github_be_asset" {
+  default = "be.zip"
 }
