@@ -34,10 +34,6 @@ variable "paas_app_fe_buildpack" {
   default = "staticfile_buildpack"
 }
 
-variable "paas_app_fe_build_artefact" {
-  default = "https://github.com/UKSpaceAgency/sst-beta/releases/download/latest/sst.zip"
-}
-
 variable "paas_app_fe_proxy_conf" {
   default = "nginx/conf/includes/proxy.conf"
 }
@@ -66,10 +62,6 @@ variable "paas_app_api_buildpack" {
   default = "nodejs_buildpack"
 }
 
-variable "paas_app_api_build_artefact" {
-  default = "https://github.com/UKSpaceAgency/sst-beta/releases/download/latest/api.zip"
-}
-
 variable "paas_app_api_command" {
   default = "node dist/apps/api/main.js"
 }
@@ -96,10 +88,6 @@ variable "paas_app_be_timeout" {
 
 variable "paas_app_be_buildpack" {
   default = "python_buildpack"
-}
-
-variable "paas_app_be_build_artefact" {
-  default = "https://github.com/the-psc/sst-beta-python-backend/releases/download/latest/be.zip"
 }
 
 variable "paas_app_be_command" {
@@ -141,7 +129,7 @@ variable "paas_password" {
 variable "paas_username" {}
 
 variable "github_token" {
-  //sensitive = true
+  sensitive = true
 }
 
 variable "github_owner" {
