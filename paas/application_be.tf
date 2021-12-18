@@ -1,17 +1,6 @@
 resource "cloudfoundry_app" "be" {
 
-  provisioner "local-exec" {
-    command = "./download-private-release.sh ${var.github_thepsc} ${var.github_be_repo} ${var.github_release_tag} ${var.github_be_asset} ./${var.github_be_asset}"
-
-    environment = {
-      GIT_TOKEN = var.github_token
-    }
-  }
-
-  provisioner "local-exec" {
-    command = "echo ./download-private-release.sh ${var.github_thepsc} ${var.github_be_repo} ${var.github_release_tag} ${var.github_be_asset} ./${var.github_be_asset}"
-  }
-
+  depends_on = [null_resource.be_build_assets]
   name       = var.paas_app_be_name
   space      = data.cloudfoundry_space.space.id
   buildpack  = var.paas_app_be_buildpack
@@ -21,6 +10,11 @@ resource "cloudfoundry_app" "be" {
   instances  = var.paas_app_be_instances
   path       = var.github_be_asset
   command    = var.paas_app_be_command
+
+  environment = {
+    SPACE_TRACK_IDENTITY = var.spacetrack_username
+    SPACE_TRACK_PASSWORD = var.spacetrack_password
+  }
 
   routes {
     route = cloudfoundry_route.app_be_internal.id
@@ -32,5 +26,9 @@ resource "cloudfoundry_app" "be" {
 
   service_binding {
     service_instance = cloudfoundry_service_instance.aws_s3_bucket.id
+  }
+
+  service_binding {
+    service_instance = cloudfoundry_user_provided_service.logit.id
   }
 }

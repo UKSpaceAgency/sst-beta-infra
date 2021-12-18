@@ -43,7 +43,7 @@ variable "paas_app_api_name" {
 }
 
 variable "paas_app_api_memory" {
-  default = 1024
+  default = 2048
 }
 
 variable "pass_app_api_disk_quota" {
@@ -71,7 +71,7 @@ variable "paas_app_be_name" {
 }
 
 variable "paas_app_be_memory" {
-  default = 1024
+  default = 2048
 }
 
 variable "pass_app_be_disk_quota" {
@@ -91,7 +91,7 @@ variable "paas_app_be_buildpack" {
 }
 
 variable "paas_app_be_command" {
-  default = "uvicorn app.main:app --port 8080 --host 0.0.0.0"
+  default = "uvicorn app.main:app --port 8080 --host 0.0.0.0 --workers 4"
 }
 
 variable "paas_db_name" {
@@ -103,7 +103,7 @@ variable "paas_db_service" {
 }
 
 variable "paas_db_plan" {
-  default = "tiny-unencrypted-13-high-iops"
+  default = "small-13"
 }
 
 variable "paas_s3_name" {
@@ -162,4 +162,17 @@ variable "github_fe_sst_asset" {
 
 variable "github_be_asset" {
   default = "be.zip"
+}
+
+variable "logit_service_name" {
+  default = "logit-ssl-drain"
+}
+
+variable "logit_endpoint" {
+}
+
+variable "spacetrack_username" {
+}
+
+variable "spacetrack_password" {
 }
