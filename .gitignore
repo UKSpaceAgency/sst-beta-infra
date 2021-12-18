@@ -3,6 +3,7 @@
 nginx/
 .terraform.lock.hcl
 api.zip
+be.zip
 sst.zip
 credentials.tfvars
 dev.backend.conf
