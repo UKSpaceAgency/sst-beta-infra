@@ -1,4 +1,9 @@
 resource "null_resource" "fe_build_assets" {
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
   provisioner "local-exec" {
     command = "./download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_sst_asset} ./${var.github_fe_sst_asset}"
 
@@ -17,6 +22,11 @@ resource "null_resource" "fe_build_assets" {
 }
 
 resource "null_resource" "api_build_assets" {
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
   provisioner "local-exec" {
     command = "./download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_api_asset} ./${var.github_fe_api_asset}"
 
@@ -27,6 +37,11 @@ resource "null_resource" "api_build_assets" {
 }
 
 resource "null_resource" "be_build_assets" {
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
   provisioner "local-exec" {
     command = "./download-private-release.sh ${var.github_thepsc} ${var.github_be_repo} ${var.github_release_tag} ${var.github_be_asset} ./${var.github_be_asset}"
 
