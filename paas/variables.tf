@@ -94,6 +94,14 @@ variable "paas_app_be_command" {
   default = "uvicorn app.main:app --port 8080 --host 0.0.0.0 --workers 4"
 }
 
+variable "paas_app_db_migration_name" {
+  default = "monitor-my-satellites-db-migration"
+}
+
+variable "paas_app_db_migration_command" {
+  default = "alembic upgrade head"
+}
+
 variable "paas_db_name" {
   default = "monitor-my-satellites-db"
 }
