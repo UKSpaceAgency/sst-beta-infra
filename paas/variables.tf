@@ -99,7 +99,7 @@ variable "paas_app_db_migration_name" {
 }
 
 variable "paas_app_db_migration_command" {
-  default = "alembic upgrade head"
+  default = "(alembic upgrade head && echo SUCCESS || echo FAIL) && sleep infinity"
 }
 
 variable "paas_db_name" {
