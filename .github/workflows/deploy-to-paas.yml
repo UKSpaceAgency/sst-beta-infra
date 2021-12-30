@@ -36,6 +36,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Display dir structure
+        run: ls -R
+
       - name: Terraform Init
         run: |
           terraform init \
