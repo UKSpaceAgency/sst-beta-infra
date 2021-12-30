@@ -14,6 +14,20 @@ on:
 jobs:
   say_hello:
     runs-on: ubuntu-latest
+
     steps:
       - run: |
           echo "Calling ${{ github.event.inputs.env }} from ${{ github.event.inputs.invoker }}!"
+
+  deploy:
+    name: Deploy to Gov.UK PaaS
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: hashicorp/setup-terraform@v1
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform Init
+        run: terraform init
