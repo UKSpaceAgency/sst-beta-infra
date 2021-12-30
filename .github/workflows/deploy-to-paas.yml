@@ -46,9 +46,6 @@ jobs:
             -backend-config="access_key=${{ secrets.s3_backend_access_key }}" \
             -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
 
-      - name: Display dir structure
-        run: ls -alhR .
-
       - name: Terraform Plan
         run: |
           terraform plan \
