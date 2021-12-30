@@ -12,7 +12,7 @@ on:
         default: 'dev'
 
 jobs:
-  say_hello:
+  called_with_by:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,8 @@ jobs:
   deploy:
     name: Deploy to Gov.UK PaaS
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.env }}
 
     steps:
       - uses: hashicorp/setup-terraform@v1
@@ -30,4 +32,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          terraform init
+            -reconfigure
+            -backend-config="key=${{ secrets.s3_backend_key }}"
