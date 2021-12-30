@@ -26,18 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.env }}
-    #defaults:
-    #  run:
-    #    working-directory: ./paas
+    defaults:
+      run:
+        working-directory: ./paas
 
     steps:
       - uses: hashicorp/setup-terraform@v1
 
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Display dir structure
-        run: ls -R
 
       - name: Terraform Init
         run: |
@@ -50,7 +47,7 @@ jobs:
             -backend-config="secret_key=${{ secrets.s3_secret_key }}"
 
       - name: Display dir structure
-        run: ls -R
+        run: ls -alhR .
 
       - name: Terraform Plan
         run: |
