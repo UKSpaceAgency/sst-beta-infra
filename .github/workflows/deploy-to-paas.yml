@@ -12,8 +12,51 @@ on:
         default: 'dev'
 
 jobs:
-  say_hello:
+  called_with_by:
+    name: Who's calling?
     runs-on: ubuntu-latest
+
     steps:
       - run: |
           echo "Calling ${{ github.event.inputs.env }} from ${{ github.event.inputs.invoker }}!"
+
+  deploy:
+    needs: called_with_by
+    name: Deploy to Gov.UK PaaS
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.env }}
+    defaults:
+      run:
+        working-directory: ./paas
+
+    steps:
+      - uses: hashicorp/setup-terraform@v1
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -reconfigure \
+            -backend-config="key=${{ secrets.s3_backend_key }}" \
+            -backend-config="region=${{ secrets.s3_backend_region }}" \
+            -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
+            -backend-config="access_key=${{ secrets.s3_backend_access_key }}" \
+            -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
+
+      - name: Terraform Apply Front-End
+        if: ${{ github.event.inputs.invoker }} == 'front-end'
+        run: |
+          terraform apply \
+            -replace=cloudfoundry_app.fe \
+            -replace=cloudfoundry_app.api \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}"
