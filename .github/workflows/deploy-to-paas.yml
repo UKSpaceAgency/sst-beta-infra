@@ -47,7 +47,7 @@ jobs:
             -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
 
       - name: Terraform Apply Front-End
-        if: ${{ github.event.inputs.invoker }} == 'front-end'
+        if: ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
             -replace=cloudfoundry_app.fe \
@@ -62,7 +62,7 @@ jobs:
             -var="spacetrack_password=${{ secrets.spacetrack_password }}"
 
       - name: Terraform Apply Back-End
-        if: ${{ github.event.inputs.invoker }} == 'back-end'
+        if: ${{ github.event.inputs.invoker == 'back-end' }}
         run: |
           terraform apply \
             -replace=cloudfoundry_app.be \
