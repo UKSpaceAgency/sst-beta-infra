@@ -13,6 +13,7 @@ on:
 
 jobs:
   called_with_by:
+    name: Called by who? And with what?
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +21,7 @@ jobs:
           echo "Calling ${{ github.event.inputs.env }} from ${{ github.event.inputs.invoker }}!"
 
   deploy:
+    needs: called_with_by
     name: Deploy to Gov.UK PaaS
     runs-on: ubuntu-latest
     environment:
@@ -34,4 +36,8 @@ jobs:
       - name: Terraform Init
         run: |
           terraform init \
-            -backend-config="key=${{ secrets.s3_backend_key }}"
+            -backend-config="key=${{ secrets.s3_backend_key }}" \
+            -backend-config="region=${{ secrets.s3_backend_region }}" \
+            -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
+            -backend-config="access_key=${{ secrets.s3_access_key }}" \
+            -backend-config="secret_key=${{ secrets.s3_secret_key }}"
