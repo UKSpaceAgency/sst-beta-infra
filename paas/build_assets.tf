@@ -5,7 +5,7 @@ resource "null_resource" "fe_build_assets" {
   }
 
   provisioner "local-exec" {
-    command = "./download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_sst_asset} ./${var.github_fe_sst_asset}"
+    command = "./download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_app_asset} ./${var.github_fe_app_asset}"
 
     environment = {
       GIT_TOKEN = var.github_token
@@ -17,7 +17,7 @@ resource "null_resource" "fe_build_assets" {
   }
 
   provisioner "local-exec" {
-    command = "zip ${var.github_fe_sst_asset} ${var.paas_app_fe_proxy_conf}"
+    command = "zip ${var.github_fe_app_asset} ${var.paas_app_fe_proxy_conf}"
   }
 }
 

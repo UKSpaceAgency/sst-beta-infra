@@ -164,8 +164,8 @@ variable "github_fe_api_asset" {
   default = "api.zip"
 }
 
-variable "github_fe_sst_asset" {
-  default = "sst.zip"
+variable "github_fe_app_asset" {
+  default = "app.zip"
 }
 
 variable "github_be_asset" {
