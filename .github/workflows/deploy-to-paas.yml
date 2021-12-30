@@ -13,7 +13,7 @@ on:
 
 jobs:
   called_with_by:
-    name: Called by who? And with what?
+    name: Who's calling?
     runs-on: ubuntu-latest
 
     steps:
@@ -41,3 +41,14 @@ jobs:
             -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
             -backend-config="access_key=${{ secrets.s3_access_key }}" \
             -backend-config="secret_key=${{ secrets.s3_secret_key }}"
+
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}
