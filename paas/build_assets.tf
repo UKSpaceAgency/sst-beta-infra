@@ -13,7 +13,7 @@ resource "null_resource" "fe_build_assets" {
   }
 
   provisioner "local-exec" {
-    command =  "echo 'location /api { proxy_http_version 1.1; proxy_set_header Connection \"\"; proxy_pass http://${var.paas_app_api_route_name}.apps.internal:8080/graphql/; }' > ${var.paas_app_fe_proxy_conf}"
+    command =  "echo 'location /api { proxy_http_version 1.1; proxy_set_header Connection \"\"; proxy_pass http://${var.paas_app_api_route_name}.apps.internal:8080/graphql/; }' > ./paas/${var.paas_app_fe_proxy_conf}"
   }
 
   provisioner "local-exec" {
