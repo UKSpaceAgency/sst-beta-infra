@@ -46,18 +46,7 @@ jobs:
             -backend-config="access_key=${{ secrets.s3_backend_access_key }}" \
             -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
 
-      - name: Terraform Plan
-        run: |
-          terraform plan \
-            -var-file="${{ secrets.env_tfvars }}" \
-            -var="paas_username=${{ secrets.paas_username }}" \
-            -var="paas_password=${{ secrets.paas_password }}" \
-            -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
-            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
-            -var="spacetrack_password=${{ secrets.spacetrack_password }}"
-
-      - name: Terraform Apply - if front-end
+      - name: Terraform Apply Front-End
         if: ${{ github.event.inputs.invoker }} == 'front-end'
         run: |
           terraform apply \
