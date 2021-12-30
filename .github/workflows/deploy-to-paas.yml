@@ -26,9 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.env }}
-    defaults:
-      run:
-        working-directory: ./paas
+    #defaults:
+    #  run:
+    #    working-directory: ./paas
 
     steps:
       - uses: hashicorp/setup-terraform@v1
