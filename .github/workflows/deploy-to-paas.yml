@@ -47,11 +47,38 @@ jobs:
             -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
 
       - name: Terraform Apply Front-End
-        if: ${{ github.event.inputs.invoker }} == 'front-end'
+        if: ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
             -replace=cloudfoundry_app.fe \
             -replace=cloudfoundry_app.api \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}"
+
+      - name: Terraform Apply Back-End
+        if: ${{ github.event.inputs.invoker == 'back-end' }}
+        run: |
+          terraform apply \
+            -replace=cloudfoundry_app.be \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}"
+
+      - name: Terraform Destroy DB Migration
+        run: |
+          terraform destroy \
+            -target=cloudfoundry_app.db_migration \
             -auto-approve \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
