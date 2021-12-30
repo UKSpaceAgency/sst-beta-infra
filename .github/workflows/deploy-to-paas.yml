@@ -34,5 +34,4 @@ jobs:
       - name: Terraform Init
         run: |
           terraform init \
-            -reconfigure \
             -backend-config="key=${{ secrets.s3_backend_key }}"
