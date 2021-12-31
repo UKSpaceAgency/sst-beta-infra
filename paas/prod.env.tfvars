@@ -8,4 +8,6 @@ paas_app_be_route_name     = "monitor-my-satellites-be-prod"
 paas_db_name               = "monitor-my-satellites-db-prod"
 paas_s3_name               = "monitor-my-satellites-s3-prod"
 paas_space                 = "monitor-my-satellites-prod"
+paas_custom_domain_flag    = true
+paas_custom_subdomain      = "www"
 logit_service_name         = "monitor-my-satellites-logit-ssl-drain-prod"
