@@ -122,6 +122,14 @@ variable "paas_s3_service" {
   default = "aws-s3-bucket"
 }
 
+variable "paas_custom_domain_flag" {
+  default = false
+}
+
+variable "paas_custom_subdomain" {
+  default = "www"
+}
+
 variable "paas_org_name" {
   default = "uk-space-agency-space-surveillance-and-tracking"
 }
