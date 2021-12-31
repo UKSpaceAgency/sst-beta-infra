@@ -13,12 +13,12 @@ on:
 
 jobs:
   called_with_by:
-    name: Who's calling?
+    name: Objective
     runs-on: ubuntu-latest
 
     steps:
       - run: |
-          echo "Calling ${{ github.event.inputs.env }} from ${{ github.event.inputs.invoker }}!"
+          echo "Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
 
   deploy:
     needs: called_with_by
@@ -66,6 +66,36 @@ jobs:
         run: |
           terraform apply \
             -replace=cloudfoundry_app.be \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}"
+
+      - name: Terraform Apply All
+        if: ${{ github.event.inputs.invoker == 'all' }}
+        run: |
+          terraform apply \
+            -replace=cloudfoundry_app.fe \
+            -replace=cloudfoundry_app.api \
+            -replace=cloudfoundry_app.be \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}"
+
+
+      - name: Terraform Apply
+        if: ${{ github.event.inputs.invoker == 'apply' }}
+        run: |
+          terraform apply \
             -auto-approve \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
