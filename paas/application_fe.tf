@@ -17,8 +17,11 @@ resource "cloudfoundry_app" "fe" {
     route = cloudfoundry_route.app_route_cloud.id
   }
 
-  routes {
-    route = cloudfoundry_route.app_route_custom_domain.id
+  dynamic "routes" {
+    for_each = var.paas_custom_domain_flag? [1] : []
+    content {
+      route = cloudfoundry_route.app_route_custom_domain[0].id
+    }
   }
 
   service_binding {
