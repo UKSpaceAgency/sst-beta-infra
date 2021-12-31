@@ -120,6 +120,7 @@ jobs:
             -var="spacetrack_password=${{ secrets.spacetrack_password }}"
 
       - name: Terraform Destroy DB Migration
+        if: ${{ github.event.inputs.invoker != 'plan' }}
         run: |
           terraform destroy \
             -target=cloudfoundry_app.db_migration \
