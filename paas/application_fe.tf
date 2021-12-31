@@ -17,6 +17,10 @@ resource "cloudfoundry_app" "fe" {
     route = cloudfoundry_route.app_route_cloud.id
   }
 
+  routes {
+    route = cloudfoundry_route.app_route_custom_domain.id
+  }
+
   service_binding {
     service_instance = cloudfoundry_user_provided_service.logit.id
   }
