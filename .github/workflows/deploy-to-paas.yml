@@ -29,6 +29,7 @@ jobs:
     defaults:
       run:
         working-directory: ./paas
+    concurrency: ${{ github.event.inputs.env }}
 
     steps:
       - uses: hashicorp/setup-terraform@v1
