@@ -14,6 +14,8 @@ resource "cloudfoundry_app" "be" {
   environment = {
     SPACE_TRACK_IDENTITY = var.spacetrack_username
     SPACE_TRACK_PASSWORD = var.spacetrack_password
+    IRON_NAME            = var.paas_app_iron_name
+    IRON_PASSWORD        = var.paas_app_iron_password
   }
 
   routes {
