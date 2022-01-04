@@ -184,11 +184,12 @@ variable "logit_service_name" {
   default = "logit-ssl-drain"
 }
 
-variable "logit_endpoint" {
-}
+variable "logit_endpoint" {}
 
-variable "spacetrack_username" {
-}
+variable "spacetrack_username" {}
 
-variable "spacetrack_password" {
-}
+variable "spacetrack_password" {}
+
+variable "paas_app_iron_name" {}
+
+variable "paas_app_iron_password" {}
