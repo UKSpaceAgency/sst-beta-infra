@@ -11,20 +11,6 @@ resource "null_resource" "fe_build_assets" {
       GIT_TOKEN = var.github_token
     }
   }
-
-  /*
-  provisioner "local-exec" {
-    command = "unzip -u ${var.github_fe_app_asset} ${var.paas_app_fe_proxy_conf}"
-  }
-
-  provisioner "local-exec" {
-    command =  "echo 'location /api { proxy_http_version 1.1; proxy_set_header Connection \"\"; proxy_pass http://${var.paas_app_api_route_name}.apps.internal:8080/graphql/; }' > ${var.paas_app_fe_proxy_conf}"
-  }
-
-  provisioner "local-exec" {
-    command = "zip ${var.github_fe_app_asset} ${var.paas_app_fe_proxy_conf}"
-  }
-  */
 }
 
 resource "null_resource" "api_build_assets" {

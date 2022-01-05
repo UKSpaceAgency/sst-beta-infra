@@ -8,6 +8,7 @@ resource "cloudfoundry_app" "fe" {
   disk_quota  = var.paas_app_fe_disk_quota
   instances   = var.paas_app_fe_instances
   path        = var.github_fe_app_asset
+  command     = var.paas_app_fe_command
 
   environment = {
     GRAPHQL_URL         = format("http://%s.apps.internal:8080/graphql/", cloudfoundry_route.api_route_internal.hostname)

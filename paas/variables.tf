@@ -31,11 +31,11 @@ variable "paas_app_fe_instances" {
 }
 
 variable "paas_app_fe_buildpack" {
-  default = "staticfile_buildpack"
+  default = "nodejs_buildpack"
 }
 
-variable "paas_app_fe_proxy_conf" {
-  default = "nginx/conf/includes/proxy.conf"
+variable "paas_app_fe_command" {
+  default = "yarn install && yarn start"
 }
 
 variable "paas_app_api_name" {
