@@ -32,6 +32,7 @@ jobs:
     concurrency: ${{ github.event.inputs.env }}
     env:
       NEXT_TRANSLATE_PATH: /home/vcap/app/next
+      PAGES_LOCATION: ./.next/server/pages
 
     steps:
       - uses: hashicorp/setup-terraform@v1
