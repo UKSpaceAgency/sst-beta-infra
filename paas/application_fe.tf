@@ -10,8 +10,7 @@ resource "cloudfoundry_app" "fe" {
   path        = var.github_fe_app_asset
 
   environment = {
-    //API_URL = format("http://%s.apps.internal:8000/", cloudfoundry_route.api_route_internal.hostname)
-    API_URL             = "http://127.0.0.1:8000/"
+    GRAPHQL_URL         = format("http://%s.apps.internal:8080/graphql/", cloudfoundry_route.api_route_internal.hostname)
     NEXT_TRANSLATE_PATH = "apps/next"
     IRON_NAME           = var.paas_app_iron_name
     IRON_PASSWORD       = var.paas_app_iron_password

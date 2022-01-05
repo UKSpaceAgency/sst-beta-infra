@@ -10,6 +10,12 @@ resource "cloudfoundry_app" "api" {
   path       = var.github_fe_api_asset
   command    = var.paas_app_api_command
 
+  environment = {
+    IRON_NAME            = var.paas_app_iron_name
+    IRON_PASSWORD        = var.paas_app_iron_password
+    API_URL              = format("http://%s.apps.internal:8080/", cloudfoundry_route.app_be_internal.hostname)
+  }
+
   routes {
     route = cloudfoundry_route.api_route_internal.id
   }
