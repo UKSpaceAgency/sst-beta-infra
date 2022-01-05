@@ -35,7 +35,7 @@ variable "paas_app_fe_buildpack" {
 }
 
 variable "paas_app_fe_command" {
-  default = "yarn install && yarn start"
+  default = "npm run start"
 }
 
 variable "paas_app_api_name" {
@@ -47,7 +47,7 @@ variable "paas_app_api_memory" {
 }
 
 variable "pass_app_api_disk_quota" {
-  default = 2048
+  default = 6144
 }
 
 variable "paas_app_api_instances" {
