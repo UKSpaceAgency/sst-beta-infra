@@ -11,7 +11,7 @@ resource "cloudfoundry_app" "fe" {
   command     = var.paas_app_fe_command
 
   environment = {
-    GRAPHQL_URL         = format("http://%s.apps.internal:8080/graphql/", cloudfoundry_route.api_route_internal.hostname)
+    GRAPHQL_URL         = format("http://%s.apps.internal:8080/graphql", cloudfoundry_route.api_route_internal.hostname)
     IRON_NAME           = var.paas_app_iron_name
     IRON_PASSWORD       = var.paas_app_iron_password
     PAGES_LOCATION      = "./.next/server/pages"
