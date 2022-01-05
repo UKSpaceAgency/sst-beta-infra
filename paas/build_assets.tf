@@ -26,6 +26,10 @@ resource "null_resource" "api_build_assets" {
       GIT_TOKEN = var.github_token
     }
   }
+
+  provisioner "local-exec" {
+    command = "ls -alh ."
+  }
 }
 
 resource "null_resource" "be_build_assets" {
