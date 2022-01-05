@@ -1,6 +1,6 @@
 resource "cloudfoundry_app" "fe" {
 
-  depends_on = [null_resource.fe_build_assets,cloudfoundry_app.api]
+  depends_on = [null_resource.fe_build_assets]
   name        = var.paas_app_fe_name
   space       = data.cloudfoundry_space.space.id
   buildpack   = var.paas_app_fe_buildpack
@@ -12,7 +12,6 @@ resource "cloudfoundry_app" "fe" {
 
   environment = {
     GRAPHQL_URL         = format("http://%s.apps.internal:8080/graphql/", cloudfoundry_route.api_route_internal.hostname)
-    NEXT_TRANSLATE_PATH = "apps/next"
     IRON_NAME           = var.paas_app_iron_name
     IRON_PASSWORD       = var.paas_app_iron_password
   }
