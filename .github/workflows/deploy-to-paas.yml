@@ -30,6 +30,8 @@ jobs:
       run:
         working-directory: ./paas
     concurrency: ${{ github.event.inputs.env }}
+    env:
+      NEXT_TRANSLATE_PATH: apps/next
 
     steps:
       - uses: hashicorp/setup-terraform@v1
