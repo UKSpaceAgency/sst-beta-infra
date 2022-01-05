@@ -12,6 +12,7 @@ resource "null_resource" "fe_build_assets" {
     }
   }
 
+  /*
   provisioner "local-exec" {
     command = "unzip -u ${var.github_fe_app_asset} ${var.paas_app_fe_proxy_conf}"
   }
@@ -23,6 +24,7 @@ resource "null_resource" "fe_build_assets" {
   provisioner "local-exec" {
     command = "zip ${var.github_fe_app_asset} ${var.paas_app_fe_proxy_conf}"
   }
+  */
 }
 
 resource "null_resource" "api_build_assets" {
