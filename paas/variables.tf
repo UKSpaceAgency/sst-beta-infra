@@ -19,7 +19,7 @@ variable "paas_app_fe_name" {
 }
 
 variable "paas_app_fe_memory" {
-  default = 1024
+  default = 2048
 }
 
 variable "paas_app_fe_disk_quota" {
@@ -43,7 +43,7 @@ variable "paas_app_api_name" {
 }
 
 variable "paas_app_api_memory" {
-  default = 2048
+  default = 4096
 }
 
 variable "pass_app_api_disk_quota" {
@@ -71,11 +71,11 @@ variable "paas_app_be_name" {
 }
 
 variable "paas_app_be_memory" {
-  default = 2048
+  default = 4096
 }
 
 variable "pass_app_be_disk_quota" {
-  default = 2048
+  default = 4096
 }
 
 variable "paas_app_be_instances" {
