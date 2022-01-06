@@ -18,7 +18,7 @@ resource "cloudfoundry_app" "fe" {
     BASE_API_URL            = <<-EOT
     "${var.paas_custom_domain_flag == "false" ?
     "https://${cloudfoundry_route.app_route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}/api" :
-    "https://var.paas_custom_subdomain.${data.cloudfoundry_domain.custom.name}/api"}"
+    "https://${var.paas_custom_subdomain}.${data.cloudfoundry_domain.custom.name}/api"}"
     EOT
   }
 
