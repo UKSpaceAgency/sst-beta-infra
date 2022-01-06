@@ -9,6 +9,7 @@ resource "cloudfoundry_app" "fe" {
   instances   = var.paas_app_fe_instances
   path        = var.github_fe_app_asset
   command     = var.paas_app_fe_command
+  strategy    = var.paas_app_fe_strategy
 
   environment = {
     IRON_NAME               = var.paas_app_iron_name
