@@ -38,6 +38,10 @@ variable "paas_app_fe_command" {
   default = "npm run start"
 }
 
+variable "paas_app_fe_strategy" {
+  default = "blue-green"
+}
+
 variable "paas_app_api_name" {
   default = "monitor-my-satellites-api"
 }
@@ -64,6 +68,10 @@ variable "paas_app_api_buildpack" {
 
 variable "paas_app_api_command" {
   default = "node dist/apps/api/main.js"
+}
+
+variable "paas_app_api_strategy" {
+  default = "blue-green"
 }
 
 variable "paas_app_be_name" {
