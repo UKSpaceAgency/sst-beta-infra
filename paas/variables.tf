@@ -201,3 +201,5 @@ variable "spacetrack_password" {}
 variable "paas_app_iron_name" {}
 
 variable "paas_app_iron_password" {}
+
+variable "notify_api_key" {}
