@@ -15,7 +15,7 @@ resource "cloudfoundry_app" "fe" {
     IRON_PASSWORD           = var.paas_app_iron_password
     PAGES_LOCATION          = "./.next/server/pages"
     GRAPHQL_URL             = "http://${cloudfoundry_route.api_route_internal.hostname}.${data.cloudfoundry_domain.internal.name}:8080/graphql"
-    BASE_API_URL            = ${ var.paas_custom_domain_flag == false ? "https://${cloudfoundry_route.app_route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}/api" : "https://${var.paas_custom_subdomain}.${data.cloudfoundry_domain.custom.name}/api"}
+    BASE_API_URL            = "${ var.paas_custom_domain_flag == false ? "https://${cloudfoundry_route.app_route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}/api" : "https://${var.paas_custom_subdomain}.${data.cloudfoundry_domain.custom.name}/api"}"
   }
 
   dynamic "routes" {
