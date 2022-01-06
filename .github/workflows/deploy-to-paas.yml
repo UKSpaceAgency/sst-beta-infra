@@ -59,7 +59,8 @@ jobs:
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}"
+            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}
 
       - name: Terraform Apply Front-End
         if: ${{ github.event.inputs.invoker == 'front-end' }}
@@ -76,7 +77,8 @@ jobs:
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}"
+            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}
 
       - name: Terraform Apply Back-End
         if: ${{ github.event.inputs.invoker == 'back-end' }}
@@ -92,7 +94,8 @@ jobs:
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}"
+            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}
 
       - name: Terraform Apply All
         if: ${{ github.event.inputs.invoker == 'all' }}
@@ -110,7 +113,8 @@ jobs:
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}"
+            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}
 
 
       - name: Terraform Apply
@@ -126,7 +130,8 @@ jobs:
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}"
+            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -142,4 +147,5 @@ jobs:
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}"
+            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}

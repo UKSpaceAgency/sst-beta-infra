@@ -17,6 +17,7 @@ resource "cloudfoundry_app" "be" {
     IRON_NAME            = var.paas_app_iron_name
     IRON_PASSWORD        = var.paas_app_iron_password
     APP_FRONTEND_URL     = "${ var.paas_custom_domain_flag == false ? "https://${cloudfoundry_route.app_route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}" : "https://${var.paas_custom_subdomain}.${data.cloudfoundry_domain.custom.name}"}"
+    NOTIFY_API_KEY       = var.notify_api_key
   }
 
   routes {
