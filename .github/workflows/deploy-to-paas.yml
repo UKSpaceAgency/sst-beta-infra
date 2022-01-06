@@ -30,10 +30,6 @@ jobs:
       run:
         working-directory: ./paas
     concurrency: ${{ github.event.inputs.env }}
-    env:
-      NEXT_TRANSLATE_PATH: /home/vcap/app/next
-      PAGES_LOCATION: ./.next/server/pages
-      NEXT_PUBLIC_GRAPHQL_URL: http://monitor-my-satellites-api-dev.apps.internal:8080/graphql
 
     steps:
       - uses: hashicorp/setup-terraform@v1
