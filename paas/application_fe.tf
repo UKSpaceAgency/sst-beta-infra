@@ -1,6 +1,6 @@
 resource "cloudfoundry_app" "fe" {
 
-  depends_on  = [null_resource.fe_build_assets, cloudfoundry_app.api]
+  depends_on  = [null_resource.fe_build_assets]
   name        = var.paas_app_fe_name
   space       = data.cloudfoundry_space.space.id
   buildpack   = var.paas_app_fe_buildpack
