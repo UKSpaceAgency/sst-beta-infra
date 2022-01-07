@@ -203,3 +203,9 @@ variable "paas_app_iron_name" {}
 variable "paas_app_iron_password" {}
 
 variable "notify_api_key" {}
+
+variable "user_service_jwt_authentication_secret" {}
+
+variable "user_service_reset_password_token_secret" {}
+
+variable "user_service_verification_token_secret" {}

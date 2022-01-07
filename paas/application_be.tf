@@ -12,12 +12,15 @@ resource "cloudfoundry_app" "be" {
   command    = var.paas_app_be_command
 
   environment = {
-    SPACE_TRACK_IDENTITY = var.spacetrack_username
-    SPACE_TRACK_PASSWORD = var.spacetrack_password
-    IRON_NAME            = var.paas_app_iron_name
-    IRON_PASSWORD        = var.paas_app_iron_password
-    APP_FRONTEND_URL     = "${ var.paas_custom_domain_flag == false ? "https://${cloudfoundry_route.app_route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}" : "https://${var.paas_custom_subdomain}.${data.cloudfoundry_domain.custom.name}"}"
-    NOTIFY_API_KEY       = var.notify_api_key
+    SPACE_TRACK_IDENTITY                      = var.spacetrack_username
+    SPACE_TRACK_PASSWORD                      = var.spacetrack_password
+    IRON_NAME                                 = var.paas_app_iron_name
+    IRON_PASSWORD                             = var.paas_app_iron_password
+    APP_FRONTEND_URL                          = "${ var.paas_custom_domain_flag == false ? "https://${cloudfoundry_route.app_route_cloud.hostname}.${data.cloudfoundry_domain.cloudapps.name}" : "https://${var.paas_custom_subdomain}.${data.cloudfoundry_domain.custom.name}"}"
+    NOTIFY_API_KEY                            = var.notify_api_key
+    USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
+    USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
+    USER_SERVICE_VERIFICATION_TOKEN_SECRET    = var.user_service_verification_token_secret
   }
 
   routes {
