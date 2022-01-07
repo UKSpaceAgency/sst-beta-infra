@@ -42,3 +42,15 @@ resource "null_resource" "be_build_assets" {
     }
   }
 }
+
+resource "null_resource" "mp_build_assets" {
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "cd ../maintenance-page && zip -r mp.zip ./* && mv mp.zip ../paas/ && cd ../paas"
+  }
+
+}

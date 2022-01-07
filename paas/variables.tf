@@ -209,3 +209,15 @@ variable "user_service_jwt_authentication_secret" {}
 variable "user_service_reset_password_token_secret" {}
 
 variable "user_service_verification_token_secret" {}
+
+variable "paas_app_mp_name" {
+  default = "monitor-my-satellites-mp"
+}
+
+variable "paas_app_mp_buildpack" {
+  default = "staticfile_buildpack"
+}
+
+variable "paas_mp_asset" {
+  default = "mp.zip"
+}
