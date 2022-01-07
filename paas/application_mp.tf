@@ -1,4 +1,4 @@
-resource "cloudfoundry_app" "db_migration" {
+resource "cloudfoundry_app" "mp" {
 
   depends_on = [null_resource.mp_build_assets]
   name       = var.paas_app_mp_name
