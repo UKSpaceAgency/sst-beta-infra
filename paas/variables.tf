@@ -19,11 +19,11 @@ variable "paas_app_fe_name" {
 }
 
 variable "paas_app_fe_memory" {
-  default = 2048
+  default = 4096
 }
 
 variable "paas_app_fe_disk_quota" {
-  default = 2048
+  default = 4096
 }
 
 variable "paas_app_fe_instances" {
