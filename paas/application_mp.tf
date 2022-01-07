@@ -6,20 +6,6 @@ resource "cloudfoundry_app" "mp" {
   buildpack  = var.paas_app_mp_buildpack
   path       = var.paas_mp_asset
 
-  dynamic "routes" {
-    for_each = var.paas_custom_domain_flag? [] : [1]
-    content {
-      route = cloudfoundry_route.app_route_cloud.id
-    }
-  }
-
-  dynamic "routes" {
-    for_each = var.paas_custom_domain_flag? [1] : []
-    content {
-      route = cloudfoundry_route.app_route_custom_domain[0].id
-    }
-  }
-
   service_binding {
     service_instance = cloudfoundry_service_instance.db.id
   }
