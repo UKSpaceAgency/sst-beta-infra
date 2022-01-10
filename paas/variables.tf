@@ -210,6 +210,8 @@ variable "user_service_reset_password_token_secret" {}
 
 variable "user_service_verification_token_secret" {}
 
+variable "app_environment" {}
+
 variable "paas_app_mp_name" {
   default = "monitor-my-satellites-mp"
 }
