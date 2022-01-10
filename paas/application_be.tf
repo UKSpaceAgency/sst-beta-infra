@@ -21,6 +21,7 @@ resource "cloudfoundry_app" "be" {
     USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
     USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
     USER_SERVICE_VERIFICATION_TOKEN_SECRET    = var.user_service_verification_token_secret
+    APP_ENVIRONMENT                           = var.app_environment
   }
 
   routes {
