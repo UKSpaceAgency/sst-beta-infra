@@ -27,7 +27,7 @@ variable "app_be_instances" {
 }
 
 variable "app_be_command" {
-  default = "uvicorn app.main:app --port 8080 --host 0.0.0.0 --workers 4"
+  default = "uvicorn app.main:app --port 8080 --host 0.0.0.0 --workers 1"
 }
 
 variable "be_build_asset" {}
