@@ -65,7 +65,7 @@ module "back-end" {
 }
 
 module "front-end" {
-  depends_on          = [module.build-assets, module.back-end]
+  depends_on          = [module.build-assets, module.back-end.be_app]
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
   fe_build_asset      = module.build-assets.fe_asset
