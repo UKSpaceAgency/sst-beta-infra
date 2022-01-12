@@ -30,6 +30,8 @@ variable "app_be_command" {
   default = "uvicorn app.main:app --port 8080 --host 0.0.0.0 --workers 4"
 }
 
+variable "be_build_asset" {}
+
 variable "app_be_route" {}
 
 variable "app_fe_route" {}
@@ -65,23 +67,3 @@ variable "db" {}
 variable "s3" {}
 
 variable "logit" {}
-
-variable "github_token" {
-  sensitive = true
-}
-
-variable "github_owner" {
-  default = "the-psc"
-}
-
-variable "github_be_repo" {
-  default = "sst-beta-python-backend"
-}
-
-variable "github_release_tag" {
-  default = "latest"
-}
-
-variable "github_be_asset" {
-  default = "be.zip"
-}

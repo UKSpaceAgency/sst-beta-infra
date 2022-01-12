@@ -19,6 +19,11 @@ data "cloudfoundry_space" "space" {
   org_name = var.paas_org_name
 }
 
+module "build-assets" {
+  source        = "./modules/build-assets"
+  github_token  = var.github_token
+}
+
 module "maintenance" {
   source    = "./modules/maintenance"
   space     = data.cloudfoundry_space.space
@@ -39,15 +44,16 @@ module "network" {
 }
 
 module "back-end" {
+  depends_on                                = [module.build-assets]
   source                                    = "./modules/back-end"
   space                                     = data.cloudfoundry_space.space
+  be_build_asset                            = module.build-assets.be_asset
   app_be_route                              = module.network.be_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
   logit                                     = module.backing-services.logit
   app_fe_route                              = module.network.fe_route
   env_tag                                   = var.env_tag
-  github_token                              = var.github_token
   iron_name                                 = var.iron_name
   iron_password                             = var.iron_password
   notify_api_key                            = var.notify_api_key
@@ -59,9 +65,11 @@ module "back-end" {
 }
 
 module "front-end" {
-  depends_on          = [module.back-end.be_app]
+  depends_on          = [module.build-assets]
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
+  fe_build_asset      = module.build-assets.fe_asset
+  api_build_asset     = module.build-assets.api_asset
   app_fe_route        = module.network.fe_route
   app_api_route       = module.network.api_route
   app_be_route        = module.network.be_route
@@ -72,7 +80,6 @@ module "front-end" {
   logit               = module.backing-services.logit
   be_app              = module.back-end.be_app
   env_tag             = var.env_tag
-  github_token        = var.github_token
   iron_name           = var.iron_name
   iron_password       = var.iron_password
 }

@@ -9,44 +9,11 @@ terraform {
 
 locals {
   fe_name             = "${ var.app_fe_name }-${ var.env_tag }"
-  fe_asset_fullpath   = "${path.module}/${var.github_fe_app_asset}"
   api_name            = "${ var.app_api_name }-${ var.env_tag }"
-  api_asset_fullpath  = "${path.module}/${var.github_fe_api_asset}"
-}
-
-resource "null_resource" "fe_build_assets" {
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "${ path.module }/download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_app_asset} ${ local.fe_asset_fullpath }"
-
-    environment = {
-      GIT_TOKEN = var.github_token
-    }
-  }
-}
-
-resource "null_resource" "api_build_assets" {
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "${ path.module }/download-private-release.sh ${var.github_owner} ${var.github_fe_repo} ${var.github_release_tag} ${var.github_fe_api_asset} ${ local.api_asset_fullpath }"
-
-    environment = {
-      GIT_TOKEN = var.github_token
-    }
-  }
 }
 
 resource "cloudfoundry_app" "api" {
 
-  depends_on       = [null_resource.api_build_assets]
   name             = local.api_name
   space            = var.space.id
   buildpack        = var.app_api_buildpack
@@ -54,8 +21,8 @@ resource "cloudfoundry_app" "api" {
   disk_quota       = var.app_api_disk_quota
   timeout          = var.app_api_timeout
   instances        = var.app_api_instances
-  path             = local.api_asset_fullpath
-  source_code_hash = fileexists(local.api_asset_fullpath) ? filebase64sha256(local.api_asset_fullpath) : "0"
+  path             = var.api_build_asset
+  source_code_hash = filebase64sha256(var.api_build_asset)
   command          = var.app_api_command
   strategy         = var.app_api_strategy
 
@@ -80,15 +47,14 @@ resource "cloudfoundry_app" "api" {
 
 resource "cloudfoundry_app" "fe" {
 
-  depends_on        = [null_resource.fe_build_assets]
   name              = local.fe_name
   space             = var.space.id
   buildpack         = var.app_fe_buildpack
   memory            = var.app_fe_memory
   disk_quota        = var.app_fe_disk_quota
   instances         = var.app_fe_instances
-  path              = local.fe_asset_fullpath
-  source_code_hash  = fileexists(local.fe_asset_fullpath) ? filebase64sha256(local.fe_asset_fullpath) : "0"
+  path              = var.fe_build_asset
+  source_code_hash  = filebase64sha256(var.fe_build_asset)
   command           = var.app_fe_command
   strategy          = var.app_fe_strategy
 

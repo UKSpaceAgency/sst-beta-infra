@@ -9,28 +9,12 @@ terraform {
 
 locals {
   be_name           = "${ var.app_be_name }-${ var.env_tag }"
-  be_asset_fullpath = "${path.module}/${var.github_be_asset}"
   db_migration_name = "${ var.app_db_migration_name }-${ var.env_tag }"
 }
 
-resource "null_resource" "be_build_assets" {
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "${path.module}/download-private-release.sh ${var.github_owner} ${var.github_be_repo} ${var.github_release_tag} ${var.github_be_asset} ${ local.be_asset_fullpath }"
-
-    environment = {
-      GIT_TOKEN = var.github_token
-    }
-  }
-}
 
 resource "cloudfoundry_app" "be" {
 
-  depends_on        = [null_resource.be_build_assets]
   name              = local.be_name
   space             = var.space.id
   buildpack         = var.app_be_buildpack
@@ -38,8 +22,8 @@ resource "cloudfoundry_app" "be" {
   disk_quota        = var.app_be_disk_quota
   timeout           = var.app_be_timeout
   instances         = var.app_be_instances
-  path              = local.be_asset_fullpath
-  source_code_hash  = fileexists(local.be_asset_fullpath) ? filebase64sha256(local.be_asset_fullpath) : "0"
+  path              = var.be_build_asset
+  source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_be_command
 
   environment = {
@@ -74,12 +58,11 @@ resource "cloudfoundry_app" "be" {
 
 resource "cloudfoundry_app" "db_migration" {
 
-  depends_on        = [null_resource.be_build_assets]
   name              = local.db_migration_name
   space             = var.space.id
   buildpack         = var.app_be_buildpack
-  path              = local.be_asset_fullpath
-  source_code_hash  = fileexists(local.be_asset_fullpath) ? filebase64sha256(local.be_asset_fullpath) : "0"
+  path              = var.be_build_asset
+  source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_db_migration_command
   health_check_type = "none"
 

@@ -2,30 +2,6 @@ variable "env_tag" {
   default = "dev"
 }
 
-variable "github_token" {
-  sensitive = true
-}
-
-variable "github_owner" {
-  default = "UKSpaceAgency"
-}
-
-variable "github_fe_repo" {
-  default = "sst-beta"
-}
-
-variable "github_release_tag" {
-  default = "latest"
-}
-
-variable "github_fe_app_asset" {
-  default = "app.zip"
-}
-
-variable "github_fe_api_asset" {
-  default = "api.zip"
-}
-
 variable "be_app" {}
 
 variable "space" {}
@@ -65,6 +41,10 @@ variable "app_api_command" {
 variable "app_api_strategy" {
   default = "blue-green"
 }
+
+variable "api_build_asset" {}
+
+variable "fe_build_asset" {}
 
 variable "app_api_route" {}
 
