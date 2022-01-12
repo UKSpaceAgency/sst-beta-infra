@@ -27,6 +27,6 @@ resource "cloudfoundry_app" "mp" {
   space             = var.space.id
   buildpack         = var.app_buildpack
   path              = local.build_asset_fullpath
-  source_code_hash  = "${ fileexists(local.build_asset_fullpath) ? filebase64sha256(local.build_asset_fullpath) : "0" }"
+  source_code_hash  = fileexists(local.build_asset_fullpath) ? filebase64sha256(local.build_asset_fullpath) : "0"
 
 }
