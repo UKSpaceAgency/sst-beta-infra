@@ -55,7 +55,7 @@ resource "cloudfoundry_app" "api" {
   timeout          = var.app_api_timeout
   instances        = var.app_api_instances
   path             = local.api_asset_fullpath
-  source_code_hash = "${ fileexists(filebase64sha256(local.api_asset_fullpath)) }"
+  source_code_hash = "${ fileexists(local.api_asset_fullpath) ? (filebase64sha256(local.api_asset_fullpath) }"
   command          = var.app_api_command
   strategy         = var.app_api_strategy
 
@@ -88,7 +88,7 @@ resource "cloudfoundry_app" "fe" {
   disk_quota        = var.app_fe_disk_quota
   instances         = var.app_fe_instances
   path              = local.fe_asset_fullpath
-  source_code_hash  = "${ fileexists(filebase64sha256(local.fe_asset_fullpath)) }"
+  source_code_hash  = "${ fileexists(local.fe_asset_fullpath) ? (filebase64sha256(local.fe_asset_fullpath) }"
   command           = var.app_fe_command
   strategy          = var.app_fe_strategy
 
