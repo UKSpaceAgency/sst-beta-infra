@@ -1,12 +1,8 @@
 .idea/
 .terraform/
-nginx/
 .terraform.lock.hcl
-api.zip
-be.zip
-sst.zip
 credentials.tfvars
-dev.backend.conf
-stage.backend.conf
+*.backend.conf
 *.tar
 *.sql
+*.zip
