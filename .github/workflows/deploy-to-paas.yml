@@ -52,7 +52,7 @@ jobs:
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
             -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="iron_name=${{ secrets.paas_app_iron_name }}" \
@@ -71,7 +71,7 @@ jobs:
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
             -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="iron_name=${{ secrets.paas_app_iron_name }}" \
@@ -91,7 +91,7 @@ jobs:
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
             -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
+            -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
             -var="iron_name=${{ secrets.paas_app_iron_name }}" \
