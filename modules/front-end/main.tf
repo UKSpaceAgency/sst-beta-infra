@@ -22,7 +22,7 @@ resource "cloudfoundry_app" "api" {
   timeout          = var.app_api_timeout
   instances        = var.app_api_instances
   path             = var.api_build_asset
-  source_code_hash = filebase64sha256(var.api_build_asset)
+  //source_code_hash = filebase64sha256(var.api_build_asset)
   command          = var.app_api_command
   strategy         = var.app_api_strategy
 
@@ -54,7 +54,7 @@ resource "cloudfoundry_app" "fe" {
   disk_quota        = var.app_fe_disk_quota
   instances         = var.app_fe_instances
   path              = var.fe_build_asset
-  source_code_hash  = filebase64sha256(var.fe_build_asset)
+  //source_code_hash  = filebase64sha256(var.fe_build_asset)
   command           = var.app_fe_command
   strategy          = var.app_fe_strategy
 
