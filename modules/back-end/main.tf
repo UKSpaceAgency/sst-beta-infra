@@ -39,7 +39,7 @@ resource "cloudfoundry_app" "be" {
   timeout           = var.app_be_timeout
   instances         = var.app_be_instances
   path              = local.be_asset_fullpath
-  source_code_hash  = "${ fileexists(local.be_asset_fullpath) }"
+  source_code_hash  = "${ fileexists(filebase64sha256(local.be_asset_fullpath)) }"
   command           = var.app_be_command
 
   environment = {
@@ -79,7 +79,7 @@ resource "cloudfoundry_app" "db_migration" {
   space             = var.space.id
   buildpack         = var.app_be_buildpack
   path              = local.be_asset_fullpath
-  source_code_hash  = "${ filebase64sha256(local.be_asset_fullpath) }"
+  source_code_hash  = "${ fileexists(filebase64sha256(local.be_asset_fullpath)) }"
   command           = var.app_db_migration_command
   health_check_type = "none"
 
