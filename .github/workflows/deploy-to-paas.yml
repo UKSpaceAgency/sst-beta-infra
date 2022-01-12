@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environments }}
+
     concurrency: ${{ github.event.inputs.environments }}
 
     steps:
