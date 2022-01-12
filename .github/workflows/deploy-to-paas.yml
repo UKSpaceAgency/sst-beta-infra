@@ -25,11 +25,8 @@ jobs:
     name: Deploy to Gov.UK PaaS
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.event.inputs.env }}
-    defaults:
-      run:
-        working-directory: ./paas
-    concurrency: ${{ github.event.inputs.env }}
+      name: ${{ github.event.inputs.environments }}
+    concurrency: ${{ github.event.inputs.environments }}
 
     steps:
       - uses: hashicorp/setup-terraform@v1
@@ -65,72 +62,8 @@ jobs:
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
 
-      - name: Terraform Apply Front-End
-        if: ${{ github.event.inputs.invoker == 'front-end' }}
-        run: |
-          terraform apply \
-            -replace=cloudfoundry_app.fe \
-            -replace=cloudfoundry_app.api \
-            -auto-approve \
-            -var-file="${{ secrets.env_tfvars }}" \
-            -var="paas_username=${{ secrets.paas_username }}" \
-            -var="paas_password=${{ secrets.paas_password }}" \
-            -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
-            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
-            -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
-            -var="notify_api_key=${{ secrets.notify_api_key }}" \
-            -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
-            -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
-
-      - name: Terraform Apply Back-End
-        if: ${{ github.event.inputs.invoker == 'back-end' }}
-        run: |
-          terraform apply \
-            -replace=cloudfoundry_app.be \
-            -auto-approve \
-            -var-file="${{ secrets.env_tfvars }}" \
-            -var="paas_username=${{ secrets.paas_username }}" \
-            -var="paas_password=${{ secrets.paas_password }}" \
-            -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
-            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
-            -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
-            -var="notify_api_key=${{ secrets.notify_api_key }}" \
-            -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
-            -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
-
-      - name: Terraform Apply All
-        if: ${{ github.event.inputs.invoker == 'all' }}
-        run: |
-          terraform apply \
-            -replace=cloudfoundry_app.fe \
-            -replace=cloudfoundry_app.api \
-            -replace=cloudfoundry_app.be \
-            -auto-approve \
-            -var-file="${{ secrets.env_tfvars }}" \
-            -var="paas_username=${{ secrets.paas_username }}" \
-            -var="paas_password=${{ secrets.paas_password }}" \
-            -var="github_token=${{ secrets.tf_github_token }}" \
-            -var="logit_endpoint=${{ secrets.logit_endpoint }}" \
-            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
-            -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="paas_app_iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="paas_app_iron_password=${{ secrets.paas_app_iron_password }}" \
-            -var="notify_api_key=${{ secrets.notify_api_key }}" \
-            -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
-            -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
-
-
       - name: Terraform Apply
-        if: ${{ github.event.inputs.invoker == 'apply' }}
+        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
             -auto-approve \
@@ -152,7 +85,7 @@ jobs:
         if: ${{ github.event.inputs.invoker != 'plan' }}
         run: |
           terraform destroy \
-            -target=cloudfoundry_app.db_migration \
+            -target=module.back-end.cloudfoundry_app.db_migration \
             -auto-approve \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
