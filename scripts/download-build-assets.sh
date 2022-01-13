@@ -16,11 +16,11 @@ echo "$(date '+%d/%m/%Y %H:%M:%S') Downloading BE Asset..."
 echo "$(date '+%d/%m/%Y %H:%M:%S') Downloaded"
 
 # FE APP Asset
-echo "$(date '+%d/%m/%Y %H:%M:%S') Downloading FE APP Asset"
+echo "$(date '+%d/%m/%Y %H:%M:%S') Downloading FE APP Asset..."
 . ./scripts/download-private-release.sh $GITHUB_OWNER $GITHUB_FE_REPO $GITHUB_RELEASE_TAG $GITHUB_FE_APP_ASSET $GITHUB_FE_APP_ASSET
 echo "$(date '+%d/%m/%Y %H:%M:%S') Downloaded"
 
 # FE API Asset
-echo "$(date '+%d/%m/%Y %H:%M:%S') Downloading FE API Asset"
+echo "$(date '+%d/%m/%Y %H:%M:%S') Downloading FE API Asset..."
 . ./scripts/download-private-release.sh $GITHUB_OWNER $GITHUB_FE_REPO $GITHUB_RELEASE_TAG $GITHUB_FE_API_ASSET $GITHUB_FE_API_ASSET
 echo "$(date '+%d/%m/%Y %H:%M:%S') Downloaded"
