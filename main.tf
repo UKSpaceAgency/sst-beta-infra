@@ -20,7 +20,7 @@ data "cloudfoundry_space" "space" {
 }
 
 module "network-routes" {
-  source  = "modules/network-routes"
+  source  = "./modules/network-routes"
   space   = data.cloudfoundry_space.space
   env_tag = var.env_tag
 }
