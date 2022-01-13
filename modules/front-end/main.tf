@@ -74,23 +74,3 @@ resource "cloudfoundry_app" "fe" {
     service_instance = var.logit.id
   }
 }
-
-resource "cloudfoundry_network_policy" "fe_api_policy" {
-  depends_on = [cloudfoundry_app.fe, cloudfoundry_app.api]
-  policy {
-    source_app = cloudfoundry_app.fe.id
-    destination_app = cloudfoundry_app.api.id
-    port = "8080"
-    protocol = "tcp"
-  }
-}
-
-resource "cloudfoundry_network_policy" "api_be_policy" {
-  depends_on = [cloudfoundry_app.api]
-  policy {
-    source_app      = cloudfoundry_app.api.id
-    destination_app = var.be_app.id
-    port            = "8080"
-    protocol        = "tcp"
-  }
-}

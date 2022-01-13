@@ -19,18 +19,18 @@ data "cloudfoundry_space" "space" {
   org_name = var.paas_org_name
 }
 
-module "network" {
-  source  = "./modules/network"
+module "network-routes" {
+  source  = "modules/network-routes"
   space   = data.cloudfoundry_space.space
   env_tag = var.env_tag
 }
 
 module "maintenance" {
   source     = "./modules/maintenance"
-  depends_on = [module.network.mp_route]
+  depends_on = [module.network-routes.mp_route]
   space      = data.cloudfoundry_space.space
   env_tag    = var.env_tag
-  app_route  = module.network.mp_route
+  app_route  = module.network-routes.mp_route
 }
 
 module "backing-services" {
@@ -44,11 +44,11 @@ module "back-end" {
   source                                    = "./modules/back-end"
   space                                     = data.cloudfoundry_space.space
   be_build_asset                            = var.be_asset
-  app_be_route                              = module.network.be_route
+  app_be_route                              = module.network-routes.be_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
   logit                                     = module.backing-services.logit
-  app_fe_route                              = module.network.fe_route
+  app_fe_route                              = module.network-routes.fe_route
   env_tag                                   = var.env_tag
   iron_name                                 = var.iron_name
   iron_password                             = var.iron_password
@@ -66,17 +66,24 @@ module "front-end" {
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
   api_build_asset     = var.api_asset
-  app_fe_route        = module.network.fe_route
-  app_api_route       = module.network.api_route
-  app_be_route        = module.network.be_route
-  internal_domain     = module.network.internal_domain
-  cloudapps_domain    = module.network.cloudapps_domain
-  custom_domain       = module.network.custom_domain
+  app_fe_route        = module.network-routes.fe_route
+  app_api_route       = module.network-routes.api_route
+  app_be_route        = module.network-routes.be_route
+  internal_domain     = module.network-routes.internal_domain
+  cloudapps_domain    = module.network-routes.cloudapps_domain
+  custom_domain       = module.network-routes.custom_domain
   db                  = module.backing-services.db
   logit               = module.backing-services.logit
   be_app              = module.back-end.be_app
   env_tag             = var.env_tag
   iron_name           = var.iron_name
   iron_password       = var.iron_password
+}
+
+module "network-policy" {
+  source      = "./modules/network-policy"
+  api_app     = module.front-end.api_app
+  app_app     = module.front-end.app_app
+  be_app      = module.back-end.be_app
 }
 
