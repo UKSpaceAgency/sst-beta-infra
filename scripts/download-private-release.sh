@@ -11,7 +11,7 @@ output_filename_path="${5:-}"
 
 usage="usage: download-private-release.sh [repo-owner] [repo-name] [git-tag] [asset-filename] [output-filename-path]"
 if [[ -z "$_git_token" ]]; then
-    echo "Missing environment variable: GIT_TOKEN"
+    echo "Missing environment variable: TF_GITHUB_TOKEN"
     exit 1
 fi
 expected="repo_owner repo_name git_tag asset_filename output_filename_path"

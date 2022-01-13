@@ -24,3 +24,8 @@ echo "$(date '+%d/%m/%Y %H:%M:%S') Downloaded"
 echo "$(date '+%d/%m/%Y %H:%M:%S') Downloading FE API Asset..."
 . ./scripts/download-private-release.sh $GITHUB_OWNER $GITHUB_FE_REPO $GITHUB_RELEASE_TAG $GITHUB_FE_API_ASSET $GITHUB_FE_API_ASSET
 echo "$(date '+%d/%m/%Y %H:%M:%S') Downloaded"
+
+# Generate MP Asset
+echo "$(date '+%d/%m/%Y %H:%M:%S') Generating MP Asset..."
+cd modules/maintenance/app && zip -r mp.zip ./* && mv mp.zip ../../..
+echo "$(date '+%d/%m/%Y %H:%M:%S') Downloaded"

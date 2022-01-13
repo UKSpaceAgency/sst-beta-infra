@@ -7,28 +7,13 @@ terraform {
   }
 }
 
-locals {
-  build_asset_fullpath = "${path.module}/${var.build_asset}"
-}
-
-resource "null_resource" "mp_build_assets" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "cd ${ path.module}/app && zip -r mp.zip ./* && mv mp.zip .. "
-  }
-}
-
 resource "cloudfoundry_app" "mp" {
-  depends_on        = [null_resource.mp_build_assets]
   name              = "${ var.app_name }-${ var.env_tag }"
   space             = var.space.id
   buildpack         = var.app_buildpack
   memory            = var.app_memory
-  path              = local.build_asset_fullpath
-  //source_code_hash  = filebase64sha256(local.build_asset_fullpath)
+  path              = var.build_asset
+  source_code_hash  = filebase64sha256(var.build_asset)
 
   routes {
     route = var.app_route.id
