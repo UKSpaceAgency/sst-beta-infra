@@ -20,6 +20,20 @@ variable "logit_service_url" {}
 
 variable "env_tag" {}
 
+variable "be_asset" {
+  default = "be.zip"
+}
+
+variable "app_asset" {
+  default = "app.zip"
+}
+
+variable "api_asset" {
+  default = "api.zip"
+}
+
+variable ""
+
 variable "github_token" {}
 
 variable "spacetrack_username" {}

@@ -19,15 +19,25 @@ data "cloudfoundry_space" "space" {
   org_name = var.paas_org_name
 }
 
+/*
 module "build-assets" {
   source        = "./modules/build-assets"
   github_token  = var.github_token
 }
+*/
+
+module "network" {
+  source  = "./modules/network"
+  space   = data.cloudfoundry_space.space
+  env_tag = var.env_tag
+}
 
 module "maintenance" {
-  source    = "./modules/maintenance"
-  space     = data.cloudfoundry_space.space
-  env_tag   = var.env_tag
+  source     = "./modules/maintenance"
+  depends_on = [module.network.mp_route]
+  space      = data.cloudfoundry_space.space
+  env_tag    = var.env_tag
+  app_route  = module.network.mp_route
 }
 
 module "backing-services" {
@@ -37,17 +47,10 @@ module "backing-services" {
   logit_service_url   = var.logit_service_url
 }
 
-module "network" {
-  source  = "./modules/network"
-  space   = data.cloudfoundry_space.space
-  env_tag = var.env_tag
-}
-
 module "back-end" {
-  depends_on                                = [module.build-assets]
   source                                    = "./modules/back-end"
   space                                     = data.cloudfoundry_space.space
-  be_build_asset                            = module.build-assets.be_asset
+  be_build_asset                            = var.be_asset
   app_be_route                              = module.network.be_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
@@ -65,11 +68,11 @@ module "back-end" {
 }
 
 module "front-end" {
-  depends_on          = [module.build-assets, module.back-end.be_app]
+  depends_on          = [module.back-end.be_app]
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
-  fe_build_asset      = module.build-assets.fe_asset
-  api_build_asset     = module.build-assets.api_asset
+  fe_build_asset      = var.app_asset
+  api_build_asset     = var.api_asset
   app_fe_route        = module.network.fe_route
   app_api_route       = module.network.api_route
   app_be_route        = module.network.be_route

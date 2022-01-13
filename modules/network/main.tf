@@ -42,11 +42,3 @@ resource "cloudfoundry_route" "mp" {
   hostname = "${ var.app_mp_route_name }-${ var.env_tag }"
   space    = var.space.id
 }
-/*
-resource "cloudfoundry_route" "app_route_custom_domain" {
-  count    = var.custom_domain_flag ? 1 : 0
-  domain   = data.cloudfoundry_domain.custom.id
-  hostname = var.custom_subdomain
-  space    = var.space.id
-}
-*/
