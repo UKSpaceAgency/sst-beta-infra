@@ -74,6 +74,26 @@ jobs:
           terraform apply \
             -auto-approve \
             -var-file="${{ secrets.env_tfvars }}" \
+            -var="maintenance_mode=true" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_service_url=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
+            -var="iron_name=${{ secrets.paas_app_iron_name }}" \
+            -var="iron_password=${{ secrets.paas_app_iron_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}" \
+            -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
+            -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
+
+      - name: Terraform Turn Off Maintenance Page
+        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
+        run: |
+          terraform apply \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
             -var="github_token=${{ secrets.tf_github_token }}" \
