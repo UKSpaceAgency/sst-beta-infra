@@ -28,7 +28,7 @@ resource "cloudfoundry_app" "mp" {
   buildpack         = var.app_buildpack
   memory            = var.app_memory
   path              = local.build_asset_fullpath
-  source_code_hash  = filebase64sha256(local.build_asset_fullpath)
+  //source_code_hash  = filebase64sha256(local.build_asset_fullpath)
 
   routes {
     route = var.app_route
