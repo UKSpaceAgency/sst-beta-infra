@@ -23,7 +23,7 @@ resource "cloudfoundry_app" "be" {
   timeout           = var.app_be_timeout
   instances         = var.app_be_instances
   path              = var.be_build_asset
-  //source_code_hash  = filebase64sha256(var.be_build_asset)
+  source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_be_command
 
   environment = {
