@@ -32,8 +32,6 @@ variable "api_asset" {
   default = "api.zip"
 }
 
-variable ""
-
 variable "github_token" {}
 
 variable "spacetrack_username" {}
