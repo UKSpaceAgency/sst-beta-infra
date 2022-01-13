@@ -39,7 +39,7 @@ variable "app_api_command" {
 }
 
 variable "app_api_strategy" {
-  default = "blue-green"
+  default = "none"
 }
 
 variable "api_build_asset" {}
@@ -81,7 +81,7 @@ variable "app_fe_instances" {
 }
 
 variable "app_fe_strategy" {
-  default = "blue-green"
+  default = "none"
 }
 
 variable "internal_domain" {}
