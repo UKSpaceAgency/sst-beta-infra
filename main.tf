@@ -30,7 +30,7 @@ module "maintenance" {
   depends_on = [module.network-routes.mp_route]
   space      = data.cloudfoundry_space.space
   env_tag    = var.env_tag
-  app_route  = module.network-routes.mp_route
+  app_route  = var.maintenance_mode ? module.network-routes.fe_route : module.network-routes.mp_route
 }
 
 module "backing-services" {
@@ -66,7 +66,7 @@ module "front-end" {
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
   api_build_asset     = var.api_asset
-  app_fe_route        = module.network-routes.fe_route
+  app_fe_route        = var.maintenance_mode ? module.network-routes.mp_route : module.network-routes.fe_route
   app_api_route       = module.network-routes.api_route
   app_be_route        = module.network-routes.be_route
   internal_domain     = module.network-routes.internal_domain
