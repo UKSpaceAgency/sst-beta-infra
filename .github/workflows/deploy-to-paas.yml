@@ -34,6 +34,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Download Build Artifacts
+        run: |
+          ./scripts/download-build-assets.sh
+        env:
+          TF_GITHUB_TOKEN = ${{ secrets.TF_GITHUB_TOKEN }}
+
       - name: Terraform Init
         run: |
           terraform init \
@@ -43,10 +49,6 @@ jobs:
             -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
             -backend-config="access_key=${{ secrets.s3_backend_access_key }}" \
             -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
-
-      - name: Download Build Artifacts
-        run: |
-          ./scripts/download-build-assets.sh
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.invoker == 'plan' }}
