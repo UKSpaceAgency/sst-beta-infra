@@ -19,13 +19,6 @@ data "cloudfoundry_space" "space" {
   org_name = var.paas_org_name
 }
 
-/*
-module "build-assets" {
-  source        = "./modules/build-assets"
-  github_token  = var.github_token
-}
-*/
-
 module "network" {
   source  = "./modules/network"
   space   = data.cloudfoundry_space.space
