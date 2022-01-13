@@ -2,7 +2,7 @@
 # shellcheck disable=SC2086
 set -eou pipefail
 
-_git_token="${GIT_TOKEN:-}"
+_git_token="${TF_GITHUB_TOKEN:-}"
 repo_owner="${1:-}"
 repo_name="${2:-}"
 git_tag="${3:-}"
