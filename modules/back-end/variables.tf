@@ -54,6 +54,10 @@ variable "iron_password" {}
 
 variable "notify_api_key" {}
 
+variable "notify_interval" {
+  default = 43200
+}
+
 variable "user_service_jwt_authentication_secret" {}
 
 variable "user_service_reset_password_token_secret" {}
