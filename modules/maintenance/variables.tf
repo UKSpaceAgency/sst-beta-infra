@@ -15,7 +15,7 @@ variable "app_buildpack" {
 }
 
 variable "app_strategy" {
-  default = "blue-green"
+  default = "none"
 }
 
 variable "build_asset" {

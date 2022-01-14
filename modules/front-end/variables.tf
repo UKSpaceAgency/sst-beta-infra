@@ -81,7 +81,7 @@ variable "app_fe_instances" {
 }
 
 variable "app_fe_strategy" {
-  default = "blue-green"
+  default = "none"
 }
 
 variable "internal_domain" {}
