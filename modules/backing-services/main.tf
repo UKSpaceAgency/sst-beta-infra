@@ -24,6 +24,7 @@ data "cloudfoundry_service" "s3" {
 resource "cloudfoundry_service_instance" "db" {
   name         = local.db_name
   service_plan = "${data.cloudfoundry_service.db.service_plans["${var.db_plan}"]}"
+  json_params  = var.db_extensions
   space        = var.space.id
 }
 

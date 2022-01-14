@@ -14,6 +14,10 @@ variable "db_plan" {
   default = "small-13"
 }
 
+variable "db_extensions" {
+  default = "{\"enable_extensions\": [\"pg_stat_statements\"]}"
+}
+
 variable "s3_name" {
   default = "mms-s3"
 }
