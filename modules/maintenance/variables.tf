@@ -14,6 +14,10 @@ variable "app_buildpack" {
   default = "staticfile_buildpack"
 }
 
+variable "app_strategy" {
+  default = "blue-green"
+}
+
 variable "build_asset" {
   default = "mp.zip"
 }

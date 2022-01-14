@@ -14,6 +14,7 @@ resource "cloudfoundry_app" "mp" {
   memory            = var.app_memory
   path              = var.build_asset
   source_code_hash  = filebase64sha256(var.build_asset)
+  strategy          = var.app_strategy
 
   routes {
     route = var.app_route.id
