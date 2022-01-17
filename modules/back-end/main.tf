@@ -26,7 +26,7 @@ resource "cloudfoundry_app" "be" {
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_be_command
 
-  labels = {
+  annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
     "release_timestamp" = "${timestamp()}"
   }
