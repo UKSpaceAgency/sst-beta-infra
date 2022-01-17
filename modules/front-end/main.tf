@@ -27,8 +27,8 @@ resource "cloudfoundry_app" "api" {
   strategy         = var.app_api_strategy
 
   labels = {
-    "source code hash" = filebase64sha256(var.api_build_asset)
-    "release timestamp" = "${timestamp()}"
+    "source_code_hash"  = filebase64sha256(var.api_build_asset)
+    "release_timestamp" = "${timestamp()}"
   }
 
   environment = {
@@ -64,8 +64,8 @@ resource "cloudfoundry_app" "fe" {
   strategy          = var.app_fe_strategy
 
   labels = {
-    "source code hash" = filebase64sha256(var.fe_build_asset)
-    "release timestamp" = "${timestamp()}"
+    "source_code_hash"  = filebase64sha256(var.fe_build_asset)
+    "release_timestamp" = "${timestamp()}"
   }
 
   environment = {

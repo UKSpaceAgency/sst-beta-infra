@@ -27,8 +27,8 @@ resource "cloudfoundry_app" "be" {
   command           = var.app_be_command
 
   labels = {
-    "source code hash" = filebase64sha256(var.be_build_asset)
-    "release timestamp" = "${timestamp()}"
+    "source_code_hash"  = filebase64sha256(var.be_build_asset)
+    "release_timestamp" = "${timestamp()}"
   }
 
   environment = {
