@@ -26,6 +26,11 @@ resource "cloudfoundry_app" "be" {
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_be_command
 
+  labels = {
+    "source code hash" = filebase64sha256(var.be_build_asset)
+    "release timestamp" = "${timestamp()}"
+  }
+
   environment = {
     SPACE_TRACK_IDENTITY                      = var.spacetrack_username
     SPACE_TRACK_PASSWORD                      = var.spacetrack_password

@@ -26,6 +26,11 @@ resource "cloudfoundry_app" "api" {
   command          = var.app_api_command
   strategy         = var.app_api_strategy
 
+  labels = {
+    "source code hash" = filebase64sha256(var.api_build_asset)
+    "release timestamp" = "${timestamp()}"
+  }
+
   environment = {
     IRON_NAME            = var.iron_name
     IRON_PASSWORD        = var.iron_password
@@ -57,6 +62,11 @@ resource "cloudfoundry_app" "fe" {
   source_code_hash  = filebase64sha256(var.fe_build_asset)
   command           = var.app_fe_command
   strategy          = var.app_fe_strategy
+
+  labels = {
+    "source code hash" = filebase64sha256(var.fe_build_asset)
+    "release timestamp" = "${timestamp()}"
+  }
 
   environment = {
     IRON_NAME               = var.iron_name
