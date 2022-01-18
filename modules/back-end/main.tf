@@ -72,6 +72,11 @@ resource "cloudfoundry_app" "db_migration" {
   command           = var.app_db_migration_command
   health_check_type = "none"
 
+  annotations = {
+    "source_code_hash"  = filebase64sha256(var.be_build_asset)
+    "release_timestamp" = "${timestamp()}"
+  }
+
   service_binding {
     service_instance = var.db.id
   }
