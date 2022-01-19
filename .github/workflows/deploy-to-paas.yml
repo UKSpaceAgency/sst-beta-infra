@@ -27,7 +27,7 @@ jobs:
           # For posting a rich message using Block Kit
           payload: |
             {
-              "text": "*Release Train* ${{ github.run_id }}: Leaving to station to deploy *${{ github.event.inputs.invoker }}* on *${{ github.event.inputs.env }}*"
+              "text": "*Release Train* ${{ github.run_id }}: Leaving the station to deploy *${{ github.event.inputs.invoker }}* on *${{ github.event.inputs.env }}*"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
