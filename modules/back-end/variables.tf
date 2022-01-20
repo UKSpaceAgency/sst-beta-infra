@@ -27,7 +27,7 @@ variable "app_be_instances" {
 }
 
 variable "app_be_command" {
-  default = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker --preload --bind 0.0.0.0:8080 app.main:app"
+  default = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker --preload --bind 0.0.0.0:8080 --timeout 0 app.main:app"
 }
 
 variable "be_build_asset" {}
