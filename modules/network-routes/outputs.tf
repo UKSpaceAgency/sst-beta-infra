@@ -6,8 +6,12 @@ output "api_route" {
   value = cloudfoundry_route.api
 }
 
-output "be_route" {
-  value = cloudfoundry_route.be
+output "be_batch_route" {
+  value = cloudfoundry_route.be_batch
+}
+
+output "be_interactive_route" {
+  value = cloudfoundry_route.be_interactive
 }
 
 output "mp_route" {

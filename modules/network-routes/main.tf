@@ -31,9 +31,15 @@ resource "cloudfoundry_route" "api" {
   space    = var.space.id
 }
 
-resource "cloudfoundry_route" "be" {
+resource "cloudfoundry_route" "be_batch" {
   domain   = data.cloudfoundry_domain.internal.id
-  hostname = "${ var.app_be_route_name }-${ var.env_tag }"
+  hostname = "${ var.app_be_batch_route_name }-${ var.env_tag }"
+  space    = var.space.id
+}
+
+resource "cloudfoundry_route" "be_interactive" {
+  domain   = data.cloudfoundry_domain.internal.id
+  hostname = "${ var.app_be_interactive_route_name }-${ var.env_tag }"
   space    = var.space.id
 }
 

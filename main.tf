@@ -44,7 +44,8 @@ module "back-end" {
   source                                    = "./modules/back-end"
   space                                     = data.cloudfoundry_space.space
   be_build_asset                            = var.be_asset
-  app_be_route                              = module.network-routes.be_route
+  app_be_batch_route                        = module.network-routes.be_batch_route
+  app_be_interactive_route                  = module.network-routes.be_interactive_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
   logit                                     = module.backing-services.logit

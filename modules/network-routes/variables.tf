@@ -10,8 +10,12 @@ variable "app_api_route_name" {
   default = "monitor-my-satellites-api"
 }
 
-variable "app_be_route_name" {
-  default = "monitor-my-satellites-be"
+variable "app_be_batch_route_name" {
+  default = "monitor-my-satellites-be-batch"
+}
+
+variable "app_be_interactive_route_name" {
+  default = "monitor-my-satellites-be-interactive"
 }
 
 variable "app_fe_route_name" {

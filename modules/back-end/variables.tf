@@ -2,8 +2,12 @@ variable "env_tag" {
   default = "dev"
 }
 
-variable "app_be_name" {
-  default = "mms-be"
+variable "app_be_batch_name" {
+  default = "mms-be-batch"
+}
+
+variable "app_be_interactive_name" {
+  default = "mms-be-interactive"
 }
 
 variable "app_be_buildpack" {
@@ -11,11 +15,11 @@ variable "app_be_buildpack" {
 }
 
 variable "app_be_memory" {
-  default = 4096
+  default = 2048
 }
 
 variable "app_be_disk_quota" {
-  default = 4096
+  default = 2048
 }
 
 variable "app_be_timeout" {
@@ -26,13 +30,19 @@ variable "app_be_instances" {
   default = 1
 }
 
-variable "app_be_command" {
+variable "app_be_batch_command" {
   default = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker --preload --bind 0.0.0.0:8080 --timeout 0 app.main:app"
+}
+
+variable "app_be_interactive_command" {
+  default = "python -m app/periodics/space_track_worker.py"
 }
 
 variable "be_build_asset" {}
 
-variable "app_be_route" {}
+variable "app_be_batch_route" {}
+
+variable "app_be_interactive_route" {}
 
 variable "app_fe_route" {}
 
