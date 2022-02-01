@@ -7,15 +7,15 @@ variable "custom_subdomain" {
 }
 
 variable "app_api_route_name" {
-  default = "monitor-my-satellites-api"
+  default = "mms-api"
 }
 
 variable "app_be_batch_route_name" {
-  default = "monitor-my-satellites-be-batch"
+  default = "mms-be-batch"
 }
 
 variable "app_be_interactive_route_name" {
-  default = "monitor-my-satellites-be-interactive"
+  default = "mms-be-interactive"
 }
 
 variable "app_fe_route_name" {
@@ -23,7 +23,7 @@ variable "app_fe_route_name" {
 }
 
 variable "app_mp_route_name" {
-  default = "monitor-my-satellites-mp"
+  default = "mms-mp"
 }
 
 variable "space" {}
