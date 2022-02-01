@@ -80,7 +80,7 @@ jobs:
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }} \
+            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
 
       - name: Terraform Apply
@@ -102,7 +102,7 @@ jobs:
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }} \
+            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
 
       - name: Terraform Turn Off Maintenance Page
@@ -123,7 +123,7 @@ jobs:
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }} \
+            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
 
       - name: Terraform Destroy DB Migration
@@ -145,7 +145,7 @@ jobs:
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }} \
+            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
 
       - name: Send build result to Slack
