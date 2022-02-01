@@ -62,20 +62,20 @@ module "back-end" {
 }
 
 module "front-end" {
-  depends_on          = [module.back-end.be_app]
+  depends_on          = [module.back-end.be_interactive_app]
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
   api_build_asset     = var.api_asset
   app_fe_route        = var.maintenance_mode ? module.network-routes.mp_route : module.network-routes.fe_route
   app_api_route       = module.network-routes.api_route
-  app_be_route        = module.network-routes.be_route
+  app_be_route        = module.network-routes.be_interactive_route
   internal_domain     = module.network-routes.internal_domain
   cloudapps_domain    = module.network-routes.cloudapps_domain
   custom_domain       = module.network-routes.custom_domain
   db                  = module.backing-services.db
   logit               = module.backing-services.logit
-  be_app              = module.back-end.be_app
+  be_app              = module.back-end.be_interactive_app
   env_tag             = var.env_tag
   iron_name           = var.iron_name
   iron_password       = var.iron_password
@@ -85,6 +85,6 @@ module "network-policy" {
   source      = "./modules/network-policy"
   api_app     = module.front-end.api_app
   app_app     = module.front-end.app_app
-  be_app      = module.back-end.be_app
+  be_app      = module.back-end.be_interactive_app
 }
 
