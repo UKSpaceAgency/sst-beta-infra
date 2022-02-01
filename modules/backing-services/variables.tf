@@ -27,7 +27,7 @@ variable "redis_service" {
 }
 
 variable "redis_plan" {
-  default = "tiny-6.x"
+  default = "tiny-6_x"
 }
 
 variable "s3_name" {

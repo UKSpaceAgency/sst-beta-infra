@@ -59,6 +59,10 @@ resource "cloudfoundry_app" "be_batch" {
   }
 
   service_binding {
+    service_instance = var.redis.id
+  }
+
+  service_binding {
     service_instance = var.logit.id
   }
 }

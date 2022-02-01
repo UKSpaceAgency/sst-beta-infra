@@ -48,6 +48,7 @@ module "back-end" {
   app_be_interactive_route                  = module.network-routes.be_interactive_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
+  redis                                     = module.backing-services.redis
   logit                                     = module.backing-services.logit
   app_fe_route                              = module.network-routes.fe_route
   env_tag                                   = var.env_tag

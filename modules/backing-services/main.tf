@@ -35,7 +35,7 @@ resource "cloudfoundry_service_instance" "db" {
 
 resource "cloudfoundry_service_instance" "redis" {
   name         = local.redis_name
-  service_plan = "${data.cloudfoundry_service.redis.service_plans[${var.redis_plan}]}"
+  service_plan = "${data.cloudfoundry_service.redis.service_plans["${var.redis_plan}"]}"
   space        = var.space.id
 }
 
