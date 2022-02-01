@@ -35,7 +35,7 @@ variable "app_be_interactive_command" {
 }
 
 variable "app_be_batch_command" {
-  default = "python -m app/periodics/space_track_worker"
+  default = "python -m app.periodics.space_track_worker"
 }
 
 variable "be_build_asset" {}
@@ -66,6 +66,14 @@ variable "notify_api_key" {}
 
 variable "notify_interval" {
   default = 43200
+}
+
+variable "run_at_hour" {
+  default = 18
+}
+
+variable "run_at_minute" {
+  default = 30
 }
 
 variable "user_service_jwt_authentication_secret" {}

@@ -26,6 +26,7 @@ resource "cloudfoundry_app" "be_batch" {
   path              = var.be_build_asset
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_be_batch_command
+  health_check_type = "none"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
@@ -38,6 +39,8 @@ resource "cloudfoundry_app" "be_batch" {
     NOTIFY_API_KEY                            = var.notify_api_key
     NOTIFY_INTERVAL                           = var.notify_interval
     APP_ENVIRONMENT                           = var.env_tag
+    RUN_AT_HOUR                               = var.run_at_hour
+    RUN_AT_MINUTE                             = var.run_at_minute
   }
 
   routes {
