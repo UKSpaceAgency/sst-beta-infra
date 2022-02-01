@@ -10,6 +10,7 @@ terraform {
 locals {
   db_name     = "${ var.db_name }-${ var.env_tag }"
   s3_name     = "${ var.s3_name }-${ var.env_tag }"
+  redis_name  = "${ var.redis_name }-${ var.env_tag }"
   logit_name  = "${ var.logit_service_name }-${ var.env_tag }"
 }
 
@@ -21,10 +22,20 @@ data "cloudfoundry_service" "s3" {
   name = var.s3_service
 }
 
+data "cloudfoundry_service" "redis" {
+  name = var.redis_service
+}
+
 resource "cloudfoundry_service_instance" "db" {
   name         = local.db_name
   service_plan = "${data.cloudfoundry_service.db.service_plans["${var.db_plan}"]}"
   json_params  = var.db_extensions
+  space        = var.space.id
+}
+
+resource "cloudfoundry_service_instance" "redis" {
+  name         = local.redis_name
+  service_plan = "${data.cloudfoundry_service.redis.service_plans[${var.redis_plan}]}"
   space        = var.space.id
 }
 

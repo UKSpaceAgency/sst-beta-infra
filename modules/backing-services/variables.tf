@@ -18,6 +18,18 @@ variable "db_extensions" {
   default = "{\"enable_extensions\": [\"pg_stat_statements\"]}"
 }
 
+variable "redis_name" {
+  default = "mms-redis"
+}
+
+variable "redis_service" {
+  default = "redis"
+}
+
+variable "redis_plan" {
+  default = "tiny-6.x"
+}
+
 variable "s3_name" {
   default = "mms-s3"
 }
