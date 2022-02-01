@@ -69,11 +69,11 @@ variable "notify_interval" {
 }
 
 variable "run_at_hour" {
-  default = 20
+  default = 21
 }
 
 variable "run_at_minute" {
-  default = 00
+  default = 0
 }
 
 variable "user_service_jwt_authentication_secret" {}
