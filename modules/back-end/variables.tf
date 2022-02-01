@@ -30,12 +30,12 @@ variable "app_be_instances" {
   default = 1
 }
 
-variable "app_be_batch_command" {
+variable "app_be_interactive_command" {
   default = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker --preload --bind 0.0.0.0:8080 --timeout 0 app.main:app"
 }
 
-variable "app_be_interactive_command" {
-  default = "python -m app/periodics/space_track_worker.py"
+variable "app_be_batch_command" {
+  default = "python -m app/periodics/space_track_worker"
 }
 
 variable "be_build_asset" {}
