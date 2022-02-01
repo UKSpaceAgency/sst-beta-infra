@@ -50,6 +50,10 @@ variable "user_service_reset_password_token_secret" {}
 
 variable "user_service_verification_token_secret" {}
 
+variable "spacetrack_run_at_hour" {}
+
+variable "spacetrack_run_at_minute" {}
+
 variable "maintenance_mode" {
   default = false
 }

@@ -79,9 +79,7 @@ jobs:
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="run_at_hour=${{ secrets.run_at_hour }}" \
-            -var="run_at_minute=${{ secrets.run_at_minute }}"
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -101,9 +99,7 @@ jobs:
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="run_at_hour=${{ secrets.run_at_hour }}" \
-            -var="run_at_minute=${{ secrets.run_at_minute }}"
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -122,9 +118,7 @@ jobs:
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="run_at_hour=${{ secrets.run_at_hour }}" \
-            -var="run_at_minute=${{ secrets.run_at_minute }}"
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -144,9 +138,7 @@ jobs:
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
-            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
-            -var="run_at_hour=${{ secrets.run_at_hour }}" \
-            -var="run_at_minute=${{ secrets.run_at_minute }}"
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}"
 
       - name: Send build result to Slack
         id: slack
