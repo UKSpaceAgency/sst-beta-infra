@@ -86,6 +86,7 @@ resource "cloudfoundry_app" "be_interactive" {
     IRON_NAME                                 = var.iron_name
     IRON_PASSWORD                             = var.iron_password
     APP_FRONTEND_URL                          = "https://${ var.app_fe_route.endpoint }"
+    NOTIFY_API_KEY                            = var.notify_api_key
     USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
     USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
     USER_SERVICE_VERIFICATION_TOKEN_SECRET    = var.user_service_verification_token_secret
