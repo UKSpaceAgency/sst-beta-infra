@@ -74,6 +74,7 @@ resource "cloudfoundry_app" "fe" {
     PAGES_LOCATION          = "./.next/server/pages"
     GRAPHQL_URL             = "http://${var.app_api_route.endpoint}:8080/graphql"
     BASE_API_URL            = "https://${ var.app_fe_route.endpoint }/api"
+    PIWIK_ID                = var.piwik_id
   }
 
   routes {

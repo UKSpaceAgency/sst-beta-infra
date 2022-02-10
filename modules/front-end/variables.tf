@@ -56,6 +56,8 @@ variable "iron_name" {}
 
 variable "iron_password" {}
 
+variable "piwik_id" {}
+
 variable "app_fe_name" {
   default = "mms-fe"
 }

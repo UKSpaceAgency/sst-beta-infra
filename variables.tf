@@ -42,6 +42,10 @@ variable "iron_name" {}
 
 variable "iron_password" {}
 
+variable "piwik_id" {
+  default = ""
+}
+
 variable "notify_api_key" {}
 
 variable "user_service_jwt_authentication_secret" {}

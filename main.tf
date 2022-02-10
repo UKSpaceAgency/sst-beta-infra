@@ -82,6 +82,7 @@ module "front-end" {
   env_tag             = var.env_tag
   iron_name           = var.iron_name
   iron_password       = var.iron_password
+  piwik_id            = var.piwik_id
 }
 
 module "network-policy" {

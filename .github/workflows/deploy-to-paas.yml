@@ -81,7 +81,8 @@ jobs:
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
-            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
+            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
+            -var="piwik_id=${{ secrets.piwik_id }}
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -103,7 +104,8 @@ jobs:
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
-            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
+            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
+            -var="piwik_id=${{ secrets.piwik_id }}
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -124,7 +126,8 @@ jobs:
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
-            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
+            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
+            -var="piwik_id=${{ secrets.piwik_id }}
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -146,7 +149,8 @@ jobs:
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
-            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}"
+            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
+            -var="piwik_id=${{ secrets.piwik_id }}
 
       - name: Send build result to Slack
         id: slack
