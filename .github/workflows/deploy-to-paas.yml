@@ -51,7 +51,7 @@ jobs:
           ref: 'rest'
 
       - name: Checkout MAIN Branch
-        if: !${{ github.event.inputs.env }} == 'rest'
+        if: ${{ github.event.inputs.env != 'rest' }}
           uses: actions/checkout@v2
 
       - name: Download Build Artifacts
