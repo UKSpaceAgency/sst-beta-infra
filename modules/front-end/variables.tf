@@ -10,43 +10,7 @@ variable "db" {}
 
 variable "logit" {}
 
-variable "app_api_name" {
-  default = "mms-api"
-}
-
-variable "app_api_memory" {
-  default = 4096
-}
-
-variable "app_api_disk_quota" {
-  default = 6144
-}
-
-variable "app_api_timeout" {
-  default = 300
-}
-
-variable "app_api_instances" {
-  default = 1
-}
-
-variable "app_api_buildpack" {
-  default = "nodejs_buildpack"
-}
-
-variable "app_api_command" {
-  default = "node dist/apps/api/main.js"
-}
-
-variable "app_api_strategy" {
-  default = "none"
-}
-
-variable "api_build_asset" {}
-
 variable "fe_build_asset" {}
-
-variable "app_api_route" {}
 
 variable "app_be_route" {}
 
