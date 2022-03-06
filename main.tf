@@ -80,6 +80,10 @@ module "front-end" {
   env_tag             = var.env_tag
   iron_name           = var.iron_name
   iron_password       = var.iron_password
+  i18nexus_api_key    = var.i18nexus_api_key
+  cosmic_bucket_slug  = var.cosmic_bucket_slug
+  cosmic_read_key     = var.cosmic_read_key
+  cosmic_preview_secret = var.cosmic_preview_secret
   piwik_id            = var.piwik_id
 }
 

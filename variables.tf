@@ -42,6 +42,14 @@ variable "iron_name" {}
 
 variable "iron_password" {}
 
+variable "i18nexus_api_key" {}
+
+variable "cosmic_bucket_slug" {}
+
+variable "cosmic_read_key" {}
+
+variable "cosmic_preview_secret" {}
+
 variable "piwik_id" {
   default = ""
 }
