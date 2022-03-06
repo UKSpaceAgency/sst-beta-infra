@@ -35,7 +35,6 @@ resource "cloudfoundry_app" "fe" {
     IRON_NAME               = var.iron_name
     IRON_PASSWORD           = var.iron_password
     PAGES_LOCATION          = "./.next/server/pages"
-    NEXT_TRANSLATE_PATH     = "apps/next"
     I18NEXUS_API_KEY        = var.i18nexus_api_key
     COSMIC_BUCKET_SLUG      = var.cosmic_bucket_slug
     COSMIC_READ_KEY         = var.cosmic_read_key
