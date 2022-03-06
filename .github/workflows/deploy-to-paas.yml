@@ -45,11 +45,11 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
 
       - name: Checkout MAIN Branch
-        if: ${{ github.event.inputs.env }} != 'rest'
+        if: ${{ github.event.inputs.env != 'rest' }}
         uses: actions/checkout@v2
 
       - name: Checkout REST Branch
-        if: ${{ github.event.inputs.env }} == 'rest'
+        if: ${{ github.event.inputs.env == 'rest' }}
         uses: actions/checkout@v2
         with:
           ref: 'rest'
