@@ -34,7 +34,7 @@ resource "cloudfoundry_app" "fe" {
     BASE_API_URL            = "https://${ var.app_fe_route.endpoint }/api/graphql"
     IRON_NAME               = var.iron_name
     IRON_PASSWORD           = var.iron_password
-    PAGES_LOCATION          = "./pages"
+    PAGES_LOCATION          = "./.next/server/pages"
     I18NEXUS_API_KEY        = var.i18nexus_api_key
     COSMIC_BUCKET_SLUG      = var.cosmic_bucket_slug
     COSMIC_READ_KEY         = var.cosmic_read_key
