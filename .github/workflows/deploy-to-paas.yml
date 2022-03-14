@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - uses: hashicorp/setup-terraform@v1
-
+      
       - name: Checkout MAIN Branch
         if: ${{ github.event.inputs.env != 'rest' }}
         uses: actions/checkout@v2
@@ -89,7 +89,11 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}"
+            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
+            -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
+            -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -112,7 +116,11 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}"
+            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
+            -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
+            -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -134,7 +142,11 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}"
+            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
+            -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
+            -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -157,7 +169,11 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}"
+            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
+            -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
+            -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
 
       - name: Send build result to Slack
         id: slack

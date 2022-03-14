@@ -9,45 +9,6 @@ terraform {
 
 locals {
   fe_name             = "${ var.app_fe_name }-${ var.env_tag }"
-  api_name            = "${ var.app_api_name }-${ var.env_tag }"
-}
-
-resource "cloudfoundry_app" "api" {
-
-  name             = local.api_name
-  space            = var.space.id
-  buildpack        = var.app_api_buildpack
-  memory           = var.app_api_memory
-  disk_quota       = var.app_api_disk_quota
-  timeout          = var.app_api_timeout
-  instances        = var.app_api_instances
-  path             = var.api_build_asset
-  source_code_hash = filebase64sha256(var.api_build_asset)
-  command          = var.app_api_command
-  strategy         = var.app_api_strategy
-
-  annotations = {
-    "source_code_hash"  = filebase64sha256(var.api_build_asset)
-    "release_timestamp" = "${timestamp()}"
-  }
-
-  environment = {
-    IRON_NAME            = var.iron_name
-    IRON_PASSWORD        = var.iron_password
-    API_URL              = "http://${ var.app_be_route.hostname }.${var.internal_domain.name}:8080/"
-  }
-
-  routes {
-    route = var.app_api_route.id
-  }
-
-  service_binding {
-    service_instance = var.db.id
-  }
-
-  service_binding {
-    service_instance = var.logit.id
-  }
 }
 
 resource "cloudfoundry_app" "fe" {
@@ -69,11 +30,15 @@ resource "cloudfoundry_app" "fe" {
   }
 
   environment = {
+    API_URL                 = "http://${ var.app_be_route.endpoint }:8080"
+    BASE_API_URL            = "https://${ var.app_fe_route.endpoint }/api/graphql"
     IRON_NAME               = var.iron_name
     IRON_PASSWORD           = var.iron_password
     PAGES_LOCATION          = "./.next/server/pages"
-    GRAPHQL_URL             = "http://${var.app_api_route.endpoint}:8080/graphql"
-    BASE_API_URL            = "https://${ var.app_fe_route.endpoint }/api"
+    I18NEXUS_API_KEY        = var.i18nexus_api_key
+    COSMIC_BUCKET_SLUG      = var.cosmic_bucket_slug
+    COSMIC_READ_KEY         = var.cosmic_read_key
+    COSMIC_PREVIEW_SECRET   = var.cosmic_preview_secret
     PIWIK_ID                = var.piwik_id
   }
 

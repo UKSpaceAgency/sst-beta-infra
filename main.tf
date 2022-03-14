@@ -69,9 +69,7 @@ module "front-end" {
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
-  api_build_asset     = var.api_asset
   app_fe_route        = var.maintenance_mode ? module.network-routes.mp_route : module.network-routes.fe_route
-  app_api_route       = module.network-routes.api_route
   app_be_route        = module.network-routes.be_interactive_route
   internal_domain     = module.network-routes.internal_domain
   cloudapps_domain    = module.network-routes.cloudapps_domain
@@ -82,12 +80,15 @@ module "front-end" {
   env_tag             = var.env_tag
   iron_name           = var.iron_name
   iron_password       = var.iron_password
+  i18nexus_api_key    = var.i18nexus_api_key
+  cosmic_bucket_slug  = var.cosmic_bucket_slug
+  cosmic_read_key     = var.cosmic_read_key
+  cosmic_preview_secret = var.cosmic_preview_secret
   piwik_id            = var.piwik_id
 }
 
 module "network-policy" {
   source      = "./modules/network-policy"
-  api_app     = module.front-end.api_app
   app_app     = module.front-end.app_app
   be_app      = module.back-end.be_interactive_app
 }
