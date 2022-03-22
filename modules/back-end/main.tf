@@ -69,8 +69,8 @@ resource "cloudfoundry_app" "be_interactive" {
   name              = local.be_interactive_name
   space             = var.space.id
   buildpack         = var.app_be_buildpack
-  memory            = var.app_be_memory
-  disk_quota        = var.app_be_disk_quota
+  memory            = var.app_api_memory
+  disk_quota        = var.app_api_disk_quota
   timeout           = var.app_be_timeout
   instances         = var.app_be_instances
   path              = var.be_build_asset
