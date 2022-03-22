@@ -2,10 +2,6 @@ output "fe_route" {
   value = cloudfoundry_route.fe
 }
 
-output "api_route" {
-  value = cloudfoundry_route.api
-}
-
 output "be_batch_route" {
   value = cloudfoundry_route.be_batch
 }
