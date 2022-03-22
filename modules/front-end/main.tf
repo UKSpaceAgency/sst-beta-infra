@@ -30,7 +30,7 @@ resource "cloudfoundry_app" "fe" {
   }
 
   environment = {
-    API_URL                 = "http://${ var.app_be_route.endpoint }:8080"
+    API_URL                 = "https://${ var.app_be_route.endpoint }"
     BASE_API_URL            = "https://${ var.app_fe_route.endpoint }/api/graphql"
     IRON_NAME               = var.iron_name
     IRON_PASSWORD           = var.iron_password
