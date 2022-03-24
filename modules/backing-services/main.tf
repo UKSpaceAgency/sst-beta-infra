@@ -33,11 +33,13 @@ resource "cloudfoundry_service_instance" "db" {
   space        = var.space.id
 }
 
+/*
 resource "cloudfoundry_service_instance" "redis" {
   name         = local.redis_name
   service_plan = "${data.cloudfoundry_service.redis.service_plans["${var.redis_plan}"]}"
   space        = var.space.id
 }
+*/
 
 resource "cloudfoundry_service_instance" "aws_s3_bucket" {
   name         = local.s3_name
