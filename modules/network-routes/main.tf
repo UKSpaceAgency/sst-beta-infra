@@ -19,26 +19,26 @@ data "cloudfoundry_domain" "custom" {
   name = "monitor-my-satellites.space"
 }
 
-resource "cloudfoundry_route" "fe" {
+resource "cloudfoundry_route" "web" {
   domain   = "${ var.env_tag == "prod"? data.cloudfoundry_domain.custom.id : data.cloudfoundry_domain.cloudapps.id}"
-  hostname = "${ var.env_tag == "prod"? var.custom_subdomain : "${ var.app_fe_route_name }-${ var.env_tag }" }"
+  hostname = "${ var.env_tag == "prod"? var.custom_subdomain : "${ var.app_web_route_name }-${ var.env_tag }" }"
   space    = var.space.id
 }
 
-resource "cloudfoundry_route" "be_batch" {
+resource "cloudfoundry_route" "spacetrack" {
   domain   = data.cloudfoundry_domain.internal.id
-  hostname = "${ var.app_be_batch_route_name }-${ var.env_tag }"
+  hostname = "${ var.app_spacetrack_route_name }-${ var.env_tag }"
   space    = var.space.id
 }
 
-resource "cloudfoundry_route" "be_interactive" {
+resource "cloudfoundry_route" "api" {
   domain   = data.cloudfoundry_domain.cloudapps.id
-  hostname = "${ var.app_be_interactive_route_name }-${ var.env_tag }"
+  hostname = "${ var.app_api_route_name }-${ var.env_tag }"
   space    = var.space.id
 }
 
-resource "cloudfoundry_route" "mp" {
+resource "cloudfoundry_route" "maintenance" {
   domain   = data.cloudfoundry_domain.internal.id
-  hostname = "${ var.app_mp_route_name }-${ var.env_tag }"
+  hostname = "${ var.app_maintenance_route_name }-${ var.env_tag }"
   space    = var.space.id
 }

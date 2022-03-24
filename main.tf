@@ -27,10 +27,10 @@ module "network-routes" {
 
 module "maintenance" {
   source     = "./modules/maintenance"
-  depends_on = [module.network-routes.mp_route]
+  depends_on = [module.network-routes.maintenance_route]
   space      = data.cloudfoundry_space.space
   env_tag    = var.env_tag
-  app_route  = var.maintenance_mode ? module.network-routes.fe_route : module.network-routes.mp_route
+  app_route  = var.maintenance_mode ? module.network-routes.web_route : module.network-routes.maintenance_route
 }
 
 module "backing-services" {
@@ -44,13 +44,13 @@ module "back-end" {
   source                                    = "./modules/back-end"
   space                                     = data.cloudfoundry_space.space
   be_build_asset                            = var.be_asset
-  app_spacetrack_route                      = module.network-routes.be_batch_route
-  app_api_route                             = module.network-routes.be_interactive_route
+  app_spacetrack_route                      = module.network-routes.spacetrack_route
+  app_api_route                             = module.network-routes.api_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
   redis                                     = module.backing-services.redis
   logit                                     = module.backing-services.logit
-  app_web_route                             = module.network-routes.fe_route
+  app_web_route                             = module.network-routes.web_route
   env_tag                                   = var.env_tag
   iron_name                                 = var.iron_name
   iron_password                             = var.iron_password
@@ -69,8 +69,8 @@ module "front-end" {
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
-  app_web_route        = var.maintenance_mode ? module.network-routes.mp_route : module.network-routes.fe_route
-  app_api_route        = module.network-routes.be_interactive_route
+  app_web_route       = var.maintenance_mode ? module.network-routes.maintenance_route : module.network-routes.web_route
+  app_api_route       = module.network-routes.api_route
   internal_domain     = module.network-routes.internal_domain
   cloudapps_domain    = module.network-routes.cloudapps_domain
   custom_domain       = module.network-routes.custom_domain

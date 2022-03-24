@@ -1,17 +1,17 @@
-output "fe_route" {
-  value = cloudfoundry_route.fe
+output "web_route" {
+  value = cloudfoundry_route.web
 }
 
-output "be_batch_route" {
-  value = cloudfoundry_route.be_batch
+output "spacetrack_route" {
+  value = cloudfoundry_route.spacetrack
 }
 
-output "be_interactive_route" {
-  value = cloudfoundry_route.be_interactive
+output "api_route" {
+  value = cloudfoundry_route.api
 }
 
-output "mp_route" {
-  value = cloudfoundry_route.mp
+output "maintenance_route" {
+  value = cloudfoundry_route.maintenance
 }
 
 output "internal_domain" {

@@ -6,20 +6,20 @@ variable "custom_subdomain" {
   default = "www"
 }
 
-variable "app_be_batch_route_name" {
-  default = "monitor-my-satellites-spacetrack"
+variable "app_spacetrack_route_name" {
+  default = "mms-spacetrack"
 }
 
-variable "app_be_interactive_route_name" {
-  default = "monitor-my-satellites-api"
+variable "app_api_route_name" {
+  default = "mms-api"
 }
 
-variable "app_fe_route_name" {
-  default = "monitor-my-satellites"
+variable "app_web_route_name" {
+  default = "mms-web"
 }
 
-variable "app_mp_route_name" {
-  default = "monitor-my-satellites-mp"
+variable "app_maintenance_route_name" {
+  default = "mms-maintenance"
 }
 
 variable "space" {}
