@@ -69,8 +69,8 @@ module "front-end" {
   source              = "./modules/front-end"
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
-  app_fe_route        = var.maintenance_mode ? module.network-routes.mp_route : module.network-routes.fe_route
-  app_be_route        = module.network-routes.be_interactive_route
+  app_web_route        = var.maintenance_mode ? module.network-routes.mp_route : module.network-routes.fe_route
+  app_api_route        = module.network-routes.be_interactive_route
   internal_domain     = module.network-routes.internal_domain
   cloudapps_domain    = module.network-routes.cloudapps_domain
   custom_domain       = module.network-routes.custom_domain
