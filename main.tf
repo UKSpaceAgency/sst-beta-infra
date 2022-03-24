@@ -44,13 +44,13 @@ module "back-end" {
   source                                    = "./modules/back-end"
   space                                     = data.cloudfoundry_space.space
   be_build_asset                            = var.be_asset
-  app_be_batch_route                        = module.network-routes.be_batch_route
-  app_be_interactive_route                  = module.network-routes.be_interactive_route
+  app_spacetrack_route                      = module.network-routes.be_batch_route
+  app_api_route                             = module.network-routes.be_interactive_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
   redis                                     = module.backing-services.redis
   logit                                     = module.backing-services.logit
-  app_fe_route                              = module.network-routes.fe_route
+  app_web_route                             = module.network-routes.fe_route
   env_tag                                   = var.env_tag
   iron_name                                 = var.iron_name
   iron_password                             = var.iron_password
