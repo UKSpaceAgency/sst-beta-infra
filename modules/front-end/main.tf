@@ -8,21 +8,21 @@ terraform {
 }
 
 locals {
-  fe_name             = "${ var.app_fe_name }-${ var.env_tag }"
+  web_name             = "${ var.app_web_name }-${ var.env_tag }"
 }
 
-resource "cloudfoundry_app" "fe" {
+resource "cloudfoundry_app" "web" {
 
-  name              = local.fe_name
+  name              = local.web_name
   space             = var.space.id
-  buildpack         = var.app_fe_buildpack
-  memory            = var.app_fe_memory
-  disk_quota        = var.app_fe_disk_quota
-  instances         = var.app_fe_instances
+  buildpack         = var.app_web_buildpack
+  memory            = var.app_web_memory
+  disk_quota        = var.app_web_disk_quota
+  instances         = var.app_web_instances
   path              = var.fe_build_asset
   source_code_hash  = filebase64sha256(var.fe_build_asset)
-  command           = var.app_fe_command
-  strategy          = var.app_fe_strategy
+  command           = var.app_web_command
+  strategy          = var.app_web_strategy
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.fe_build_asset)
@@ -30,8 +30,8 @@ resource "cloudfoundry_app" "fe" {
   }
 
   environment = {
-    API_URL                 = "https://${ var.app_be_route.endpoint }"
-    BASE_API_URL            = "https://${ var.app_fe_route.endpoint }/api/graphql"
+    API_URL                 = "https://${ var.app_api_route.endpoint }"
+    BASE_API_URL            = "https://${ var.app_web_route.endpoint }/api/graphql"
     IRON_NAME               = var.iron_name
     IRON_PASSWORD           = var.iron_password
     PAGES_LOCATION          = "./.next/server/pages"
@@ -43,7 +43,7 @@ resource "cloudfoundry_app" "fe" {
   }
 
   routes {
-    route = var.app_fe_route.id
+    route = var.app_web_route.id
   }
 
   service_binding {

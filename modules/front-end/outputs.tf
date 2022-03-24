@@ -1,3 +1,3 @@
 output "app_app" {
-  value = cloudfoundry_app.fe
+  value = cloudfoundry_app.web
 }

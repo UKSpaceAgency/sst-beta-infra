@@ -12,9 +12,9 @@ variable "logit" {}
 
 variable "fe_build_asset" {}
 
-variable "app_be_route" {}
+variable "app_api_route" {}
 
-variable "app_fe_route" {}
+variable "app_web_route" {}
 
 variable "iron_name" {}
 
@@ -30,31 +30,31 @@ variable "cosmic_read_key" {}
 
 variable "cosmic_preview_secret" {}
 
-variable "app_fe_name" {
-  default = "mms-fe"
+variable "app_web_name" {
+  default = "mms-web"
 }
 
-variable "app_fe_buildpack" {
+variable "app_web_buildpack" {
   default = "nodejs_buildpack"
 }
 
-variable "app_fe_command" {
+variable "app_web_command" {
   default = "npm run start"
 }
 
-variable "app_fe_memory" {
+variable "app_web_memory" {
   default = 4096
 }
 
-variable "app_fe_disk_quota" {
+variable "app_web_disk_quota" {
   default = 4096
 }
 
-variable "app_fe_instances" {
+variable "app_web_instances" {
   default = 1
 }
 
-variable "app_fe_strategy" {
+variable "app_web_strategy" {
   default = "none"
 }
 
