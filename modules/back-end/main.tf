@@ -66,19 +66,19 @@ resource "cloudfoundry_app" "spacetrack" {
 
 resource "cloudfoundry_app" "api" {
 
-  name                  = local.api_name
-  space                 = var.space.id
-  buildpack             = var.app_be_buildpack
-  memory                = var.app_api_memory
-  disk_quota            = var.app_api_disk_quota
-  timeout               = var.app_be_timeout
-  instances             = var.app_be_instances
-  path                  = var.be_build_asset
-  source_code_hash      = filebase64sha256(var.be_build_asset)
-  command               = var.app_api_command
-  health_check_type     = "http"
-  health_check_endpoint = "/"
-  health_check_timeout  = "5"
+  name                       = local.api_name
+  space                      = var.space.id
+  buildpack                  = var.app_be_buildpack
+  memory                     = var.app_api_memory
+  disk_quota                 = var.app_api_disk_quota
+  timeout                    = var.app_be_timeout
+  instances                  = var.app_be_instances
+  path                       = var.be_build_asset
+  source_code_hash           = filebase64sha256(var.be_build_asset)
+  command                    = var.app_api_command
+  health_check_type          = "http"
+  health_check_http_endpoint = "/"
+  health_check_timeout       = "5"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
