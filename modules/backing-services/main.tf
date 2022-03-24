@@ -22,9 +22,11 @@ data "cloudfoundry_service" "s3" {
   name = var.s3_service
 }
 
+/*
 data "cloudfoundry_service" "redis" {
   name = var.redis_service
 }
+*/
 
 resource "cloudfoundry_service_instance" "db" {
   name         = local.db_name
