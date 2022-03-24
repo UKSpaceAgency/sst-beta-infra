@@ -2,8 +2,6 @@ variable "env_tag" {
   default = "dev"
 }
 
-variable "be_app" {}
-
 variable "space" {}
 
 variable "db" {}

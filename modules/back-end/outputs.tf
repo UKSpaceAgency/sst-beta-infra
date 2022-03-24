@@ -1,3 +1,3 @@
-output "be_interactive_app" {
+output "api_app" {
   value = cloudfoundry_app.api
 }
