@@ -76,6 +76,8 @@ resource "cloudfoundry_app" "be_interactive" {
   path              = var.be_build_asset
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_be_interactive_command
+  health_check_type = "http"
+  health_check_timeout = "5"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
