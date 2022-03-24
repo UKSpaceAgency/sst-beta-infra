@@ -70,7 +70,7 @@ module "front-end" {
   space               = data.cloudfoundry_space.space
   fe_build_asset      = var.app_asset
   app_web_route       = var.maintenance_mode ? module.network-routes.maintenance_route : module.network-routes.web_route
-  app_api_route       = module.network-routes.api_route
+  app_api_route      = module.network-routes.api_route
   internal_domain     = module.network-routes.internal_domain
   cloudapps_domain    = module.network-routes.cloudapps_domain
   custom_domain       = module.network-routes.custom_domain
@@ -87,9 +87,4 @@ module "front-end" {
   piwik_id            = var.piwik_id
 }
 
-module "network-policy" {
-  source      = "./modules/network-policy"
-  app_app     = module.front-end.app_app
-  be_app      = module.back-end.be_interactive_app
-}
 
