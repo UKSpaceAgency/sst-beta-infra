@@ -96,6 +96,4 @@ variable "db" {}
 
 variable "s3" {}
 
-variable "redis" {}
-
 variable "logit" {}

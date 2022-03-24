@@ -56,10 +56,6 @@ resource "cloudfoundry_app" "spacetrack" {
   }
 
   service_binding {
-    service_instance = var.redis.id
-  }
-
-  service_binding {
     service_instance = var.logit.id
   }
 }
