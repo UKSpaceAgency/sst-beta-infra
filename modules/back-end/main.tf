@@ -8,15 +8,15 @@ terraform {
 }
 
 locals {
-  be_batch_name       = "${ var.app_be_batch_name }-${ var.env_tag }"
-  be_interactive_name = "${ var.app_be_interactive_name }-${ var.env_tag }"
+  spacetrack_name     = "${ var.app_spacetrack_name }-${ var.env_tag }"
+  api_name            = "${ var.app_api_name }-${ var.env_tag }"
   db_migration_name   = "${ var.app_db_migration_name }-${ var.env_tag }"
 }
 
 
-resource "cloudfoundry_app" "be_batch" {
+resource "cloudfoundry_app" "spacetrack" {
 
-  name              = local.be_batch_name
+  name              = local.spacetrack_name
   space             = var.space.id
   buildpack         = var.app_be_buildpack
   memory            = var.app_be_memory
@@ -25,7 +25,7 @@ resource "cloudfoundry_app" "be_batch" {
   instances         = var.app_be_instances
   path              = var.be_build_asset
   source_code_hash  = filebase64sha256(var.be_build_asset)
-  command           = var.app_be_batch_command
+  command           = var.app_spacetrack_command
   health_check_type = "none"
 
   annotations = {
@@ -44,7 +44,7 @@ resource "cloudfoundry_app" "be_batch" {
   }
 
   routes {
-    route = var.app_be_batch_route.id
+    route = var.app_spacetrack_route.id
   }
 
   service_binding {
@@ -64,20 +64,21 @@ resource "cloudfoundry_app" "be_batch" {
   }
 }
 
-resource "cloudfoundry_app" "be_interactive" {
+resource "cloudfoundry_app" "api" {
 
-  name              = local.be_interactive_name
-  space             = var.space.id
-  buildpack         = var.app_be_buildpack
-  memory            = var.app_api_memory
-  disk_quota        = var.app_api_disk_quota
-  timeout           = var.app_be_timeout
-  instances         = var.app_be_instances
-  path              = var.be_build_asset
-  source_code_hash  = filebase64sha256(var.be_build_asset)
-  command           = var.app_be_interactive_command
-  health_check_type = "http"
-  health_check_timeout = "5"
+  name                  = local.api_name
+  space                 = var.space.id
+  buildpack             = var.app_be_buildpack
+  memory                = var.app_api_memory
+  disk_quota            = var.app_api_disk_quota
+  timeout               = var.app_be_timeout
+  instances             = var.app_be_instances
+  path                  = var.be_build_asset
+  source_code_hash      = filebase64sha256(var.be_build_asset)
+  command               = var.app_api_command
+  health_check_type     = "http"
+  health_check_endpoint = "/"
+  health_check_timeout  = "5"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
@@ -87,7 +88,7 @@ resource "cloudfoundry_app" "be_interactive" {
   environment = {
     IRON_NAME                                 = var.iron_name
     IRON_PASSWORD                             = var.iron_password
-    APP_FRONTEND_URL                          = "https://${ var.app_fe_route.endpoint }"
+    APP_FRONTEND_URL                          = "https://${ var.app_web_route.endpoint }"
     NOTIFY_API_KEY                            = var.notify_api_key
     USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
     USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
@@ -96,7 +97,7 @@ resource "cloudfoundry_app" "be_interactive" {
   }
 
   routes {
-    route = var.app_be_interactive_route.id
+    route = var.app_api_route.id
   }
 
   service_binding {

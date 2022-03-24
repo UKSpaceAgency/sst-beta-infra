@@ -2,12 +2,12 @@ variable "env_tag" {
   default = "dev"
 }
 
-variable "app_be_batch_name" {
-  default = "mms-be-batch"
+variable "app_spacetrack_name" {
+  default = "mms-spacetrack"
 }
 
-variable "app_be_interactive_name" {
-  default = "mms-be-interactive"
+variable "app_api_name" {
+  default = "mms-api"
 }
 
 variable "app_be_buildpack" {
@@ -38,21 +38,21 @@ variable "app_be_instances" {
   default = 1
 }
 
-variable "app_be_interactive_command" {
+variable "app_api_command" {
   default = "gunicorn -w 4 -k uvicorn.workers.UvicornWorker --preload --bind 0.0.0.0:8080 --timeout 0 app.main:app"
 }
 
-variable "app_be_batch_command" {
+variable "app_spacetrack_command" {
   default = "python -m app.periodics.space_track_worker"
 }
 
 variable "be_build_asset" {}
 
-variable "app_be_batch_route" {}
+variable "app_spacetrack_route" {}
 
-variable "app_be_interactive_route" {}
+variable "app_api_route" {}
 
-variable "app_fe_route" {}
+variable "app_web_route" {}
 
 variable "app_db_migration_name" {
   default = "mms-db-migration"
