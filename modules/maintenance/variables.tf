@@ -3,7 +3,7 @@ variable "env_tag" {
 }
 
 variable "app_name" {
-  default = "mms-mp"
+  default = "mms-maintenance"
 }
 
 variable "app_memory" {
