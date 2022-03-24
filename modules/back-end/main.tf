@@ -78,7 +78,7 @@ resource "cloudfoundry_app" "api" {
   command                    = var.app_api_command
   health_check_type          = "http"
   health_check_http_endpoint = "/"
-  health_check_timeout       = 5
+  health_check_timeout       = "5"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
