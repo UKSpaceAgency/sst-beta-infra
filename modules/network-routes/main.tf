@@ -21,7 +21,7 @@ data "cloudfoundry_domain" "custom" {
 
 resource "cloudfoundry_route" "web" {
   domain   = data.cloudfoundry_domain.custom.id
-  hostname = "${ var.env_tag == "prod"? var.custom_web_subdomain : "${ var.custom_api_subdomain }-${ var.env_tag }" }"
+  hostname = "${ var.env_tag == "prod"? var.custom_web_subdomain : "${ var.custom_web_subdomain }-${ var.env_tag }" }"
   space    = var.space.id
 }
 
