@@ -20,8 +20,8 @@ data "cloudfoundry_domain" "custom" {
 }
 
 resource "cloudfoundry_route" "web" {
-  domain   = "${ var.env_tag == "prod"? data.cloudfoundry_domain.custom.id : data.cloudfoundry_domain.cloudapps.id}"
-  hostname = "${ var.env_tag == "prod"? var.custom_web_subdomain : "${ var.app_web_route_name }-${ var.env_tag }" }"
+  domain   = data.cloudfoundry_domain.custom.id
+  hostname = "${ var.env_tag == "prod"? var.custom_web_subdomain : "${ var.custom_api_subdomain }-${ var.env_tag }" }"
   space    = var.space.id
 }
 
@@ -32,12 +32,9 @@ resource "cloudfoundry_route" "spacetrack" {
 }
 
 resource "cloudfoundry_route" "api" {
-  domain   = data.cloudfoundry_domain.cloudapps.id
-  hostname = "${ var.app_api_route_name }-${ var.env_tag }"
-  /*
-  domain   = "${ var.env_tag == "prod"? data.cloudfoundry_domain.custom.id : data.cloudfoundry_domain.cloudapps.id}"
-  hostname = "${ var.env_tag == "prod"? var.custom_api_subdomain : "${ var.app_api_route_name }-${ var.env_tag }" }"
-  */
+
+  domain   = data.cloudfoundry_domain.custom.id
+  hostname = "${ var.env_tag == "prod"? var.custom_api_subdomain : "${ var.custom_api_subdomain }-${ var.env_tag }" }"
   space    = var.space.id
 }
 
