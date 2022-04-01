@@ -2,8 +2,12 @@ variable "env_tag" {
   default = "dev"
 }
 
-variable "custom_subdomain" {
+variable "custom_web_subdomain" {
   default = "www"
+}
+
+variable "custom_api_subdomain" {
+  default = "api"
 }
 
 variable "app_spacetrack_route_name" {
