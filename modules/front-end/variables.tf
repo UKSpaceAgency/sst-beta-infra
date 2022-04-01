@@ -55,13 +55,3 @@ variable "app_web_instances" {
 variable "app_web_strategy" {
   default = "none"
 }
-
-variable "internal_domain" {}
-
-variable "cloudapps_domain" {}
-
-variable "custom_domain" {}
-
-variable "custom_domain_flag" {
-  default = "false"
-}
