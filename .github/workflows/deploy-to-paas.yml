@@ -115,7 +115,13 @@ jobs:
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
-            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}" \
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}" \
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}" \
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
+            -var="auth0_audience=${{ secrets.auth0_audience }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
