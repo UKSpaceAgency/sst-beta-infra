@@ -54,6 +54,18 @@ variable "piwik_id" {
   default = ""
 }
 
+variable "nextauth_secret" {}
+
+variable "auth0_issuer" {}
+
+variable "auth0_client_id" {}
+
+variable "auth0_client_secret" {}
+
+variable "auth0_jwks_url" {}
+
+variable "auth0_audience" {}    
+
 variable "notify_api_key" {}
 
 variable "user_service_jwt_authentication_secret" {}

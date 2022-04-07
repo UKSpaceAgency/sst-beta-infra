@@ -61,6 +61,9 @@ module "back-end" {
   user_service_verification_token_secret    = var.user_service_verification_token_secret
   run_at_hour                               = var.spacetrack_run_at_hour
   run_at_minute                             = var.spacetrack_run_at_minute
+  auth0_jwks_url                          = var.auth0_jwks_url
+  auth0_audience                            = var.auth0_audience
+  auth0_issuer                              = var.auth0_issuer
 }
 
 module "front-end" {
@@ -80,6 +83,10 @@ module "front-end" {
   cosmic_read_key     = var.cosmic_read_key
   cosmic_preview_secret = var.cosmic_preview_secret
   piwik_id            = var.piwik_id
+  nextauth_secret     = var.nextauth_secret
+  auth0_issuer        = var.auth0_issuer
+  auth0_client_id     = var.auth0_client_id
+  auth0_client_secret = var.auth0_client_secret
 }
 
 
