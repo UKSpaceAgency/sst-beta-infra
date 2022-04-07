@@ -39,6 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.env }}
+    env:
+      TF_LOG: DEBUG
     concurrency: ${{ github.event.inputs.env }}
 
     steps:
@@ -52,7 +54,6 @@ jobs:
           ./scripts/download-build-assets.sh
         env:
           TF_GITHUB_TOKEN: ${{ secrets.TF_GITHUB_TOKEN }}
-          TF_LOG: DEBUG
 
       - name: Terraform Init
         run: |
