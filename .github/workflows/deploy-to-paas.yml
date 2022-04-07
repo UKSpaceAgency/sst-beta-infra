@@ -52,6 +52,7 @@ jobs:
           ./scripts/download-build-assets.sh
         env:
           TF_GITHUB_TOKEN: ${{ secrets.TF_GITHUB_TOKEN }}
+          TF_LOG: DEBUG
 
       - name: Terraform Init
         run: |
