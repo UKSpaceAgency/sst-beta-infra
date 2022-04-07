@@ -3,13 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       invoker:
-        description: 'Invoker'
+        description: "Invoker"
         required: true
-        default: ''
+        default: ""
       env:
-        description: 'Environment'
+        description: "Environment"
         required: false
-        default: 'dev'
+        default: "dev"
 
 jobs:
   called_with_by:
@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - uses: hashicorp/setup-terraform@v1
-      
+
       - name: Checkoutm Main Branch
         uses: actions/checkout@v2
 
@@ -74,8 +74,6 @@ jobs:
             -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="iron_password=${{ secrets.paas_app_iron_password }}" \
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
@@ -87,6 +85,12 @@ jobs:
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
             -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}"
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}"
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}"
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}"
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -101,8 +105,6 @@ jobs:
             -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="iron_password=${{ secrets.paas_app_iron_password }}" \
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
@@ -114,6 +116,12 @@ jobs:
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
             -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}"
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}"
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}"
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}"
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -127,8 +135,6 @@ jobs:
             -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="iron_password=${{ secrets.paas_app_iron_password }}" \
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
@@ -140,6 +146,12 @@ jobs:
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
             -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}"
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}"
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}"
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}"
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -154,8 +166,6 @@ jobs:
             -var="logit_service_url=${{ secrets.logit_endpoint }}" \
             -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
             -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
-            -var="iron_name=${{ secrets.paas_app_iron_name }}" \
-            -var="iron_password=${{ secrets.paas_app_iron_password }}" \
             -var="notify_api_key=${{ secrets.notify_api_key }}" \
             -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
             -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
@@ -167,6 +177,12 @@ jobs:
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
             -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}"
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}"
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}"
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}"
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}"
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}"
 
       - name: Send build result to Slack
         id: slack
@@ -176,7 +192,7 @@ jobs:
           payload: |
             {
               "text": "*[${{ github.event.inputs.env }}] Release Train* ${{ github.run_id }}: Pulling into the station - ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-            
+
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

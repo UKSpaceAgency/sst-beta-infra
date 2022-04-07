@@ -82,14 +82,15 @@ resource "cloudfoundry_app" "api" {
   }
 
   environment = {
-    IRON_NAME                                 = var.iron_name
-    IRON_PASSWORD                             = var.iron_password
     APP_FRONTEND_URL                          = "https://${ var.app_web_route.endpoint }"
     NOTIFY_API_KEY                            = var.notify_api_key
     USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
     USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
     USER_SERVICE_VERIFICATION_TOKEN_SECRET    = var.user_service_verification_token_secret
     APP_ENVIRONMENT                           = var.env_tag
+    AUTH0_JWKS_URL                            = var.auth0_jwks_url
+    AUTH0_ISSUER                              = var.auth0_issuer
+    AUTH0_AUDIENCE                            = var.auth0_audience
   }
 
   routes {

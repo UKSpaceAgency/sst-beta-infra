@@ -66,9 +66,11 @@ variable "spacetrack_username" {}
 
 variable "spacetrack_password" {}
 
-variable "iron_name" {}
+variable "auth0_issuer" {}
 
-variable "iron_password" {}
+variable "auth0_jwks_url" {}
+
+variable "auth0_audience" {}   
 
 variable "notify_api_key" {}
 

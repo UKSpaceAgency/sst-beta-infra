@@ -51,8 +51,6 @@ module "back-end" {
   logit                                     = module.backing-services.logit
   app_web_route                             = module.network-routes.web_route
   env_tag                                   = var.env_tag
-  iron_name                                 = var.iron_name
-  iron_password                             = var.iron_password
   notify_api_key                            = var.notify_api_key
   spacetrack_password                       = var.spacetrack_password
   spacetrack_username                       = var.spacetrack_username
@@ -61,6 +59,9 @@ module "back-end" {
   user_service_verification_token_secret    = var.user_service_verification_token_secret
   run_at_hour                               = var.spacetrack_run_at_hour
   run_at_minute                             = var.spacetrack_run_at_minute
+  auth0_jwks_url                            = var.auth0_jwks_url
+  auth0_audience                            = var.auth0_audience
+  auth0_issuer                              = var.auth0_issuer
 }
 
 module "front-end" {
@@ -73,13 +74,15 @@ module "front-end" {
   db                  = module.backing-services.db
   logit               = module.backing-services.logit
   env_tag             = var.env_tag
-  iron_name           = var.iron_name
-  iron_password       = var.iron_password
   i18nexus_api_key    = var.i18nexus_api_key
   cosmic_bucket_slug  = var.cosmic_bucket_slug
   cosmic_read_key     = var.cosmic_read_key
   cosmic_preview_secret = var.cosmic_preview_secret
   piwik_id            = var.piwik_id
+  nextauth_secret     = var.nextauth_secret
+  auth0_issuer        = var.auth0_issuer
+  auth0_client_id     = var.auth0_client_id
+  auth0_client_secret = var.auth0_client_secret
 }
 
 
