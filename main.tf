@@ -51,8 +51,6 @@ module "back-end" {
   logit                                     = module.backing-services.logit
   app_web_route                             = module.network-routes.web_route
   env_tag                                   = var.env_tag
-  iron_name                                 = var.iron_name
-  iron_password                             = var.iron_password
   notify_api_key                            = var.notify_api_key
   spacetrack_password                       = var.spacetrack_password
   spacetrack_username                       = var.spacetrack_username
@@ -76,8 +74,6 @@ module "front-end" {
   db                  = module.backing-services.db
   logit               = module.backing-services.logit
   env_tag             = var.env_tag
-  iron_name           = var.iron_name
-  iron_password       = var.iron_password
   i18nexus_api_key    = var.i18nexus_api_key
   cosmic_bucket_slug  = var.cosmic_bucket_slug
   cosmic_read_key     = var.cosmic_read_key

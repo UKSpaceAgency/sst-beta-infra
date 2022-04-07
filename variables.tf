@@ -38,10 +38,6 @@ variable "spacetrack_username" {}
 
 variable "spacetrack_password" {}
 
-variable "iron_name" {}
-
-variable "iron_password" {}
-
 variable "i18nexus_api_key" {}
 
 variable "cosmic_bucket_slug" {}

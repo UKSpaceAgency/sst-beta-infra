@@ -14,9 +14,13 @@ variable "app_api_route" {}
 
 variable "app_web_route" {}
 
-variable "iron_name" {}
+variable "nextauth_secret" {}
 
-variable "iron_password" {}
+variable "auth0_issuer" {}
+
+variable "auth0_client_id" {}
+
+variable "auth0_client_secret" {}
 
 variable "piwik_id" {}
 
