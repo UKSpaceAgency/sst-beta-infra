@@ -32,17 +32,14 @@ resource "cloudfoundry_app" "web" {
   environment = {
     API_URL                 = "https://${ var.app_api_route.endpoint }"
     BASE_API_URL            = "https://${ var.app_web_route.endpoint }/api/graphql"
+    IRON_NAME               = var.iron_name
+    IRON_PASSWORD           = var.iron_password
     PAGES_LOCATION          = "./.next/server/pages"
     I18NEXUS_API_KEY        = var.i18nexus_api_key
     COSMIC_BUCKET_SLUG      = var.cosmic_bucket_slug
     COSMIC_READ_KEY         = var.cosmic_read_key
     COSMIC_PREVIEW_SECRET   = var.cosmic_preview_secret
     PIWIK_ID                = var.piwik_id
-    NEXTAUTH_URL            = "https://${ var.app_web_route.endpoint }"
-    NEXTAUTH_SECRET         = var.nextauth_secret
-    AUTH0_ISSUER            = var.auth0_issuer
-    AUTH0_CLIENT_ID         = var.auth0_client_id
-    AUTH0_CLIENT_SECRET     = var.auth0_client_secret
   }
 
   routes {

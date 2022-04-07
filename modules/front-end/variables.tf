@@ -14,6 +14,10 @@ variable "app_api_route" {}
 
 variable "app_web_route" {}
 
+variable "iron_name" {}
+
+variable "iron_password" {}
+
 variable "piwik_id" {}
 
 variable "i18nexus_api_key" {}
@@ -23,14 +27,6 @@ variable "cosmic_bucket_slug" {}
 variable "cosmic_read_key" {}
 
 variable "cosmic_preview_secret" {}
-
-variable "nextauth_secret" {}
-
-variable "auth0_issuer" {}
-
-variable "auth0_client_id" {}
-
-variable "auth0_client_secret" {}
 
 variable "app_web_name" {
   default = "mms-web"

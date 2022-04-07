@@ -38,6 +38,10 @@ variable "spacetrack_username" {}
 
 variable "spacetrack_password" {}
 
+variable "iron_name" {}
+
+variable "iron_password" {}
+
 variable "i18nexus_api_key" {}
 
 variable "cosmic_bucket_slug" {}
@@ -65,15 +69,3 @@ variable "spacetrack_run_at_minute" {}
 variable "maintenance_mode" {
   default = false
 }
-
-variable "nextauth_secret" {}
-
-variable "auth0_issuer" {}
-
-variable "auth0_client_id" {}
-
-variable "auth0_client_secret" {}
-
-variable "auth0_jwks_url" {}
-
-variable "auth0_audience" {}   
