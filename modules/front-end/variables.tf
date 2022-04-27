@@ -59,3 +59,5 @@ variable "app_web_instances" {
 variable "app_web_strategy" {
   default = "none"
 }
+
+variable "auth0_audience" {}

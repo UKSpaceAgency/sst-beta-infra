@@ -43,6 +43,7 @@ resource "cloudfoundry_app" "web" {
     COSMIC_READ_KEY         = var.cosmic_read_key
     COSMIC_PREVIEW_SECRET   = var.cosmic_preview_secret
     PIWIK_ID                = var.piwik_id
+    AUTH0_AUDIENCE          = var.auth0_audience
   }
 
   routes {
