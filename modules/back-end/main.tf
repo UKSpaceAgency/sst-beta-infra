@@ -89,7 +89,7 @@ resource "cloudfoundry_app" "api" {
     USER_SERVICE_VERIFICATION_TOKEN_SECRET    = var.user_service_verification_token_secret
     APP_ENVIRONMENT                           = var.env_tag
     AUTH0_JWKS_URL                            = var.auth0_jwks_url
-    AUTH0_ISSUER                              = "${ var.auth0_issuer}/"
+    AUTH0_ISSUER                              = "${ var.auth0_issuer }/"
     AUTH0_AUDIENCE                            = var.auth0_audience
   }
 
