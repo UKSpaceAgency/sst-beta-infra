@@ -34,7 +34,7 @@ resource "cloudfoundry_app" "web" {
     BASE_API_URL            = "https://${ var.app_web_route.endpoint }/api/graphql"
     NEXTAUTH_URL            = "https://${ var.app_web_route.endpoint }"
     NEXTAUTH_SECRET         = var.nextauth_secret
-    AUTH0_BASEURL           = var.auth0_issuer + '/'
+    AUTH0_BASEURL           = var.auth0_issuer
     AUTH0_CLIENT_ID         = var.auth0_client_id
     AUTH0_CLIENT_SECRET     = var.auth0_client_secret
     PAGES_LOCATION          = "./.next/server/pages"
