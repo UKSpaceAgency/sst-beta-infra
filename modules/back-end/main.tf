@@ -91,6 +91,8 @@ resource "cloudfoundry_app" "api" {
     AUTH0_JWKS_URL                            = var.auth0_jwks_url
     AUTH0_ISSUER                              = "${ var.auth0_issuer }/"
     AUTH0_AUDIENCE                            = var.auth0_audience
+    ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
+    HASHID_SALT                               = var.hashid_salt
   }
 
   routes {

@@ -70,6 +70,10 @@ variable "user_service_reset_password_token_secret" {}
 
 variable "user_service_verification_token_secret" {}
 
+variable "esa_discos_access_token" {}
+
+variable "hashid_salt" {}
+
 variable "spacetrack_run_at_hour" {}
 
 variable "spacetrack_run_at_minute" {}

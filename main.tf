@@ -62,6 +62,8 @@ module "back-end" {
   auth0_jwks_url                            = var.auth0_jwks_url
   auth0_audience                            = var.auth0_audience
   auth0_issuer                              = var.auth0_issuer
+  esa_discos_access_token                   = var.esa_discos_access_token
+  hashid_salt                               = var.hashid_salt
 }
 
 module "front-end" {

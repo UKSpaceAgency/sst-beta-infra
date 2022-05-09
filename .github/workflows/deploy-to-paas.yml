@@ -90,7 +90,9 @@ jobs:
             -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
             -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
             -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
-            -var="auth0_audience=${{ secrets.auth0_audience }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}" \
+            -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
+            -var="hashid_salt=${{ secrets.hashid_salt }}"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -121,7 +123,9 @@ jobs:
             -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
             -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
             -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
-            -var="auth0_audience=${{ secrets.auth0_audience }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}" \
+            -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
+            -var="hashid_salt=${{ secrets.hashid_salt }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -151,7 +155,9 @@ jobs:
             -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
             -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
             -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
-            -var="auth0_audience=${{ secrets.auth0_audience }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}" \
+            -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
+            -var="hashid_salt=${{ secrets.hashid_salt }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -182,7 +188,9 @@ jobs:
             -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
             -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
             -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
-            -var="auth0_audience=${{ secrets.auth0_audience }}"
+            -var="auth0_audience=${{ secrets.auth0_audience }}" \
+            -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
+            -var="hashid_salt=${{ secrets.hashid_salt }}"
 
       - name: Send build result to Slack
         id: slack
