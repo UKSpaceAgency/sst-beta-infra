@@ -103,8 +103,8 @@ jobs:
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
-            -no-color \ 
             -auto-approve \
+            -no-color \ 
             -var-file="${{ secrets.env_tfvars }}" \
             -var="maintenance_mode=true" \
             -var="paas_username=${{ secrets.paas_username }}" \
@@ -140,8 +140,8 @@ jobs:
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
-            -no-color \ 
             -auto-approve \
+            -no-color \ 
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
