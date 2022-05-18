@@ -102,7 +102,6 @@ jobs:
         run: |
           terraform apply \
             -auto-approve \
-            -no-color \ 
             -var-file="${{ secrets.env_tfvars }}" \
             -var="maintenance_mode=true" \
             -var="paas_username=${{ secrets.paas_username }}" \
@@ -139,7 +138,6 @@ jobs:
         run: |
           terraform apply \
             -auto-approve \
-            -no-color \ 
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
