@@ -57,7 +57,6 @@ jobs:
         run: |
           terraform init \
             -reconfigure \
-            -no-color \
             -backend-config="key=${{ secrets.s3_backend_key }}" \
             -backend-config="region=${{ secrets.s3_backend_region }}" \
             -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
@@ -68,7 +67,6 @@ jobs:
         if: ${{ github.event.inputs.invoker == 'plan' }}
         run: |
           terraform plan \
-            -no-color \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
@@ -103,7 +101,6 @@ jobs:
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
-            -no-color \ 
             -auto-approve \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="maintenance_mode=true" \
@@ -140,7 +137,6 @@ jobs:
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
-            -no-color \ 
             -auto-approve \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
@@ -178,7 +174,6 @@ jobs:
           terraform destroy \
             -target=module.back-end.cloudfoundry_app.db_migration \
             -auto-approve \
-            -no-color \ 
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
