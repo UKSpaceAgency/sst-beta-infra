@@ -91,6 +91,9 @@ resource "cloudfoundry_app" "api" {
     AUTH0_JWKS_URL                            = var.auth0_jwks_url
     AUTH0_ISSUER                              = "${ var.auth0_issuer }/"
     AUTH0_AUDIENCE                            = var.auth0_audience
+    AUTH0_MANAGEMENT_CLIENT_SECRET            = var.auth0_management_client_secret
+    AUTH0_MANAGEMENT_CLIENT_ID                = var.auth0_management_client_id
+    AUTH0_MANAGEMENT_DOMAIN                   = var.auth0_management_domain
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
     HASHID_SALT                               = var.hashid_salt
   }

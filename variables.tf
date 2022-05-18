@@ -60,7 +60,13 @@ variable "auth0_client_secret" {}
 
 variable "auth0_jwks_url" {}
 
-variable "auth0_audience" {}    
+variable "auth0_audience" {}
+
+variable "auth0_management_client_secret" {}
+
+variable "auth0_management_client_id" {}
+
+variable "auth0_management_domain" {}
 
 variable "notify_api_key" {}
 
