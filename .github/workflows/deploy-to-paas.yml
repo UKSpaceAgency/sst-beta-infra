@@ -94,7 +94,7 @@ jobs:
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
-            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secrets }}" \
+            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
 
       - name: Terraform Apply
@@ -130,7 +130,7 @@ jobs:
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
-            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secrets }}" \
+            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
 
       - name: Terraform Turn Off Maintenance Page
@@ -165,7 +165,7 @@ jobs:
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
-            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secrets }}" \
+            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
 
       - name: Terraform Destroy DB Migration
@@ -201,7 +201,7 @@ jobs:
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
-            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secrets }}" \
+            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
 
       - name: Send build result to Slack
