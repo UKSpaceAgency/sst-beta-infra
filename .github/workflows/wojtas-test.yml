@@ -29,4 +29,4 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
       - name: other secret
-        run: echo "at hour ${{ secrets.notify_api_key }}"
+        run: echo "at hour ${{ secrets.spacetrack_run_at_hou }}"
