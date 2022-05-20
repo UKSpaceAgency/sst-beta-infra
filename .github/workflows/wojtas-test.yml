@@ -28,5 +28,5 @@ jobs:
         run: echo "$SECRETS_CONTEXT"
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
-     - name: other secret
-       run: echo "at hour ${{ secrets.notify_api_key }}"
+      - name: other secret
+        run: echo "at hour ${{ secrets.notify_api_key }}"
