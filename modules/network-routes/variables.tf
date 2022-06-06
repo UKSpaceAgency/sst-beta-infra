@@ -11,19 +11,19 @@ variable "custom_api_subdomain" {
 }
 
 variable "app_spacetrack_route_name" {
-  default = "mms-spacetrack"
+  default = "mys-spacetrack"
 }
 
 variable "app_api_route_name" {
-  default = "mms-api"
+  default = "mys-api"
 }
 
 variable "app_web_route_name" {
-  default = "mms-web"
+  default = "mys-web"
 }
 
 variable "app_maintenance_route_name" {
-  default = "mms-maintenance"
+  default = "mys-maintenance"
 }
 
 variable "space" {}

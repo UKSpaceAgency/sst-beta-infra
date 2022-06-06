@@ -33,7 +33,7 @@ variable "cosmic_read_key" {}
 variable "cosmic_preview_secret" {}
 
 variable "app_web_name" {
-  default = "mms-web"
+  default = "mys-web"
 }
 
 variable "app_web_buildpack" {

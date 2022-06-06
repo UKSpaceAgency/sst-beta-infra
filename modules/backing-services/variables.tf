@@ -3,7 +3,7 @@ variable "env_tag" {
 }
 
 variable "db_name" {
-  default = "mms-db"
+  default = "mys-db"
 }
 
 variable "db_service" {
@@ -19,7 +19,7 @@ variable "db_extensions" {
 }
 
 variable "s3_name" {
-  default = "mms-s3"
+  default = "mys-s3"
 }
 
 variable "s3_service" {

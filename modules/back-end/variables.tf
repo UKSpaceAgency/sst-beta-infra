@@ -3,11 +3,11 @@ variable "env_tag" {
 }
 
 variable "app_spacetrack_name" {
-  default = "mms-spacetrack"
+  default = "mys-spacetrack"
 }
 
 variable "app_api_name" {
-  default = "mms-api"
+  default = "mys-api"
 }
 
 variable "app_be_buildpack" {
@@ -55,7 +55,7 @@ variable "app_api_route" {}
 variable "app_web_route" {}
 
 variable "app_db_migration_name" {
-  default = "mms-db-migration"
+  default = "mys-db-migration"
 }
 
 variable "app_db_migration_command" {
