@@ -109,3 +109,5 @@ variable "db" {}
 variable "s3" {}
 
 variable "logit" {}
+
+variable "notifiers_webhook_url" {}
