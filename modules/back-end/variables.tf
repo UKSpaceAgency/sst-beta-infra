@@ -111,3 +111,8 @@ variable "s3" {}
 variable "logit" {}
 
 variable "notifiers_webhook_url" {}
+
+variable "app_sentry_dsn" {}
+
+variable "app_spacetrack_worker_sentry_dsn" {}
+

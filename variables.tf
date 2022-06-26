@@ -80,6 +80,10 @@ variable "esa_discos_access_token" {}
 
 variable "notifiers_webhook_url" {}
 
+variable "app_sentry_dsn" {}
+
+variable "app_spacetrack_worker_sentry_dsn" {}
+
 variable "hashid_salt" {}
 
 variable "spacetrack_run_at_hour" {}
