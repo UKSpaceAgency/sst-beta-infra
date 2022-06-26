@@ -68,8 +68,6 @@ module "back-end" {
   esa_discos_access_token                   = var.esa_discos_access_token
   hashid_salt                               = var.hashid_salt
   notifiers_webhook_url                     = var.notifiers_webhook_url
-  app_sentry_dsn                            = var.app_sentry_dsn
-  app_spacetrack_worker_sentry_dsn          = var.app_spacetrack_worker_sentry_dsn
 
 }
 
