@@ -1,2 +1,2 @@
 env_tag     = "prod"
-paas_space  = "monitor-my-satellites-prod"
+paas_space  = "mys-prod"

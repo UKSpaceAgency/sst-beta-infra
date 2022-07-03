@@ -1,2 +1,2 @@
 env_tag    = "rest"
-paas_space = "monitor-my-satellites-rest"
+paas_space = "mys-rest"
