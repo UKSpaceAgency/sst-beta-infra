@@ -67,6 +67,8 @@ module "back-end" {
   auth0_management_domain                   = var.auth0_management_domain
   esa_discos_access_token                   = var.esa_discos_access_token
   hashid_salt                               = var.hashid_salt
+  notifiers_webhook_url                     = var.notifiers_webhook_url
+
 }
 
 module "front-end" {

@@ -78,6 +78,10 @@ variable "user_service_verification_token_secret" {}
 
 variable "esa_discos_access_token" {}
 
+variable "notifiers_webhook_url" {}
+
+
+
 variable "hashid_salt" {}
 
 variable "spacetrack_run_at_hour" {}
