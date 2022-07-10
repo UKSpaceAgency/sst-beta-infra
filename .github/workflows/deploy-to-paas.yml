@@ -93,9 +93,11 @@ jobs:
             -var="auth0_audience=${{ secrets.auth0_audience }}" \
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
-            -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
+            -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \                                                                             
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
 
       - name: Terraform Apply
@@ -133,7 +135,9 @@ jobs:
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
-            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -166,6 +170,8 @@ jobs:
             -var="auth0_audience=${{ secrets.auth0_audience }}" \
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
@@ -203,6 +209,8 @@ jobs:
             -var="auth0_audience=${{ secrets.auth0_audience }}" \
             -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
