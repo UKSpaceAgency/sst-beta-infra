@@ -95,8 +95,10 @@ jobs:
             -var="hashid_salt=${{ secrets.hashid_salt }}" \
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
-            -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
-            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
+            -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \                                                                             
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" 
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -133,7 +135,9 @@ jobs:
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
-            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -169,7 +173,9 @@ jobs:
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
-            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -206,7 +212,9 @@ jobs:
             -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
-            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
 
       - name: Send build result to Slack
         id: slack
