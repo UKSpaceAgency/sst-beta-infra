@@ -98,6 +98,7 @@ jobs:
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}"
 
+
       - name: Terraform Apply
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |

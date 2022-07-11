@@ -61,7 +61,6 @@ resource "cloudfoundry_app" "spacetrack" {
 }
 
 resource "cloudfoundry_app" "api" {
-
   name                       = local.api_name
   space                      = var.space.id
   buildpack                  = var.app_be_buildpack
