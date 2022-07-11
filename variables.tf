@@ -91,3 +91,7 @@ variable "spacetrack_run_at_minute" {}
 variable "maintenance_mode" {
   default = false
 }
+
+variable "app_sentry_dsn" {}
+￼
+variable "app_spacetrack_worker_sentry_dsn" {}
