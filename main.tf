@@ -70,7 +70,6 @@ module "back-end" {
   notifiers_webhook_url                     = var.notifiers_webhook_url
   app_sentry_dsn                            = var.app_sentry_dsn
   app_spacetrack_worker_sentry_dsn          = var.app_spacetrack_worker_sentry_dsn
-
 }
 
 module "front-end" {
