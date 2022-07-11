@@ -96,8 +96,6 @@ resource "cloudfoundry_app" "api" {
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
     HASHID_SALT                               = var.hashid_salt
     NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
-    APP_SENTRY_DSN	                      = var.app_sentry_dsn
-    APP_SPACETRACK_WORKER_SENTRY_DSN          = var.app_spacetrack_worker_sentry_dsn
   }
 
   routes {
