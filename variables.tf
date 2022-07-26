@@ -80,7 +80,7 @@ variable "esa_discos_access_token" {}
 
 variable "notifiers_webhook_url" {}
 
-
+variable "app_fake_data" { default = false }
 
 variable "hashid_salt" {}
 

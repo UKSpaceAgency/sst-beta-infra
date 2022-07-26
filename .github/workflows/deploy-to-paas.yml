@@ -98,7 +98,8 @@ jobs:
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
             -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
-            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
+            -var="app_fake_data=${{ secrets.app_fake_data }}"
 
 
       - name: Terraform Apply
@@ -138,7 +139,8 @@ jobs:
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
             -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
-            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
+            -var="app_fake_data=${{ secrets.app_fake_data }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
@@ -176,7 +178,8 @@ jobs:
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
             -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
-            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
+            -var="app_fake_data=${{ secrets.app_fake_data }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -215,7 +218,8 @@ jobs:
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
             -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
-            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}"
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
+            -var="app_fake_data=${{ secrets.app_fake_data }}"
 
       - name: Send build result to Slack
         id: slack

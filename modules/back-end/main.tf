@@ -98,6 +98,7 @@ resource "cloudfoundry_app" "api" {
     NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN	                      = var.app_sentry_dsn
     APP_SPACETRACK_WORKER_SENTRY_DSN          = var.app_spacetrack_worker_sentry_dsn
+    APP_FAKE_DATA		              = var.app_fake_data
   }
 
   routes {
