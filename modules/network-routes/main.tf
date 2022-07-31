@@ -29,13 +29,11 @@ resource "cloudfoundry_domain" "service-gov" {
   org_name = var.paas_org_name
 }
 
-
 resource "cloudfoundry_route" "web-gov" {
   domain   = data.cloudfoundry_domain.service-gov.id
   hostname = "${ var.env_tag == "prod"? var.custom_web_subdomain : "${ var.custom_web_subdomain }-${ var.env_tag }" }"
   space    = var.space.id
 }
-
 
 resource "cloudfoundry_route" "web" {
   domain   = data.cloudfoundry_domain.custom.id
@@ -49,14 +47,12 @@ resource "cloudfoundry_route" "spacetrack" {
   space    = var.space.id
 }
 
-
 resource "cloudfoundry_route" "api-gov" {
 
   domain   = data.cloudfoundry_domain.service-gov.id
   hostname = "${ var.env_tag == "prod"? var.custom_api_subdomain : "${ var.custom_api_subdomain }-${ var.env_tag }" }"
   space    = var.space.id
 }
-
 
 resource "cloudfoundry_route" "api" {
 
