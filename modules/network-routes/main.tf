@@ -19,13 +19,12 @@ data "cloudfoundry_domain" "custom" {
   name = "monitor-my-satellites.space"
 }
 
-resource "cloudfoundry_domain" "service-gov" {
+data "cloudfoundry_domain" "service-gov" {
   name     = "monitor-your-satellites.service.gov.uk"
-  internal = false
 }
 
 resource "cloudfoundry_route" "web-gov" {
-  domain   = cloudfoundry_domain.service-gov.id
+  domain   = data.cloudfoundry_domain.service-gov.id
   hostname = "${var.env_tag == "prod" ? var.custom_web_subdomain : "${var.custom_web_subdomain}-${var.env_tag}"}"
   space    = var.space.id
 }
@@ -44,7 +43,7 @@ resource "cloudfoundry_route" "spacetrack" {
 
 resource "cloudfoundry_route" "api-gov" {
 
-  domain   = cloudfoundry_domain.service-gov.id
+  domain   = data.cloudfoundry_domain.service-gov.id
   hostname = "${var.env_tag == "prod" ? var.custom_api_subdomain : "${var.custom_api_subdomain}-${var.env_tag}"}"
   space    = var.space.id
 }
