@@ -25,7 +25,7 @@ data "cloudfoundry_domain" "service-gov" {
 
 resource "cloudfoundry_route" "web-gov" {
   domain   = data.cloudfoundry_domain.service-gov.id
-  hostname = "${var.env_tag == "prod" ? var.custom_web_subdomain : "${var.custom_web_subdomain}-${var.env_tag}-gov"}"
+  hostname = "${var.env_tag == "prod" ? var.custom_web_subdomain : "${var.custom_web_subdomain}-${var.env_tag}"}"
   space    = var.space.id
 }
 
@@ -44,7 +44,7 @@ resource "cloudfoundry_route" "spacetrack" {
 resource "cloudfoundry_route" "api-gov" {
 
   domain   = data.cloudfoundry_domain.service-gov.id
-  hostname = "${var.env_tag == "prod" ? var.custom_api_subdomain : "${var.custom_api_subdomain}-${var.env_tag}-gov"}"
+  hostname = "${var.env_tag == "prod" ? var.custom_api_subdomain : "${var.custom_api_subdomain}-${var.env_tag}"}"
   space    = var.space.id
 }
 
@@ -60,4 +60,3 @@ resource "cloudfoundry_route" "maintenance" {
   hostname = "${var.app_maintenance_route_name}-${var.env_tag}"
   space    = var.space.id
 }
-
