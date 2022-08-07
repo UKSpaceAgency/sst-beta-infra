@@ -26,13 +26,23 @@ resource "aws_route53_record" "www" {
   ttl = "3600"
 }
 
+resource "aws_route53_record" "A-records" {
 
-resource "aws_route53_record" "api" {
-  zone_id = aws_route53_zone.this.zone_id
-  name = "api"
-  type = "CNAME"
-  records = ["d10nqkt99iw9hd.cloudfront.net"]
-  ttl = "3600"
+    for_each = var.dns_records_A
+      zone_id = aws_route53_zone.this.zone_id
+      name = each.key
+      records = [each.value]
+      type = "A"
+      ttl = "3600"
 }
 
+resource "aws_route53_record" "CNAME-records" {
+
+    for_each = var.dns_records_CNAME
+      zone_id = aws_route53_zone.this.zone_id
+      name = each.key
+      records = [each.value]
+      type = "CNAME"
+      ttl = "3600"
+}
 
