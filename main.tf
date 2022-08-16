@@ -95,4 +95,3 @@ module "front-end" {
   auth0_audience      = var.auth0_audience
 }
 
-
