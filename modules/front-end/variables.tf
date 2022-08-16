@@ -14,6 +14,10 @@ variable "app_api_route" {}
 
 variable "app_web_route" {}
 
+variable "app_api-gov_route" {}
+
+variable "app_web-gov_route" {}
+
 variable "nextauth_secret" {}
 
 variable "auth0_issuer" {}
