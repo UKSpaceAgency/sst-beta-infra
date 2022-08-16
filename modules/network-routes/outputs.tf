@@ -2,20 +2,12 @@ output "web_route" {
   value = cloudfoundry_route.web
 }
 
-output "web-gov_route" {
-  value = cloudfoundry_route.web-gov
-}
-
 output "spacetrack_route" {
   value = cloudfoundry_route.spacetrack
 }
 
 output "api_route" {
   value = cloudfoundry_route.api
-}
-
-output "api-gov_route" {
-  value = cloudfoundry_route.api-gov
 }
 
 output "maintenance_route" {
