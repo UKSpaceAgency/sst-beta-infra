@@ -81,7 +81,7 @@ resource "cloudfoundry_app" "api" {
   }
 
   environment = {
-    APP_FRONTEND_URL                          = "https://${ var.app_web-gov_route.endpoint }"
+    APP_FRONTEND_URL                          = "https://${ var.app_web_route.endpoint }"
     NOTIFY_API_KEY                            = var.notify_api_key
     USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
     USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
@@ -102,7 +102,7 @@ resource "cloudfoundry_app" "api" {
   }
 
   routes {
-    route = var.app_api-gov_route.id
+    route = var.app_api_route.id
   }
 
   service_binding {
