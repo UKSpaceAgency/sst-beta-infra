@@ -30,9 +30,9 @@ resource "cloudfoundry_app" "web" {
   }
 
   environment = {
-    API_URL                 = "https://${ var.app_api_route.endpoint }"
-    BASE_API_URL            = "https://${ var.app_web_route.endpoint }/api/graphql"
-    NEXTAUTH_URL            = "https://${ var.app_web_route.endpoint }"
+    API_URL                 = "https://${ var.app_api-gov_route.endpoint }"
+    BASE_API_URL            = "https://${ var.app_web-gov_route.endpoint }/api/graphql"
+    NEXTAUTH_URL            = "https://${ var.app_web-gov_route.endpoint }"
     NEXTAUTH_SECRET         = var.nextauth_secret
     AUTH0_BASEURL           = var.auth0_issuer
     AUTH0_CLIENT_ID         = var.auth0_client_id
@@ -47,7 +47,7 @@ resource "cloudfoundry_app" "web" {
   }
 
   routes {
-    route = var.app_web_route.id
+    route = var.app_web-gov_route.id
   }
 
   service_binding {
