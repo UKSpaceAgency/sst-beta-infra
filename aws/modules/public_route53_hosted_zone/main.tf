@@ -18,14 +18,6 @@ resource "aws_route53_zone" "this" {
   }
 }
 
-resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.this.zone_id
-  name = "www"
-  type = "CNAME"
-  records = [var.name]
-  ttl = "3600"
-}
-
 resource "aws_route53_record" "A-records" {
 
     for_each = var.dns_records_A

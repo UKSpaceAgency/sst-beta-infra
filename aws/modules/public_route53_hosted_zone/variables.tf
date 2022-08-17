@@ -48,5 +48,9 @@ variable "dns_records_CNAME" {
       "_9a607ca3dc863fc1da769224448f838f.api-demo" = "_c8cf621010a08f698ca8ec9714248b31.zxwlrjxpwn.acm-validations.aws."
       demo = "d2d3pngzkm5msd.cloudfront.net"
       "_13daf2d2cfb9c775577fb5a495076822.demo" = "_b05718b68e0513434750a5d135ed215d.zxwlrjxpwn.acm-validations.aws."
+      "www" = "d1szoesh8th5eg.cloudfront.net"
+      "_7e3724f5e697f04c1d6ff0ff26d87bcf.www" = "_d9eeaca4f9c48321cbd0516e4e36093e.xgxxrgwpcb.acm-validations.aws."
+      api = "d5zt8jih3wy.cloudfront.net"
+      "_7b7501308b3ce808d0e8df5d98628d00.api" = "_c6745098d6c3804571f314a0d0bd0122.xgxxrgwpcb.acm-validations.aws."
   }
 }
