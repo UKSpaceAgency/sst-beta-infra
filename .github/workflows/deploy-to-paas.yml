@@ -103,10 +103,11 @@ jobs:
 
 
       - name: Terraform Apply
-        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
+        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }}
         run: |
           terraform apply \
             -auto-approve \
+            -target=module.back-end \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="maintenance_mode=true" \
             -var="paas_username=${{ secrets.paas_username }}" \
@@ -143,7 +144,7 @@ jobs:
             -var="app_fake_data=${{ secrets.app_fake_data }}"
 
       - name: Terraform Turn Off Maintenance Page
-        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
+        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} 
         run: |
           terraform apply \
             -auto-approve \
