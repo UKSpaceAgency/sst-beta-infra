@@ -101,9 +101,48 @@ jobs:
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}"
 
-
       - name: Terraform Apply
-        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }}
+        if: ${{ github.event.inputs.invoker == 'apply' }}
+        run: |
+          terraform apply \
+            -auto-approve \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="maintenance_mode=true" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_service_url=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}" \
+            -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
+            -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
+            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
+            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
+            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
+            -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
+            -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}" \
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}" \
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}" \
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
+            -var="auth0_audience=${{ secrets.auth0_audience }}" \
+            -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
+            -var="hashid_salt=${{ secrets.hashid_salt }}" \
+            -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
+            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
+            -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
+            -var="app_fake_data=${{ secrets.app_fake_data }}"
+
+      - name: Terraform Back-End
+        if: ${{ github.event.inputs.invoker == 'back-end' }}
         run: |
           terraform apply \
             -auto-approve \
@@ -143,8 +182,49 @@ jobs:
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}"
 
+      - name: Terraform Front-End
+        if: ${{ github.event.inputs.invoker == 'front-end' }}
+        run: |
+          terraform apply \
+            -auto-approve \
+            -target=module.front-end \
+            -var-file="${{ secrets.env_tfvars }}" \
+            -var="maintenance_mode=true" \
+            -var="paas_username=${{ secrets.paas_username }}" \
+            -var="paas_password=${{ secrets.paas_password }}" \
+            -var="github_token=${{ secrets.tf_github_token }}" \
+            -var="logit_service_url=${{ secrets.logit_endpoint }}" \
+            -var="spacetrack_username=${{ secrets.spacetrack_username }}" \
+            -var="spacetrack_password=${{ secrets.spacetrack_password }}" \
+            -var="notify_api_key=${{ secrets.notify_api_key }}" \
+            -var="user_service_jwt_authentication_secret=${{ secrets.user_service_jwt_authentication_secret }}" \
+            -var="user_service_reset_password_token_secret=${{ secrets.user_service_reset_password_token_secret }}" \
+            -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
+            -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
+            -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
+            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
+            -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
+            -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
+            -var="cosmic_preview_secret=${{ secrets.cosmic_preview_secret }}" \
+            -var="nextauth_secret=${{ secrets.nextauth_secret }}" \
+            -var="auth0_issuer=${{ secrets.auth0_issuer }}" \
+            -var="auth0_client_id=${{ secrets.auth0_client_id }}" \
+            -var="auth0_client_secret=${{ secrets.auth0_client_secret }}" \
+            -var="auth0_jwks_url=${{ secrets.auth0_jwks_url }}" \
+            -var="auth0_audience=${{ secrets.auth0_audience }}" \
+            -var="esa_discos_access_token=${{ secrets.esa_discos_access_token }}" \
+            -var="hashid_salt=${{ secrets.hashid_salt }}" \
+            -var="auth0_management_client_id=${{ secrets.auth0_management_client_id }}" \
+            -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
+            -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
+            -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
+            -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
+            -var="app_fake_data=${{ secrets.app_fake_data }}"
+
       - name: Terraform Turn Off Maintenance Page
-        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} 
+        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
             -auto-approve \
