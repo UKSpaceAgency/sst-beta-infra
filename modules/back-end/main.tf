@@ -41,6 +41,7 @@ resource "cloudfoundry_app" "spacetrack" {
     APP_ENVIRONMENT                           = var.env_tag
     RUN_AT_HOUR                               = var.run_at_hour
     RUN_AT_MINUTE                             = var.run_at_minute
+    APP_SENTRY_DSN	                          = var.app_sentry_dsn_spacetrack
   }
 
   routes {
