@@ -224,7 +224,7 @@ jobs:
             -var="app_fake_data=${{ secrets.app_fake_data }}"
 
       - name: Terraform Turn Off Maintenance Page
-        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'front-end' }}
+        if: ${{ github.event.inputs.invoker == 'apply' || github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
             -auto-approve \
