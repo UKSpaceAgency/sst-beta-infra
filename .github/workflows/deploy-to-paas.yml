@@ -224,10 +224,11 @@ jobs:
             -var="app_fake_data=${{ secrets.app_fake_data }}"
 
       - name: Terraform Turn Off Maintenance Page
-        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'back-end' }} || ${{ github.event.inputs.invoker == 'front-end' }}
+        if: ${{ github.event.inputs.invoker == 'apply' }} || ${{ github.event.inputs.invoker == 'front-end' }}
         run: |
           terraform apply \
             -auto-approve \
+            -target=module.front-end \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
