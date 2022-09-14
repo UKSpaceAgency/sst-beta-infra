@@ -31,6 +31,7 @@ variable "dns_records_A" {
   default     = {
       "wojtas" = "1.1.1.1"
       "wojtas2" = "2.2.2.2"
+      "" = "18.132.142.3"
   }
 }
 
@@ -52,5 +53,6 @@ variable "dns_records_CNAME" {
       "_7e3724f5e697f04c1d6ff0ff26d87bcf.www" = "_d9eeaca4f9c48321cbd0516e4e36093e.xgxxrgwpcb.acm-validations.aws."
       api = "d5zt8jih3wy.cloudfront.net"
       "_7b7501308b3ce808d0e8df5d98628d00.api" = "_c6745098d6c3804571f314a0d0bd0122.xgxxrgwpcb.acm-validations.aws."
+      auth = "monitor-your-satellites-cd-u9gtdeztzb5hbcfq.edge.tenants.eu.auth0.com"
   }
 }
