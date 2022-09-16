@@ -46,6 +46,10 @@ resource "cloudfoundry_app" "web" {
     AUTH0_AUDIENCE          = var.auth0_audience
   }
 
+  routes = [
+    { route = var.app_web_route.id }
+  ]
+
   service_binding {
     service_instance = var.logit.id
   }

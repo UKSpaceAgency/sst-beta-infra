@@ -23,14 +23,14 @@ module "network-routes" {
   source              = "./modules/network-routes"
   space               = data.cloudfoundry_space.space
   env_tag             = var.env_tag
-  web_target          = var.maintenance_mode? module.maintenance.maintenance_app : module.front-end.web_app
-  maintenance_target  = var.maintenance_mode? module.front-end.web_app : module.maintenance.maintenance_app
+  maintenance_target  = var.maintenance_mode? module.network-routes.web_route : module.network-routes.maintenance_route
 }
 
 module "maintenance" {
   source     = "./modules/maintenance"
   space      = data.cloudfoundry_space.space
   env_tag    = var.env_tag
+  app_route  = var.maintenance_mode? module.network-routes.web_route : module.network-routes.maintenance_route
 }
 
 module "backing-services" {

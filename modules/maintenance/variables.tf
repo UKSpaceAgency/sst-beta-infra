@@ -26,4 +26,6 @@ variable "active" {
   default = true
 }
 
+variable "app_route" {}
+
 variable "space" {}
