@@ -6,6 +6,10 @@ output "spacetrack_route" {
   value = cloudfoundry_route.spacetrack
 }
 
+output "esa_discos_route" {
+  value = cloudfoundry_route.esa_discos
+}
+
 output "api_route" {
   value = cloudfoundry_route.api
 }
