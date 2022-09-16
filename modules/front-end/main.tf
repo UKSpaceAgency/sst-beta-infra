@@ -50,7 +50,7 @@ resource "cloudfoundry_app" "web" {
     { route = var.app_web_route.id }
   ]
 
-  service_binding {
-    service_instance = var.logit.id
-  }
+  service_binding = [
+    { service_instance = var.logit.id }
+  ]
 }
