@@ -31,6 +31,12 @@ resource "cloudfoundry_route" "spacetrack" {
   space    = var.space.id
 }
 
+resource "cloudfoundry_route" "esa_discos" {
+  domain   = data.cloudfoundry_domain.internal.id
+  hostname = "${var.app_esa_discos_route_name}-${var.env_tag}"
+  space    = var.space.id
+}
+
 resource "cloudfoundry_route" "api" {
 
   domain   = data.cloudfoundry_domain.custom.id
