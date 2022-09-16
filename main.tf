@@ -29,7 +29,6 @@ module "network-routes" {
 
 module "maintenance" {
   source     = "./modules/maintenance"
-  depends_on = [module.network-routes.maintenance_route]
   space      = data.cloudfoundry_space.space
   env_tag    = var.env_tag
 }
