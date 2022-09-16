@@ -230,7 +230,6 @@ jobs:
             -auto-approve \
             -target=module.front-end \
             -var-file="${{ secrets.env_tfvars }}" \
-            -var="maintenance_mode=false" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
             -var="github_token=${{ secrets.tf_github_token }}" \

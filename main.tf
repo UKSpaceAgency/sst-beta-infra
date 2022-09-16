@@ -32,7 +32,6 @@ module "maintenance" {
   depends_on = [module.network-routes.maintenance_route]
   space      = data.cloudfoundry_space.space
   env_tag    = var.env_tag
-  app_route  = var.maintenance_mode ? module.network-routes.web_route : module.network-routes.maintenance_route
 }
 
 module "backing-services" {
