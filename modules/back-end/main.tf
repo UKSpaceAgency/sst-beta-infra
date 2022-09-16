@@ -61,6 +61,59 @@ resource "cloudfoundry_app" "spacetrack" {
   }
 }
 
+
+
+locals {
+  esa_discos_name     = "${ var.app_esa_discos_name }-${ var.env_tag }"
+  api_name            = "${ var.app_api_name }-${ var.env_tag }"
+  db_migration_name   = "${ var.app_db_migration_name }-${ var.env_tag }"
+}
+
+
+resource "cloudfoundry_app" "esa_discos" {
+
+  name              = local.esa_discos_name
+  space             = var.space.id
+  buildpack         = var.app_be_buildpack
+  memory            = var.app_be_memory
+  disk_quota        = var.app_be_disk_quota
+  timeout           = var.app_be_timeout
+  instances         = var.app_be_instances
+  path              = var.be_build_asset
+  source_code_hash  = filebase64sha256(var.be_build_asset)
+  command           = var.app_esa_discos_command
+  health_check_type = "none"
+
+  annotations = {
+    "source_code_hash"  = filebase64sha256(var.be_build_asset)
+    "release_timestamp" = "${timestamp()}"
+  }
+
+  environment = {
+    APP_ENVIRONMENT                           = var.env_tag
+    RUN_AT_HOUR                               = var.run_at_hour
+    RUN_AT_MINUTE                             = var.run_at_minute
+    APP_SENTRY_DSN	                      = var.app_esa_discos_worker_sentry_dsn
+  }
+
+  routes {
+    route = var.app_esa_discos_route.id
+  }
+
+  service_binding {
+    service_instance = var.db.id
+  }
+
+  service_binding {
+    service_instance = var.s3.id
+  }
+
+  service_binding {
+    service_instance = var.logit.id
+  }
+}
+
+
 resource "cloudfoundry_app" "api" {
   name                       = local.api_name
   space                      = var.space.id

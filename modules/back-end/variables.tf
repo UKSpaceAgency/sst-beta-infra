@@ -118,3 +118,10 @@ variable "app_spacetrack_worker_sentry_dsn" {}
 
 variable "app_fake_data" { default = false}
 
+variable "app_esa_discos_name" {
+  default = "mys-esa"
+}
+
+variable "app_esa_discos_command" {
+ default = "python -m app.periodics.esa_discos_worker.py"
+}
