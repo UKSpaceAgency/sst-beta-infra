@@ -23,7 +23,6 @@ module "network-routes" {
   source              = "./modules/network-routes"
   space               = data.cloudfoundry_space.space
   env_tag             = var.env_tag
-  maintenance_target  = var.maintenance_mode? module.network-routes.web_route : module.network-routes.maintenance_route
 }
 
 module "maintenance" {
