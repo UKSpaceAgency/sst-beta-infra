@@ -41,7 +41,7 @@ resource "cloudfoundry_app" "spacetrack" {
     APP_ENVIRONMENT                           = var.env_tag
     RUN_AT_HOUR                               = var.run_at_hour
     RUN_AT_MINUTE                             = var.run_at_minute
-    APP_SENTRY_DSN	                          = var.app_spacetrack_worker_sentry_dsn
+    APP_SENTRY_DSN                            = var.app_spacetrack_worker_sentry_dsn
   }
 
   routes {
@@ -93,7 +93,7 @@ resource "cloudfoundry_app" "esa_discos" {
     APP_ENVIRONMENT                           = var.env_tag
     RUN_AT_HOUR                               = var.run_at_hour
     RUN_AT_MINUTE                             = var.run_at_minute
-    APP_SENTRY_DSN	                      = var.app_esa_discos_worker_sentry_dsn
+    APP_SENTRY_DSN                            = var.app_spacetrack_worker_sentry_dsn
   }
 
   routes {
@@ -151,7 +151,6 @@ resource "cloudfoundry_app" "api" {
     HASHID_SALT                               = var.hashid_salt
     NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN	                      = var.app_sentry_dsn
-    APP_SPACETRACK_WORKER_SENTRY_DSN          = var.app_spacetrack_worker_sentry_dsn
     APP_FAKE_DATA		              = var.app_fake_data
   }
 
