@@ -65,8 +65,6 @@ resource "cloudfoundry_app" "spacetrack" {
 
 locals {
   esa_discos_name     = "${ var.app_esa_discos_name }-${ var.env_tag }"
-  api_name            = "${ var.app_api_name }-${ var.env_tag }"
-  db_migration_name   = "${ var.app_db_migration_name }-${ var.env_tag }"
 }
 
 
