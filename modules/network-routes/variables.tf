@@ -13,7 +13,9 @@ variable "custom_api_subdomain" {
 variable "app_spacetrack_route_name" {
   default = "mys-spacetrack"
 }
-
+variable "app_esa_discos_route_name" {
+  default = "mys-esadiscos"
+}
 variable "app_api_route_name" {
   default = "mys-api"
 }
