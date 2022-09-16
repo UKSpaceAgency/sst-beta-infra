@@ -20,9 +20,11 @@ data "cloudfoundry_space" "space" {
 }
 
 module "network-routes" {
-  source  = "./modules/network-routes"
-  space   = data.cloudfoundry_space.space
-  env_tag = var.env_tag
+  source              = "./modules/network-routes"
+  space               = data.cloudfoundry_space.space
+  env_tag             = var.env_tag
+  web_target          = var.maintenance_mode? module.maintenance.maintenance_app : module.front-end.web_app
+  maintenance_target  = var.maintenance_mode? module.front-end.web_app : module.maintenance.maintenance_app
 }
 
 module "maintenance" {

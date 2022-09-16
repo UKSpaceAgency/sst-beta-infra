@@ -29,3 +29,7 @@ variable "app_maintenance_route_name" {
 }
 
 variable "space" {}
+
+variable "maintenance_target" {}
+
+variable "web_target" {}

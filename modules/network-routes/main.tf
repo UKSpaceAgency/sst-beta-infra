@@ -23,6 +23,7 @@ resource "cloudfoundry_route" "web" {
   domain   = data.cloudfoundry_domain.custom.id
   hostname = "${var.env_tag == "prod" ? var.custom_web_subdomain : "${var.env_tag}"}"
   space    = var.space.id
+  target   = var.web_target.id
 }
 
 resource "cloudfoundry_route" "spacetrack" {
@@ -48,4 +49,5 @@ resource "cloudfoundry_route" "maintenance" {
   domain   = data.cloudfoundry_domain.internal.id
   hostname = "${var.app_maintenance_route_name}-${var.env_tag}"
   space    = var.space.id
+  target   = var.maintenance_target.id
 }
