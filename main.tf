@@ -45,6 +45,7 @@ module "back-end" {
   space                                     = data.cloudfoundry_space.space
   be_build_asset                            = var.be_asset
   app_spacetrack_route                      = module.network-routes.spacetrack_route
+  app_esa_discos_route                      = module.network-routes.esa_discos_route
   app_api_route                             = module.network-routes.api_route
   db                                        = module.backing-services.db
   s3                                        = module.backing-services.s3
