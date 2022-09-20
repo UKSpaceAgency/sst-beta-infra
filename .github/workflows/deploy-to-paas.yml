@@ -229,6 +229,7 @@ jobs:
           terraform apply \
             -auto-approve \
             -target=module.front-end \
+            -target=module.maintenance \
             -var-file="${{ secrets.env_tfvars }}" \
             -var="paas_username=${{ secrets.paas_username }}" \
             -var="paas_password=${{ secrets.paas_password }}" \
