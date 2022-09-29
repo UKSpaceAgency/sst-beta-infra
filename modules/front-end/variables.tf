@@ -45,7 +45,7 @@ variable "app_web_command" {
 }
 
 variable "app_web_memory" {
-  default = 4096
+  default = 2048
 }
 
 variable "app_web_disk_quota" {
