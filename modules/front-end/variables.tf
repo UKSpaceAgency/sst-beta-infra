@@ -53,7 +53,7 @@ variable "app_web_disk_quota" {
 }
 
 variable "app_web_instances" {
-  default = 1
+  default = 2
 }
 
 variable "app_web_strategy" {
