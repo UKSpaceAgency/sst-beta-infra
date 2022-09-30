@@ -14,6 +14,10 @@ output "api_route" {
   value = cloudfoundry_route.api
 }
 
+output "notifications_route" {
+  value = cloudfoundry_route.notifications
+}
+
 output "maintenance_route" {
   value = cloudfoundry_route.maintenance
 }
