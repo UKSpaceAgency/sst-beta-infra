@@ -152,3 +152,4 @@ variable "app_esa_discos_command" {
 
 variable "app_esa_discos_route" {}
 
+variable "app_notifications_route" {}

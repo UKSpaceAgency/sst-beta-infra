@@ -92,7 +92,7 @@ resource "cloudfoundry_app" "notifications" {
   }
 
   routes {
-    route = var.app_spacetrack_route.id
+    route = var.app_notifications_route.id
   }
 
   service_binding {

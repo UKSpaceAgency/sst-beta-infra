@@ -37,6 +37,12 @@ resource "cloudfoundry_route" "esa_discos" {
   space    = var.space.id
 }
 
+resource "cloudfoundry_route" "notifications" {
+  domain   = data.cloudfoundry_domain.internal.id
+  hostname = "${var.app_notifications_route_name}-${var.env_tag}"
+  space    = var.space.id
+}
+
 resource "cloudfoundry_route" "api" {
 
   domain   = data.cloudfoundry_domain.custom.id
