@@ -71,9 +71,18 @@ module "back-end" {
   esa_discos_access_token                   = var.esa_discos_access_token
   hashid_salt                               = var.hashid_salt
   notifiers_webhook_url                     = var.notifiers_webhook_url
-  app_sentry_dsn                            = var.app_sentry_dsn
-  app_spacetrack_worker_sentry_dsn          = var.app_spacetrack_worker_sentry_dsn
-  app_fake_data			            = var.app_fake_data
+  api_sentry_dsn                            = var.app_sentry_dsn
+  spacetrack_sentry_dsn                     = var.app_spacetrack_worker_sentry_dsn
+  app_fake_data			                    = var.app_fake_data
+  esa_repeat_every_seconds                  = var.esa_repeat_every_seconds
+  esa_run_at_hour                           = var.esa_run_at_hour
+  esa_run_at_minute                         = var.esa_run_at_minute
+  esa_sentry_dsn                            = var.esa_sentry_dsn
+  spacetrack_repeat_every_seconds           = var.spacetrack_repeat_every_seconds
+  spacetrack_run_at_hour                    = var.spacetrack_run_at_hour
+  spacetrack_run_at_minute                  = var.spacetrack_run_at_minute
+  notifications_repeat_every_seconds        = var.notifications_repeat_every_seconds
+  notifications_sentry_dsn                  = var.notifications_sentry_dsn
 }
 
 module "front-end" {

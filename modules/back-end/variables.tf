@@ -10,12 +10,20 @@ variable "app_api_name" {
   default = "mys-api"
 }
 
+variable "app_notifications_name" {
+  default = "mys-notifications"
+}
+
 variable "app_be_buildpack" {
   default = "python_buildpack"
 }
 
 variable "app_be_memory" {
   default = 2048
+}
+
+variable "app_be_worker_memory" {
+  default = 1024
 }
 
 variable "app_be_disk_quota" {
@@ -44,6 +52,10 @@ variable "app_api_command" {
 
 variable "app_spacetrack_command" {
   default = "python -m app.periodics.space_track_worker"
+}
+
+variable "app_notifications_command" {
+  default = "python -m app.periodics.notifications_worker"
 }
 
 variable "be_build_asset" {}
@@ -84,13 +96,27 @@ variable "notify_interval" {
   default = 43200
 }
 
-variable "run_at_hour" {
-  default = 21
-}
+variable "spacetrack_run_at_hour" {}
 
-variable "run_at_minute" {
-  default = 0
-}
+variable "spacetrack_run_at_minute" {}
+
+variable "spacetrack_repeat_every_seconds" {}
+
+variable "spacetrack_sentry_dsn" {}
+
+variable "esa_run_at_hour" {}
+
+variable "esa_run_at_minute" {}
+
+variable "esa_repeat_every_seconds" {}
+
+variable "esa_sentry_dsn" {}
+
+variable "api_sentry_dsn" {}
+
+variable "notifications_sentry_dsn" {}
+
+variable "notifications_repeat_every_seconds" {}
 
 variable "user_service_jwt_authentication_secret" {}
 
@@ -112,11 +138,9 @@ variable "logit" {}
 
 variable "notifiers_webhook_url" {}
 
-variable "app_sentry_dsn" {}
-
-variable "app_spacetrack_worker_sentry_dsn" {}
-
-variable "app_fake_data" { default = false}
+variable "app_fake_data" {
+  default = false
+}
 
 variable "app_esa_discos_name" {
   default = "mys-esa"

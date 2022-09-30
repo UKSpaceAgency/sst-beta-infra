@@ -95,3 +95,17 @@ variable "maintenance_mode" {
 variable "app_sentry_dsn" {}
 
 variable "app_spacetrack_worker_sentry_dsn" {}
+
+variable "esa_repeat_every_seconds" {}
+
+variable "esa_run_at_hour" {}
+
+variable "esa_run_at_minute" {}
+
+variable "esa_sentry_dsn" {}
+
+variable "spacetrack_repeat_every_seconds" {}
+
+variable "notifications_repeat_every_seconds" {}
+
+variable "notifications_sentry_dsn" {}
