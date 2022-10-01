@@ -37,8 +37,8 @@ resource "cloudfoundry_app" "spacetrack" {
   environment = {
     SPACE_TRACK_IDENTITY                      = var.spacetrack_username
     SPACE_TRACK_PASSWORD                      = var.spacetrack_password
-    NOTIFY_API_KEY                            = var.notify_api_key
-    NOTIFY_INTERVAL                           = var.notify_interval
+    //NOTIFY_API_KEY                            = var.notify_api_key
+    //NOTIFY_INTERVAL                           = var.notify_interval
     APP_ENVIRONMENT                           = var.env_tag
     RUN_AT_HOUR                               = var.spacetrack_run_at_hour
     RUN_AT_MINUTE                             = var.spacetrack_run_at_minute
