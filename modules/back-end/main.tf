@@ -133,7 +133,7 @@ resource "cloudfoundry_app" "esa_discos" {
     NOTIFY_API_KEY                            = var.notify_api_key
     NOTIFY_INTERVAL                           = var.notify_interval
     RUN_AT_HOUR                               = var.esa_run_at_hour
-    RUN_AT_MINUTE                             = var.esa_run_at_minute
+    RUN_AT_MINUTE                             = var.esa_run_at_minutes
     APP_SENTRY_DSN                            = var.esa_sentry_dsn
     REPEAT_EVERY_SECONDS                      = var.esa_repeat_every_seconds
   }

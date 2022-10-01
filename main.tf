@@ -76,7 +76,7 @@ module "back-end" {
   app_fake_data			                    = var.app_fake_data
   esa_repeat_every_seconds                  = var.esa_repeat_every_seconds
   esa_run_at_hour                           = var.esa_run_at_hour
-  esa_run_at_minute                         = var.esa_run_at_minute
+  esa_run_at_minutes                        = var.esa_run_at_minutes
   esa_sentry_dsn                            = var.esa_sentry_dsn
   spacetrack_repeat_every_seconds           = var.spacetrack_repeat_every_seconds
   spacetrack_run_at_hour                    = var.spacetrack_run_at_hour
