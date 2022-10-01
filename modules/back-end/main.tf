@@ -27,7 +27,7 @@ resource "cloudfoundry_app" "spacetrack" {
   path              = var.be_build_asset
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_spacetrack_command
-  health_check_type = "none"
+  health_check_type = "process"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
@@ -117,7 +117,7 @@ resource "cloudfoundry_app" "esa_discos" {
   path              = var.be_build_asset
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_esa_discos_command
-  health_check_type = "none"
+  health_check_type = "process"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
