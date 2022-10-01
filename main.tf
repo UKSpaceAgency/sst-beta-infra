@@ -60,8 +60,6 @@ module "back-end" {
   user_service_jwt_authentication_secret    = var.user_service_jwt_authentication_secret
   user_service_reset_password_token_secret  = var.user_service_reset_password_token_secret
   user_service_verification_token_secret    = var.user_service_verification_token_secret
-  run_at_hour                               = var.spacetrack_run_at_hour
-  run_at_minute                             = var.spacetrack_run_at_minute
   auth0_jwks_url                            = var.auth0_jwks_url
   auth0_audience                            = var.auth0_audience
   auth0_issuer                              = var.auth0_issuer
