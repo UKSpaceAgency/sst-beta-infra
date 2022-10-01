@@ -85,7 +85,6 @@ resource "cloudfoundry_app" "notifications" {
   environment = {
     APP_ENVIRONMENT                           = var.env_tag
     NOTIFY_API_KEY                            = var.notify_api_key
-    NOTIFY_INTERVAL                           = var.notify_interval
     NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN                            = var.notifications_sentry_dsn
     REPEAT_EVERY_SECONDS                      = var.notifications_repeat_every_seconds
