@@ -100,7 +100,7 @@ variable "esa_repeat_every_seconds" {}
 
 variable "esa_run_at_hour" {}
 
-variable "esa_run_at_minute" {}
+variable "esa_run_at_minutes" {}
 
 variable "esa_sentry_dsn" {}
 
