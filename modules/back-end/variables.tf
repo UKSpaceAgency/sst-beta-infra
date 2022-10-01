@@ -147,7 +147,7 @@ variable "app_esa_discos_name" {
 }
 
 variable "app_esa_discos_command" {
- default = "python -m app.periodics.esa_discos_worker"
+  default = "python -m app.periodics.esa_discos_worker"
 }
 
 variable "app_esa_discos_route" {}

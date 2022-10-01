@@ -189,6 +189,8 @@ resource "cloudfoundry_app" "api" {
     AUTH0_MANAGEMENT_DOMAIN                   = var.auth0_management_domain
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
     HASHID_SALT                               = var.hashid_salt
+    NOTIFY_API_KEY                            = var.notify_api_key
+    NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN	                          = var.api_sentry_dsn
     APP_FAKE_DATA		                      = var.app_fake_data
   }
