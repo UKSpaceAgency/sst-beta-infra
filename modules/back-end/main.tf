@@ -37,8 +37,8 @@ resource "cloudfoundry_app" "spacetrack" {
   environment = {
     SPACE_TRACK_IDENTITY                      = var.spacetrack_username
     SPACE_TRACK_PASSWORD                      = var.spacetrack_password
-    NOTIFY_API_KEY                            = var.notify_api_key
-    NOTIFY_INTERVAL                           = var.notify_interval
+    //NOTIFY_API_KEY                            = var.notify_api_key
+    //NOTIFY_INTERVAL                           = var.notify_interval
     APP_ENVIRONMENT                           = var.env_tag
     RUN_AT_HOUR                               = var.spacetrack_run_at_hour
     RUN_AT_MINUTE                             = var.spacetrack_run_at_minute
@@ -129,8 +129,8 @@ resource "cloudfoundry_app" "esa_discos" {
   environment = {
     APP_ENVIRONMENT                           = var.env_tag
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
-    NOTIFY_API_KEY                            = var.notify_api_key
-    NOTIFY_INTERVAL                           = var.notify_interval
+    //NOTIFY_API_KEY                            = var.notify_api_key
+    //NOTIFY_INTERVAL                           = var.notify_interval
     RUN_AT_HOUR                               = var.esa_run_at_hour
     RUN_AT_MINUTE                             = var.esa_run_at_minutes
     APP_SENTRY_DSN                            = var.esa_sentry_dsn
@@ -188,8 +188,8 @@ resource "cloudfoundry_app" "api" {
     AUTH0_MANAGEMENT_DOMAIN                   = var.auth0_management_domain
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
     HASHID_SALT                               = var.hashid_salt
-    NOTIFY_API_KEY                            = var.notify_api_key
-    NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
+    //NOTIFY_API_KEY                            = var.notify_api_key
+    //NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN	                          = var.api_sentry_dsn
     APP_FAKE_DATA		                      = var.app_fake_data
   }
