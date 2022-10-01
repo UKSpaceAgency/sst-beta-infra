@@ -31,7 +31,7 @@ variable "app_be_disk_quota" {
 }
 
 variable "app_api_memory" {
-  default = 4096
+  default = 2048
 }
 
 variable "app_api_disk_quota" {
@@ -44,6 +44,10 @@ variable "app_be_timeout" {
 
 variable "app_be_instances" {
   default = 1
+}
+
+variable "app_be_api_instances" {
+  default = 2
 }
 
 variable "app_api_command" {

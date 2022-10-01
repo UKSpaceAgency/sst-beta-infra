@@ -161,7 +161,7 @@ resource "cloudfoundry_app" "api" {
   memory                     = var.app_api_memory
   disk_quota                 = var.app_api_disk_quota
   timeout                    = var.app_be_timeout
-  instances                  = var.app_be_instances
+  instances                  = var.app_be_api_instances
   path                       = var.be_build_asset
   source_code_hash           = filebase64sha256(var.be_build_asset)
   command                    = var.app_api_command
