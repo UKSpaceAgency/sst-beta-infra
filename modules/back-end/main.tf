@@ -73,7 +73,7 @@ resource "cloudfoundry_app" "notifications" {
   path              = var.be_build_asset
   source_code_hash  = filebase64sha256(var.be_build_asset)
   command           = var.app_notifications_command
-  health_check_type = "none"
+  health_check_type = "process"
 
   annotations = {
     "source_code_hash"  = filebase64sha256(var.be_build_asset)
