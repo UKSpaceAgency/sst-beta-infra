@@ -13,6 +13,8 @@ locals {
   db_migration_name   = "${ var.app_db_migration_name }-${ var.env_tag }"
   esa_discos_name     = "${ var.app_esa_discos_name }-${ var.env_tag }"
   notifications_name  = "${ var.app_notifications_name }-${ var.env_tag }"
+  app_frontend_url    = "https://${ var.app_web_route.endpoint }"
+
 }
 
 resource "cloudfoundry_app" "spacetrack" {
@@ -82,6 +84,7 @@ resource "cloudfoundry_app" "notifications" {
 
   environment = {
     APP_ENVIRONMENT                           = var.env_tag
+    APP_FRONTEND_URL                          = local.app_frontend_url
     NOTIFY_API_KEY                            = var.notify_api_key
     NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN                            = var.notifications_sentry_dsn
@@ -171,7 +174,7 @@ resource "cloudfoundry_app" "api" {
   }
 
   environment = {
-    APP_FRONTEND_URL                          = "https://${ var.app_web_route.endpoint }"
+    APP_FRONTEND_URL                          = local.app_frontend_url
     USER_SERVICE_JWT_AUTHENTICATION_SECRET    = var.user_service_jwt_authentication_secret
     USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET  = var.user_service_reset_password_token_secret
     USER_SERVICE_VERIFICATION_TOKEN_SECRET    = var.user_service_verification_token_secret
