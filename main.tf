@@ -38,7 +38,7 @@ module "backing-services" {
   space               = data.cloudfoundry_space.space
   env_tag             = var.env_tag
   logit_service_url   = var.logit_service_url
-  db_plan             = var.env_tag == "prod" ? "medium-ha-13-high-iops" : "small-13"
+  db_plan             = var.env_tag == "prod" ? "medium-ha-13-high-iops" : "small-13-high-iops"
 }
 
 module "back-end" {
