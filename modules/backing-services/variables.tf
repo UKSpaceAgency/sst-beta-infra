@@ -15,7 +15,7 @@ variable "db_plan" {
 }
 
 variable "db_extensions" {
-  //default = "{\"enable_extensions\": [\"pg_stat_statements\"]}"
+  default = "{\"enable_extensions\": [\"pg_stat_statements\"]}"
 }
 
 variable "s3_name" {
