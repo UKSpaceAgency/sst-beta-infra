@@ -61,7 +61,8 @@ jobs:
             -backend-config="region=${{ secrets.s3_backend_region }}" \
             -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
             -backend-config="access_key=${{ secrets.s3_backend_access_key }}" \
-            -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
+            -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}" \
+            -upgrade
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.invoker == 'plan' }}
