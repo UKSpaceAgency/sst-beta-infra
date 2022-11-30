@@ -120,6 +120,10 @@ variable "api_sentry_dsn" {}
 
 variable "notifications_sentry_dsn" {}
 
+variable "app_sentry_sample_rate" {
+  default = 0.05
+}
+
 variable "notifications_repeat_every_seconds" {}
 
 variable "user_service_jwt_authentication_secret" {}

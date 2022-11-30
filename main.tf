@@ -70,6 +70,7 @@ module "back-end" {
   hashid_salt                               = var.hashid_salt
   notifiers_webhook_url                     = var.notifiers_webhook_url
   api_sentry_dsn                            = var.app_sentry_dsn
+  app_sentry_sample_rate                    = var.app_sentry_sampling_rate
   spacetrack_sentry_dsn                     = var.app_spacetrack_worker_sentry_dsn
   app_fake_data			                    = var.app_fake_data
   esa_repeat_every_seconds                  = var.esa_repeat_every_seconds

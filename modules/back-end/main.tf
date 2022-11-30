@@ -44,6 +44,7 @@ resource "cloudfoundry_app" "spacetrack" {
     RUN_AT_MINUTE                             = var.spacetrack_run_at_minute
     APP_SENTRY_DSN                            = var.spacetrack_sentry_dsn
     REPEAT_EVERY_SECONDS                      = var.spacetrack_repeat_every_seconds
+    APP_SENTRY_SAMPLE_RATE                    = var.app_sentry_sample_rate
   }
 
   routes {
@@ -88,6 +89,7 @@ resource "cloudfoundry_app" "notifications" {
     NOTIFY_API_KEY                            = var.notify_api_key
     NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
     APP_SENTRY_DSN                            = var.notifications_sentry_dsn
+    APP_SENTRY_SAMPLE_RATE                    = var.app_sentry_sample_rate
     REPEAT_EVERY_SECONDS                      = var.notifications_repeat_every_seconds
   }
 
@@ -133,6 +135,7 @@ resource "cloudfoundry_app" "esa_discos" {
     RUN_AT_HOUR                               = var.esa_run_at_hour
     RUN_AT_MINUTE                             = var.esa_run_at_minutes
     APP_SENTRY_DSN                            = var.esa_sentry_dsn
+    APP_SENTRY_SAMPLE_RATE                    = var.app_sentry_sample_rate
     REPEAT_EVERY_SECONDS                      = var.esa_repeat_every_seconds
   }
 
@@ -188,6 +191,7 @@ resource "cloudfoundry_app" "api" {
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
     HASHID_SALT                               = var.hashid_salt
     APP_SENTRY_DSN	                          = var.api_sentry_dsn
+    APP_SENTRY_SAMPLE_RATE                    = var.app_sentry_sample_rate
     APP_FAKE_DATA		                      = var.app_fake_data
   }
 
