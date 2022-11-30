@@ -61,7 +61,8 @@ jobs:
             -backend-config="region=${{ secrets.s3_backend_region }}" \
             -backend-config="bucket=${{ secrets.s3_backend_bucket }}" \
             -backend-config="access_key=${{ secrets.s3_backend_access_key }}" \
-            -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}"
+            -backend-config="secret_key=${{ secrets.s3_backend_secret_key }}" \
+            -upgrade
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.invoker == 'plan' }}
@@ -97,7 +98,7 @@ jobs:
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
-            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \      
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}" \
             -var="esa_repeat_every_seconds=${{ secrets.esa_repeat_every_seconds }}" \
@@ -145,7 +146,7 @@ jobs:
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
-            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \  
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
              -var="app_fake_data=${{ secrets.app_fake_data }}" \
             -var="esa_repeat_every_seconds=${{ secrets.esa_repeat_every_seconds }}" \
@@ -193,7 +194,7 @@ jobs:
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
-            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \     
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}" \
             -var="esa_repeat_every_seconds=${{ secrets.esa_repeat_every_seconds }}" \
@@ -241,7 +242,7 @@ jobs:
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
-            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \    
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}" \
             -var="esa_repeat_every_seconds=${{ secrets.esa_repeat_every_seconds }}" \
@@ -289,7 +290,7 @@ jobs:
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
-            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \         
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}" \
             -var="esa_repeat_every_seconds=${{ secrets.esa_repeat_every_seconds }}" \
@@ -336,7 +337,7 @@ jobs:
             -var="auth0_management_client_secret=${{ secrets.auth0_management_client_secret }}" \
             -var="notifiers_webhook_url=${{ secrets.notifiers_webhook_url }}" \
             -var="auth0_management_domain=${{ secrets.auth0_management_domain }}" \
-            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \        
+            -var="app_sentry_dsn=${{ secrets.app_sentry_dsn }}" \
             -var="app_spacetrack_worker_sentry_dsn=${{ secrets.app_spacetrack_worker_sentry_dsn }}" \
             -var="app_fake_data=${{ secrets.app_fake_data }}" \
             -var="esa_repeat_every_seconds=${{ secrets.esa_repeat_every_seconds }}" \
