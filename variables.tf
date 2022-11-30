@@ -94,7 +94,7 @@ variable "maintenance_mode" {
 
 variable "app_sentry_dsn" {}
 
-variable "app_sentry_sampling_rate" {}
+variable "app_sentry_sample_rate" {}
 
 variable "app_spacetrack_worker_sentry_dsn" {}
 
