@@ -193,6 +193,7 @@ resource "cloudfoundry_app" "api" {
     APP_SENTRY_DSN	                          = var.api_sentry_dsn
     APP_SENTRY_SAMPLE_RATE                    = var.app_sentry_sample_rate
     APP_FAKE_DATA		                      = var.app_fake_data
+    NOTIFY_API_KEY                            = var.notify_api_key
   }
 
   routes {
