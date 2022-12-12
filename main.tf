@@ -82,6 +82,7 @@ module "back-end" {
   spacetrack_run_at_minute                  = var.spacetrack_run_at_minute
   notifications_repeat_every_seconds        = var.notifications_repeat_every_seconds
   notifications_sentry_dsn                  = var.notifications_sentry_dsn
+  notify_contact_analyst_email              = var.notify_contact_analyst_email
   app_notifications_route                   = module.network-routes.notifications_route
 }
 

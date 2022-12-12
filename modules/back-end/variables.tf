@@ -100,6 +100,8 @@ variable "notify_interval" {
   default = 43200
 }
 
+variable "notify_contact_analyst_email" {}
+
 variable "spacetrack_run_at_hour" {}
 
 variable "spacetrack_run_at_minute" {}

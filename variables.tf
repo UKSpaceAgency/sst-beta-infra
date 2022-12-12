@@ -111,3 +111,5 @@ variable "spacetrack_repeat_every_seconds" {}
 variable "notifications_repeat_every_seconds" {}
 
 variable "notifications_sentry_dsn" {}
+
+variable "notify_contact_analyst_email" {}
