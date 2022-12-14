@@ -22,7 +22,7 @@ jobs:
 
       - name: Send start message to Slack
         id: slack
-        uses: slackapi/slack-github-action@1.23.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
           # For posting a rich message using Block Kit
           payload: |
