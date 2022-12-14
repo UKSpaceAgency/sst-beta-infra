@@ -195,6 +195,7 @@ resource "cloudfoundry_app" "api" {
     APP_FAKE_DATA		                      = var.app_fake_data
     NOTIFY_API_KEY                            = var.notify_api_key
     NOTIFY_CONTACT_ANALYST_EMAIL              = var.notify_contact_analyst_email
+    NOTIFIERS_WEBHOOK_URL                     = var.notifiers_webhook_url
   }
 
   routes {
