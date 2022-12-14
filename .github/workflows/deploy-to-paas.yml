@@ -42,7 +42,7 @@ jobs:
     concurrency: ${{ github.event.inputs.env }}
 
     steps:
-      - uses: hashicorp/setup-terraform@v1
+      - uses: hashicorp/setup-terraform@v2
       
       - name: Checkoutm Main Branch
         uses: actions/checkout@v2
