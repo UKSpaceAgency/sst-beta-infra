@@ -109,7 +109,8 @@ jobs:
             -var="spacetrack_repeat_every_seconds=${{ secrets.spacetrack_repeat_every_seconds }}" \
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
-            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}"
+            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
+            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
           
 
       - name: Terraform Apply
@@ -159,7 +160,8 @@ jobs:
             -var="spacetrack_repeat_every_seconds=${{ secrets.spacetrack_repeat_every_seconds }}" \
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
-            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}"
+            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
+            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
 
       - name: Terraform Back-End
         if: ${{ github.event.inputs.invoker == 'back-end' }}
@@ -209,7 +211,8 @@ jobs:
             -var="spacetrack_repeat_every_seconds=${{ secrets.spacetrack_repeat_every_seconds }}" \
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
-            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}"
+            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
+            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
 
       - name: Terraform Front-End
         if: ${{ github.event.inputs.invoker == 'front-end' }}
@@ -259,7 +262,8 @@ jobs:
             -var="spacetrack_repeat_every_seconds=${{ secrets.spacetrack_repeat_every_seconds }}" \
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
-            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}"
+            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
+            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' || github.event.inputs.invoker == 'front-end' }}
@@ -309,7 +313,8 @@ jobs:
             -var="spacetrack_repeat_every_seconds=${{ secrets.spacetrack_repeat_every_seconds }}" \
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
-            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}"
+            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
+            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -358,7 +363,8 @@ jobs:
             -var="spacetrack_repeat_every_seconds=${{ secrets.spacetrack_repeat_every_seconds }}" \
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
-            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}"
+            -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
+            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
 
       - name: Send build result to Slack
         id: slack
