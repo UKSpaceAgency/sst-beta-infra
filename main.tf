@@ -66,6 +66,7 @@ module "back-end" {
   auth0_management_client_secret            = var.auth0_management_client_secret
   auth0_management_client_id                = var.auth0_management_client_id
   auth0_management_domain                   = var.auth0_management_domain
+  auth0_client_credentials_flow_issuer      = var.auth0_client_credentials_flow_issuer
   esa_discos_access_token                   = var.esa_discos_access_token
   hashid_salt                               = var.hashid_salt
   notifiers_webhook_url                     = var.notifiers_webhook_url

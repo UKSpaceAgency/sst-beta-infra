@@ -94,6 +94,8 @@ variable "auth0_management_client_id" {}
 
 variable "auth0_management_domain" {}
 
+variable "auth0_client_credentials_flow_issuer" {}
+
 variable "notify_api_key" {}
 
 variable "notify_interval" {

@@ -188,6 +188,7 @@ resource "cloudfoundry_app" "api" {
     AUTH0_MANAGEMENT_CLIENT_SECRET            = var.auth0_management_client_secret
     AUTH0_MANAGEMENT_CLIENT_ID                = var.auth0_management_client_id
     AUTH0_MANAGEMENT_DOMAIN                   = var.auth0_management_domain
+    AUTH0_CLIENT_CREDENTIALS_FLOW_ISSUER      = var.auth0_client_credentials_flow_issuer
     ESA_DISCOS_ACCESS_TOKEN                   = var.esa_discos_access_token
     HASHID_SALT                               = var.hashid_salt
     APP_SENTRY_DSN	                          = var.api_sentry_dsn
