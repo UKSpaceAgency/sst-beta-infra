@@ -161,7 +161,7 @@ jobs:
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
             -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
-            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
+            -var="auth0_client_credentials_flow_issuer=${{ secrets.auth0_client_credentials_flow_issuer }}"
 
       - name: Terraform Back-End
         if: ${{ github.event.inputs.invoker == 'back-end' }}
@@ -212,7 +212,7 @@ jobs:
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
             -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
-            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
+            -var="auth0_client_credentials_flow_issuer=${{ secrets.auth0_client_credentials_flow_issuer }}"
 
       - name: Terraform Front-End
         if: ${{ github.event.inputs.invoker == 'front-end' }}
@@ -263,7 +263,7 @@ jobs:
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
             -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
-            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
+            -var="auth0_client_credentials_flow_issuer=${{ secrets.auth0_client_credentials_flow_issuer }}"
 
       - name: Terraform Turn Off Maintenance Page
         if: ${{ github.event.inputs.invoker == 'apply' || github.event.inputs.invoker == 'front-end' }}
@@ -314,7 +314,7 @@ jobs:
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
             -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
-            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
+            -var="auth0_client_credentials_flow_issuer=${{ secrets.auth0_client_credentials_flow_issuer }}"
 
       - name: Terraform Destroy DB Migration
         if: ${{ github.event.inputs.invoker != 'plan' }}
@@ -364,7 +364,7 @@ jobs:
             -var="notifications_repeat_every_seconds=${{ secrets.notifications_repeat_every_seconds }}" \
             -var="notifications_sentry_dsn=${{ secrets.notifications_sentry_dsn }}" \
             -var="notify_contact_analyst_email=${{ secrets.notify_contact_analyst_email }}" \
-            -var="auth0_client_credentials_flow_user=${{ secrets.auth0_client_credentials_flow_user }}"
+            -var="auth0_client_credentials_flow_issuer=${{ secrets.auth0_client_credentials_flow_issuer }}"
 
       - name: Send build result to Slack
         id: slack
