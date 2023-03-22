@@ -45,6 +45,7 @@ resource "cloudfoundry_app" "spacetrack" {
     APP_SENTRY_DSN                            = var.spacetrack_sentry_dsn
     REPEAT_EVERY_SECONDS                      = var.spacetrack_repeat_every_seconds
     APP_SENTRY_SAMPLE_RATE                    = var.app_sentry_sample_rate
+    HASHID_SALT                               = var.hashid_salt
   }
 
   routes {
