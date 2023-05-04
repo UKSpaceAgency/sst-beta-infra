@@ -1,0 +1,1 @@
+variable "route53_domain" { type = string }
