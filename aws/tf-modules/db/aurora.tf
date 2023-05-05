@@ -1,8 +1,3 @@
-resource "random_password" "master_password" {
-  length  = 16
-  special = false
-}
-
 resource "aws_db_subnet_group" "default" {
   name       = "subnet-group-for-pg"
   subnet_ids = var.db_subnet_ids
