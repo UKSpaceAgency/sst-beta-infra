@@ -2,9 +2,8 @@ locals {
   insights_enabled = var.container_insights_enabled ? "enabled" : "disabled"
 }
 
-resource "aws_service_discovery_private_dns_namespace" "private" {
-  name        = "${var.env_name}.mys.local"
-  vpc         = var.custom_vpc_id
+resource "aws_service_discovery_http_namespace" "private" {
+  name        = "internal"
   description = "Private namespace for env ${var.env_name}"
 }
 
@@ -13,6 +12,9 @@ resource "aws_ecs_cluster" "cluster" {
   setting {
     name  = "containerInsights"
     value = local.insights_enabled
+  }
+  service_connect_defaults {
+    namespace = aws_service_discovery_http_namespace.private.arn
   }
 }
 

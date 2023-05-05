@@ -12,7 +12,7 @@ terraform {
     encrypt = true
     bucket  = "mys-dev-tf-states"
     region  = "eu-west-2"
-    key     = "dev-env-structures"
+    key     = "dev-env-structures.backend"
     profile = "mys-dev-env"
   }
 }
@@ -28,3 +28,4 @@ provider "aws" {
     }
   }
 }
+
