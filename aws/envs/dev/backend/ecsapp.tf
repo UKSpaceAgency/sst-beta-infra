@@ -29,5 +29,6 @@ module "backend" {
   healthcheck_subpath = "/"
   image_tag = "latest"
   route53_domain = var.route53_domain
+  enable_ecs_execute = false
 
 }

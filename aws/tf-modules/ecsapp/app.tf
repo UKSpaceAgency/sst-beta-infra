@@ -132,6 +132,7 @@ resource "aws_ecs_service" "ecs-app" {
   launch_type           = "FARGATE"
   desired_count         = var.app_instances_num
   wait_for_steady_state = true
+  enable_execute_command = var.enable_ecs_execute
 
   service_connect_configuration {
     enabled = true

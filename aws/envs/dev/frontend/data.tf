@@ -11,5 +11,5 @@ data "terraform_remote_state" "stack" {
 
 
 data "aws_secretsmanager_secret" "by-name" {
-  name = "${var.env_name}-backend"
+  name = "${var.env_name}-frontend"
 }

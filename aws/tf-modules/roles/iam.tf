@@ -27,10 +27,32 @@ resource "aws_iam_policy" "access-secrets-from-ecs" {
 
 }
 
+resource "aws_iam_policy" "allow_ecs_command_execution" {
+  name   = "allow_ecs_command_execution"
+  policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource : [
+          "*"
+        ]
+      }
+    ]
+  })
+
+}
+
 resource "aws_iam_role" "ecs-task-role" {
   name = "ecs-task-role-for-${var.env_name}"
 
-  managed_policy_arns = [data.aws_iam_policy.secrets-manager.arn, data.aws_iam_policy.s3-full-access.arn]
+  managed_policy_arns = [data.aws_iam_policy.secrets-manager.arn, data.aws_iam_policy.s3-full-access.arn, aws_iam_policy.allow_ecs_command_execution.arn]
   assume_role_policy  = jsonencode({
     Version   = "2012-10-17"
     Statement = [

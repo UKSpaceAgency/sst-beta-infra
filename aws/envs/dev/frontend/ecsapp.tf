@@ -19,15 +19,41 @@ module "frontend" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "API_URL", "value" : "http://backend.internal:8080" },
+    { "name" : "BASE_API_URL", "value" : "https://${var.app_name}.${var.route53_domain}/api/graphql" },
   ]
   secret_env_vars = [
     {
-      "name": "DATABASE_URL",
-      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:databaseUrl::"
+      "name": "AUTH0_CLIENT_ID",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientId::"
+    },
+    {
+      "name": "AUTH0_CLIENT_SECRET",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientSecret::"
+    },
+    {
+      "name": "AUTH0_BASEURL",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0BaseUrl::"
+    },
+    {
+      "name": "AUTH0_AUDIENCE",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0Audience::"
+    },
+    {
+      "name": "NEXTAUTH_SECRET",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:nextauthSecret::"
+    },
+    {
+      "name": "NEXTAUTH_URL",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:nextauthUrl::"
+    },
+    {
+      "name": "PIWIK_ID",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:piwikId::"
     }
   ]
   healthcheck_subpath = "/"
   image_tag = "latest"
   route53_domain = var.route53_domain
-
+  enable_ecs_execute = true
 }

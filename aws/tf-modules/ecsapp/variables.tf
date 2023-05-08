@@ -37,3 +37,8 @@ variable "secret_env_vars" {
     valueFrom = string
   }))
 }
+
+variable "enable_ecs_execute" {
+  type = bool
+  default = false
+}
