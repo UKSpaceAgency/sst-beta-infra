@@ -19,16 +19,77 @@ module "backend" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "APP_FRONTEND_URL", "value" : "https://web.${var.route53_domain}" },
+    { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
   ]
   secret_env_vars = [
     {
       "name": "DATABASE_URL",
       "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:databaseUrl::"
+    },
+    {
+      "name": "AUTH0_ISSUER",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0Issuer::"
+    },
+    {
+      "name": "AUTH0_MANAGEMENT_CLIENT_SECRET",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0ManagementClientSecret::"
+    },
+    {
+      "name": "AUTH0_AUDIENCE",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0Audience::"
+    },
+    {
+      "name": "USER_SERVICE_RESET_PASSWORD_TOKEN_SECRET",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:userServiceResetPasswordTokenSecret::"
+    },
+    {
+      "name": "AUTH0_MANAGEMENT_CLIENT_ID",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0ManagementClientId::"
+    },
+    {
+      "name": "NOTIFY_CONTACT_ANALYST_EMAIL",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:notifyContactAnalystEmail::"
+    },
+    {
+      "name": "USER_SERVICE_VERIFICATION_TOKEN_SECRET",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:userServiceVerificationTokenSecret::"
+    },
+    {
+      "name": "AUTH0_MANAGEMENT_DOMAIN",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0ManagementDomain::"
+    },
+    {
+      "name": "APP_SENTRY_DSN",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:appSentryDSN::"
+    },
+    {
+      "name": "AUTH0_JWKS_URL",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0JwksUrl::"
+    },
+    {
+      "name": "USER_SERVICE_JWT_AUTHENTICATION_SECRET",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:userServiceJwtAuthSecret::"
+    },
+    {
+      "name": "AUTH0_CLIENT_CREDENTIALS_FLOW_ISSUER",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientCredentialsFlowIssuer::"
+    },
+    {
+      "name": "NOTIFIERS_WEBHOOK_UR",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:notifiersWebhookUrl::"
+    },
+    {
+      "name": "HASHID_SALT",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:hashSaltId::"
+    },
+    {
+      "name": "NOTIFY_API_KEY",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
     }
   ]
   healthcheck_subpath = "/"
   image_tag = "latest"
   route53_domain = var.route53_domain
-  enable_ecs_execute = false
-
+  enable_ecs_execute = true
 }
