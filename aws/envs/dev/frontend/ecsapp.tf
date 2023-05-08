@@ -1,14 +1,14 @@
-module "backend" {
+module "frontend" {
   source   = "../../../tf-modules/ecsapp"
   env_name = var.env_name
   alb_name = data.terraform_remote_state.stack.outputs.alb_name
-  app_alb_priority = 10
+  app_alb_priority = 5
   app_cpu = 512
   app_instances_num = 1
   app_mem = 1024
   app_name = var.app_name
-  ecr_app_name = "backend"
-  app_port_num = 8080
+  ecr_app_name = "frontend"
+  app_port_num = 4200
   awslogs_group = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id = data.terraform_remote_state.stack.outputs.custom_vpc_id
   default_sg_id = data.terraform_remote_state.stack.outputs.default_sg_id
@@ -17,7 +17,7 @@ module "backend" {
   ecs_task_role_arn = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
   public_subnet_ids = data.terraform_remote_state.stack.outputs.public_subnet_ids
   env_vars = [
-    { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
+    { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
   ]
   secret_env_vars = [

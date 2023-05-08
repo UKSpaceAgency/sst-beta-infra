@@ -136,9 +136,9 @@ resource "aws_ecs_service" "ecs-app" {
   service_connect_configuration {
     enabled = true
     service {
-      port_name = "backend"
+      port_name = var.ecr_app_name
       client_alias {
-        port = 8080
+        port = var.app_port_num
       }
     }
   }
