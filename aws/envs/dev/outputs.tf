@@ -33,3 +33,7 @@ output "ecs_task_role_arn" {
 output "public_subnet_ids" {
   value = module.network.public_subnet_ids
 }
+
+output "s3_bucket_id" {
+  value = module.s3.bucket_id
+}
