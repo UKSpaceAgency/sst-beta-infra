@@ -51,10 +51,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::007301389989:role/github-deployment-role
+          aws-region: eu-west-2
+
+      - name: Add profile credentials to ~/.aws/credentials
+        run: |
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile mys-dev-env
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile mys-dev-env
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile mys-dev-env
+
       - name: Terraform Back-End
         if: ${{ github.event.inputs.invoker == 'backend' }}
         run: |
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
+          terraform init \
           terraform apply \
             -var="image_tag={{ github.event.inputs.image-tag }}" \
             -var="env_name={{ github.event.inputs.env }}" \
