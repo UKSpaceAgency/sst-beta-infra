@@ -16,31 +16,47 @@ on:
         default: 'latest'
 
 jobs:
-  build_and_deploy:
+  called_with_by:
+    name: Objective
     runs-on: ubuntu-latest
 
+#    steps:
+#      - run: |
+#          echo "Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
+#
+#      - name: Send start message to Slack
+#        id: slack
+#        uses: slackapi/slack-github-action@v1.23.0
+#        with:
+#          # For posting a rich message using Block Kit
+#          payload: |
+#            {
+#              "text": "*[${{ github.event.inputs.env }}] Release Train* ${{ github.run_id }}: Leaving the station to execute *${{ github.event.inputs.invoker }}*"
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+
+  deploy:
+    needs: called_with_by
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.env }}
+    concurrency: ${{ github.event.inputs.env }}
+
     steps:
+      - uses: hashicorp/setup-terraform@v2
+
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          repository: 'the-psc/sst-beta-python-backend'
-          ref: 'dev'
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::007301389989:role/github-deployment-role
-          aws-region: eu-west-2
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push docker image to Amazon ECR
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: backend
-          IMAGE_TAG: ${{ github.sha }}
+      - name: Terraform Back-End
+        if: ${{ github.event.inputs.invoker == 'back-end' }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
+          terraform plan \
+            -var="image_tag={{ github.event.inputs.image-tag }}" \
+            -var="env_name={{ github.event.inputs.env }}" \
+            -auto-approve 
