@@ -1,9 +1,19 @@
-name: Build and Deploy
-
+name: Deploy to AWS
 on:
-  push:
-    branches:
-      - feature/aws
+  workflow_dispatch:
+    inputs:
+      invoker:
+        description: 'Invoker'
+        required: true
+        default: ''
+      env:
+        description: 'Environment'
+        required: false
+        default: 'dev'
+      image-tag:
+        description: 'image ecr sha tag'
+        required: true
+        default: 'latest'
 
 jobs:
   build_and_deploy:
