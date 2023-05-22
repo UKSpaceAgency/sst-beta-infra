@@ -49,7 +49,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - uses: mcblair/configure-aws-profile-action@v0.1.1
+      - name: Configure AWS credentials
+        uses: mcblair/configure-aws-profile-action@v0.1.1
         with:
           role-arn: arn:aws:iam::007301389989:role/gitlab-ecs-deployment-role
           profile-name: mys-dev-env
