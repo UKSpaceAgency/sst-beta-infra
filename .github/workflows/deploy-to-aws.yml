@@ -19,23 +19,22 @@ jobs:
   called_with_by:
     name: Objective
     runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "AWS Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
 
-#    steps:
-#      - run: |
-#          echo "Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
-#
-#      - name: Send start message to Slack
-#        id: slack
-#        uses: slackapi/slack-github-action@v1.23.0
-#        with:
-#          # For posting a rich message using Block Kit
-#          payload: |
-#            {
-#              "text": "*[${{ github.event.inputs.env }}] Release Train* ${{ github.run_id }}: Leaving the station to execute *${{ github.event.inputs.invoker }}*"
-#            }
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Send start message to Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "*[${{ github.event.inputs.env }}] AWS Release Train* ${{ github.run_id }}: Leaving the station to execute *${{ github.event.inputs.invoker }}*"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
 
   deploy:
