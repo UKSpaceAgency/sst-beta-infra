@@ -46,24 +46,17 @@ jobs:
     concurrency: ${{ github.event.inputs.env }}
 
     steps:
-      - uses: hashicorp/setup-terraform@v2
-
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - uses: mcblair/configure-aws-profile-action@v0.1.1
         with:
-          role-to-assume: arn:aws:iam::007301389989:role/gitlab-ecs-deployment-role
+          role-arn: arn:aws:iam::007301389989:role/gitlab-ecs-deployment-role
+          profile-name: mys-dev-env
           aws-region: eu-west-2
 
-      - name: Add profile credentials to ~/.aws/credentials
-        run: |
-          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile mys-dev-env
-          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile mys-dev-env
-          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile mys-dev-env
-
       - name: Terraform Back-End
+        uses: hashicorp/setup-terraform@v2
         if: ${{ github.event.inputs.invoker == 'backend' }}
         run: |
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
