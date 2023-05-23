@@ -82,6 +82,7 @@ resource "aws_lb_target_group" "app-tg" {
   protocol_version = "HTTP1"
   target_type = "ip"
   vpc_id      = var.custom_vpc_id
+  deregistration_delay = 30
 
   health_check {
     path                = var.healthcheck_subpath
