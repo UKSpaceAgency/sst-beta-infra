@@ -62,13 +62,18 @@ jobs:
           profile-name: mys-dev-env
           region: eu-west-2
 
-      - name: Terraform Back-End init and apply
+      - name: Terraform Back-End init
         if: ${{ github.event.inputs.invoker == 'backend' }}
-        run: |
+        run: |          
+          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}      
           terraform init
-          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}          
           echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
           echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
           cat terraform.tfvars
+
+      - name: Terraform Back-End apply
+        if: ${{ github.event.inputs.invoker == 'backend' }}
+        run: |
+          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}          
           terraform apply -auto-approve
 
