@@ -64,7 +64,7 @@ resource "aws_ecs_task_definition" "app_service" {
         "interval" : 15,
         "timeout" : 5,
         "retries" : 10,
-        "startPeriod" : 120
+        "startPeriod" : 20
       }
     },
 
@@ -85,8 +85,10 @@ resource "aws_lb_target_group" "app-tg" {
 
   health_check {
     path                = var.healthcheck_subpath
-    interval            = 100
+    interval            = 20
     unhealthy_threshold = 5
+    timeout = 5
+    healthy_threshold = 3
     protocol = "HTTP"
   }
 
