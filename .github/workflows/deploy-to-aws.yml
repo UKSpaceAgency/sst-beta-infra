@@ -68,7 +68,7 @@ jobs:
           terraform init
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}          
           echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
-          echo "env_name = \"${{ ithub.event.inputs.env }}\"" >> terraform.tfvars
+          echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
           cat terraform.tfvars
           terraform apply -auto-approve
 
