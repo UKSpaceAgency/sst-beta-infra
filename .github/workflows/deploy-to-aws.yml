@@ -72,6 +72,17 @@ jobs:
           cat terraform.tfvars
           terraform apply -auto-approve
 
+      - name: Terraform Front-End init and apply
+        if: ${{ github.event.inputs.invoker == 'frontend' }}
+        run: |          
+          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}      
+          terraform init
+          echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
+          echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
+          cat terraform.tfvars
+          terraform apply -auto-approve
+      
+
       - name: Send build result to Slack
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
