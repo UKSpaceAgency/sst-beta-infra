@@ -30,6 +30,14 @@ output "ecs_task_role_arn" {
   value = module.iam.ecs_task_role_arn
 }
 
+output "ecs_events_role_arn" {
+  value = module.iam.ecs_events_role_arn
+}
+
+output "ecs_events_role_id" {
+  value = module.iam.ecs_events_role_id
+}
+
 output "public_subnet_ids" {
   value = module.network.public_subnet_ids
 }

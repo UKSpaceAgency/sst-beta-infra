@@ -54,28 +54,53 @@ resource "aws_ecs_task_definition" "app_service" {
 
 }
 
-resource "aws_ecs_service" "ecs-app" {
-  name                  = var.app_name
-  cluster               = var.ecs_cluster_arn
-  task_definition       = aws_ecs_task_definition.app_service.arn
-  launch_type           = "FARGATE"
-  desired_count         = var.app_instances_num
-  wait_for_steady_state = true
-  enable_execute_command = var.enable_ecs_execute
-
-
-
-  lifecycle {
-    ignore_changes = [
-      desired_count
-    ]
+data "aws_iam_policy_document" "ecs_events_run_task_with_any_role" {
+  statement {
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["*"]
   }
 
-  network_configuration {
-    subnets          = var.public_subnet_ids
-    security_groups  = [var.default_sg_id]
-    assign_public_ip = true
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:RunTask"]
+    resources = [replace(aws_ecs_task_definition.app_service.arn, "/:\\d+$/", ":*")]
   }
+}
+resource "aws_iam_role_policy" "ecs_events_run_task_with_any_role" {
+  name   = "ecs_events_run_task_with_any_role"
+  role   = var.ecs_events_role_id
+  policy = data.aws_iam_policy_document.ecs_events_run_task_with_any_role.json
+}
+
+
+resource "aws_cloudwatch_event_rule" "scheduled_rule" {
+  name        = "rule-for-${var.app_name}"
+  description = "Run ECS task at configured time"
+  schedule_expression = "cron(${var.cron_expression})"
+}
+
+resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
+
+  target_id = "${var.app_name}-ecs-target-job"
+  arn       = var.ecs_cluster_arn
+  rule      = aws_cloudwatch_event_rule.scheduled_rule.name
+  role_arn  = var.ecs_events_role_arn
+
+  ecs_target {
+    task_count          = 1
+    task_definition_arn = aws_ecs_task_definition.app_service.arn
+    launch_type = "FARGATE"
+    propagate_tags = "TASK_DEFINITION"
+    platform_version = "LATEST"
+
+    network_configuration {
+      subnets = var.public_subnet_ids
+      security_groups = [var.default_sg_id]
+      assign_public_ip = true
+    }
+  }
+
 
 
 }

@@ -101,3 +101,27 @@ resource "aws_iam_role" "ecs-execution-role" {
   })
 
 }
+
+data "aws_iam_policy_document" "assume_role_events" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "ecs_events" {
+  name               = "ecs_events_role-for-${var.env_name}"
+
+  managed_policy_arns = [
+    data.aws_iam_policy.ecs-task-exec.arn, data.aws_iam_policy.ec2-service-role.arn,
+    aws_iam_policy.access-secrets-from-ecs.arn
+  ]
+
+  assume_role_policy = data.aws_iam_policy_document.assume_role_events.json
+}

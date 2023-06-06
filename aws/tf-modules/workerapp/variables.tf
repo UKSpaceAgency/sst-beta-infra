@@ -35,3 +35,15 @@ variable "enable_ecs_execute" {
   type = bool
   default = false
 }
+
+variable "ecs_events_role_arn" {
+  type = string
+}
+
+variable "ecs_events_role_id" {
+  type = string
+}
+
+variable "cron_expression" {
+  type = string
+}
