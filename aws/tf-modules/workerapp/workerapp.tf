@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "ecs_events_run_task_with_any_role" {
   }
 }
 resource "aws_iam_role_policy" "ecs_events_run_task_with_any_role" {
-  name   = "ecs_events_run_task_with_any_role"
+  name   = "ecs_events_run_task_with_any_role_for_${var.app_name}"
   role   = var.ecs_events_role_id
   policy = data.aws_iam_policy_document.ecs_events_run_task_with_any_role.json
 }
