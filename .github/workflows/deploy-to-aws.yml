@@ -24,6 +24,7 @@ jobs:
           echo "AWS Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
 
       - name: Send start message to Slack
+        if: false # todo
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
@@ -85,6 +86,7 @@ jobs:
       
 
       - name: Send build result to Slack
+        if: false # todo
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
@@ -112,4 +114,4 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: 'aws/e2e_tests/newman/*.xml'
+          report_paths: '**/aws/e2e_tests/newman/newman-*.xml'
