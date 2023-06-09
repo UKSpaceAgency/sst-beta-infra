@@ -114,4 +114,4 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: '**/aws/e2e_tests/newman/newman-*.xml'
+          report_paths: '**/newman-*.xml'
