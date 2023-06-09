@@ -24,7 +24,6 @@ jobs:
           echo "AWS Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
 
       - name: Send start message to Slack
-        if: false # todo
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
@@ -83,11 +82,9 @@ jobs:
           echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
           echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
           cat terraform.tfvars
-          terraform apply -auto-approve
-      
+          terraform apply -auto-approve      
 
       - name: Send build result to Slack
-        if: false # todo
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
