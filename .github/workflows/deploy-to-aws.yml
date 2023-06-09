@@ -63,7 +63,8 @@ jobs:
           region: eu-west-2
 
       - name: Terraform Back-End init and apply
-        if: ${{ github.event.inputs.invoker == 'backend' }}
+        # if: ${{ github.event.inputs.invoker == 'backend' }}
+        if: false
         run: |          
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}      
           terraform init
@@ -73,7 +74,8 @@ jobs:
           terraform apply -auto-approve
 
       - name: Terraform Front-End init and apply
-        if: ${{ github.event.inputs.invoker == 'frontend' }}
+        # if: ${{ github.event.inputs.invoker == 'frontend' }}
+        if: false
         run: |          
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}      
           terraform init
@@ -96,3 +98,11 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Execute E2E tests
+        uses: matt-ball/newman-action@master
+        with:
+          collection: aws/e2e_tests/postman_collection.json
+          environment: aws/e2e_tests/postman_environment.json
+          reporters: '["emojitrain"]'
+          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" }, { "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}", { "key": "baseUrl", "value": "${{ secrets.e2e_base_url }}" }, { "key": "authBaseUrl", "value": "${{ secrets.e2e_auth0_base_url }}" } , { "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" } ]'
