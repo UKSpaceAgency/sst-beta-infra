@@ -116,4 +116,4 @@ jobs:
         if: always() || failure()
         with:
           files: |
-            aws/e2e_tests/newman/*.xml
+            **/newman-run-*.xml
