@@ -24,6 +24,7 @@ jobs:
           echo "AWS Deploy ${{ github.event.inputs.invoker }} on ${{ github.event.inputs.env }}"
 
       - name: Send start message to Slack
+        if: false # todo
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
@@ -64,7 +65,7 @@ jobs:
 
       - name: Terraform Back-End init and apply
         # if: ${{ github.event.inputs.invoker == 'backend' }}
-        if: false
+        if: false # todo
         run: |          
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}      
           terraform init
@@ -75,7 +76,7 @@ jobs:
 
       - name: Terraform Front-End init and apply
         # if: ${{ github.event.inputs.invoker == 'frontend' }}
-        if: false
+        if: false # todo
         run: |          
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}      
           terraform init
@@ -86,6 +87,7 @@ jobs:
       
 
       - name: Send build result to Slack
+        if: false # todo
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
@@ -105,4 +107,4 @@ jobs:
           collection: aws/e2e_tests/postman_collection.json
           environment: aws/e2e_tests/postman_environment.json
           reporters: '["emojitrain"]'
-          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" }, { "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}", { "key": "baseUrl", "value": "${{ secrets.e2e_base_url }}" }, { "key": "authBaseUrl", "value": "${{ secrets.e2e_auth0_base_url }}" } , { "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" } ]'
+          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}",{ "key": "baseUrl", "value": "${{ secrets.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ secrets.e2e_auth0_base_url }}" },{ "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
