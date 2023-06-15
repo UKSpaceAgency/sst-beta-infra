@@ -48,8 +48,8 @@ module "frontend" {
       "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:nextauthUrl::"
     },
     {
-      "name": "PIWIK_ID",
-      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:piwikId::"
+      "name": "NEXT_PUBLIC_GA",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicGA::"
     }
   ]
   healthcheck_subpath = "/"
