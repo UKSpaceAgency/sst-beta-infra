@@ -101,7 +101,7 @@ module "front-end" {
   cosmic_bucket_slug  = var.cosmic_bucket_slug
   cosmic_read_key     = var.cosmic_read_key
   cosmic_preview_secret = var.cosmic_preview_secret
-  piwik_id            = var.piwik_id
+  next_public_ga      = var.next_public_ga
   nextauth_secret     = var.nextauth_secret
   auth0_issuer        = var.auth0_issuer
   auth0_client_id     = var.auth0_client_id

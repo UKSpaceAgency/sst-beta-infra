@@ -42,7 +42,7 @@ resource "cloudfoundry_app" "web" {
     COSMIC_BUCKET_SLUG      = var.cosmic_bucket_slug
     COSMIC_READ_KEY         = var.cosmic_read_key
     COSMIC_PREVIEW_SECRET   = var.cosmic_preview_secret
-    PIWIK_ID                = var.piwik_id
+    NEXT_PUBLIC_GA          = var.next_public_ga
     AUTH0_AUDIENCE          = var.auth0_audience
   }
 

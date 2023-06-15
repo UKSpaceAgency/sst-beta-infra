@@ -81,7 +81,7 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="next_public_ga=${{ secrets.next_public_ga }}" \
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
@@ -132,7 +132,7 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="next_public_ga=${{ secrets.next_public_ga }}" \
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
@@ -183,7 +183,7 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="next_public_ga=${{ secrets.next_public_ga }}" \
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
@@ -234,7 +234,7 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="next_public_ga=${{ secrets.next_public_ga }}" \
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
@@ -285,7 +285,7 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="next_public_ga=${{ secrets.next_public_ga }}" \
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \
@@ -335,7 +335,7 @@ jobs:
             -var="user_service_verification_token_secret=${{ secrets.user_service_verification_token_secret }}" \
             -var="spacetrack_run_at_hour=${{ secrets.spacetrack_run_at_hour }}" \
             -var="spacetrack_run_at_minute=${{ secrets.spacetrack_run_at_minute }}" \
-            -var="piwik_id=${{ secrets.piwik_id }}" \
+            -var="next_public_ga=${{ secrets.next_public_ga }}" \
             -var="i18nexus_api_key=${{ secrets.i18nexus_api_key }}" \
             -var="cosmic_bucket_slug=${{ secrets.cosmic_bucket_slug }}" \
             -var="cosmic_read_key=${{ secrets.cosmic_read_key }}" \

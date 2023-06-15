@@ -46,9 +46,7 @@ variable "cosmic_read_key" {}
 
 variable "cosmic_preview_secret" {}
 
-variable "piwik_id" {
-  default = ""
-}
+variable "next_public_ga" {}
 
 variable "nextauth_secret" {}
 

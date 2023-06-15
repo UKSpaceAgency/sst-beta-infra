@@ -22,7 +22,7 @@ variable "auth0_client_id" {}
 
 variable "auth0_client_secret" {}
 
-variable "piwik_id" {}
+variable "next_public_ga" {}
 
 variable "i18nexus_api_key" {}
 
