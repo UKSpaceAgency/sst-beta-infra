@@ -123,7 +123,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.sha,
-              environment: github.event.inputs.env,
+              environment: "${{ github.event.inputs.env }}",
               required_contexts: [],
               auto_merge: false
             })
