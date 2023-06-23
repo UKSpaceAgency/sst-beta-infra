@@ -119,7 +119,7 @@ jobs:
         run: |
           LOCAL_D_FILE=${EPOCHSECONDS}.txt
           echo $LOCAL_D_FILE
-          echo "$(date)" > $LOCAL_D_FILE
+          echo "$(date +'%Y-%m-%d %H:%M:%S')" > $LOCAL_D_FILE
           echo ${{ github.event.inputs.image-tag }} >> $LOCAL_D_FILE
           echo ${{ github.event.inputs.env }}-${{ github.event.inputs.invoker }} >> $LOCAL_D_FILE
           cat $LOCAL_D_FILE
