@@ -54,7 +54,7 @@ module "frontend" {
     }
   ]
   healthcheck_subpath = "/"
-  image_tag = "latest"
+  image_tag = var.image_tag
   route53_domain = var.route53_domain
   enable_ecs_execute = true
 }
