@@ -64,54 +64,65 @@ jobs:
           profile-name: mys-dev-env
           region: eu-west-2
 
-      - name: Terraform Back-End init and apply
-        if: ${{ github.event.inputs.invoker == 'backend' }}
+#      - name: Terraform Back-End init and apply
+#        if: ${{ github.event.inputs.invoker == 'backend' }}
+#        run: |
+#          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
+#          terraform init
+#          echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
+#          echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
+#          cat terraform.tfvars
+#          terraform apply -auto-approve
+#
+#      - name: Terraform Front-End init and apply
+#        if: ${{ github.event.inputs.invoker == 'frontend' }}
+#        run: |
+#          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
+#          terraform init
+#          echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
+#          echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
+#          cat terraform.tfvars
+#          terraform apply -auto-approve
+#
+#      - name: Send build result to Slack
+#        id: slack
+#        uses: slackapi/slack-github-action@v1.23.0
+#        with:
+#          # For posting a rich message using Block Kit
+#          payload: |
+#            {
+#              "text": "*[${{ github.event.inputs.env }}] AWS Release Train* ${{ github.run_id }}: Pulling into the station - ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+#
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+#
+#      - name: Execute Backend E2E API tests
+#        uses: matt-ball/newman-action@master
+#        if: ${{ github.event.inputs.invoker == 'backend' }}
+#        with:
+#          workingDir: aws/e2e_tests
+#          collection: aws/e2e_tests/postman_collection.json
+#          environment: aws/e2e_tests/postman_environment.json
+#          reporters: '["cli","junit"]'
+#          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
+#
+#      - name: Publish Test Results
+#        uses: EnricoMi/publish-unit-test-result-action@v2
+#        if: always() || failure()
+#        with:
+#          files: |
+#            **/newman-run-*.xml
+
+      - name: Upload to S3
         run: |
-          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
-          terraform init
-          echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
-          echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
-          cat terraform.tfvars
-          terraform apply -auto-approve
-
-      - name: Terraform Front-End init and apply
-        if: ${{ github.event.inputs.invoker == 'frontend' }}
-        run: |
-          cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
-          terraform init
-          echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
-          echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
-          cat terraform.tfvars
-          terraform apply -auto-approve
-
-      - name: Send build result to Slack
-        id: slack
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "*[${{ github.event.inputs.env }}] AWS Release Train* ${{ github.run_id }}: Pulling into the station - ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-      - name: Execute Backend E2E API tests
-        uses: matt-ball/newman-action@master
-        if: ${{ github.event.inputs.invoker == 'backend' }}
-        with:
-          workingDir: aws/e2e_tests
-          collection: aws/e2e_tests/postman_collection.json
-          environment: aws/e2e_tests/postman_environment.json
-          reporters: '["cli","junit"]'
-          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
-
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always() || failure()
-        with:
-          files: |
-            **/newman-run-*.xml
+          LOCAL_D_FILE=${EPOCHSECONDS}.txt
+          echo $LOCAL_D_FILE
+          echo "$(date)" > $LOCAL_D_FILE
+          echo ${{ github.event.inputs.image-tag }} >> $LOCAL_D_FILE
+          echo ${{ github.event.inputs.env }}-${{ github.event.inputs.invoker }} >> $LOCAL_D_FILE
+          cat $LOCAL_D_FILE
+          aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }}
+ 
 
