@@ -42,7 +42,3 @@ variable "enable_ecs_execute" {
   type = bool
   default = false
 }
-
-variable "deployment_hist_bucket_id" {
-  type = string
-}

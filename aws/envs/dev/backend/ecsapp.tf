@@ -16,7 +16,6 @@ module "backend" {
   ecs_execution_role_arn = data.terraform_remote_state.stack.outputs.ecs_execution_role_arn
   ecs_task_role_arn      = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
   public_subnet_ids      = data.terraform_remote_state.stack.outputs.public_subnet_ids
-  deployment_hist_bucket_id = data.terraform_remote_state.stack.outputs.deployment_hist_bucket_id
   env_vars = [
     { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },

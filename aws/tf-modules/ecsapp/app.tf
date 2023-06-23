@@ -184,16 +184,3 @@ resource "aws_route53_record" "app_record_a" {
     evaluate_target_health = false
   }
 }
-
-locals {
-  current_datetime = formatdate("YYYY-MM-DD_HH_mm_ss", timestamp())
-  current_datetime_pretty = formatdate("YYYY-MM-DD HH:mm:ss", timestamp())
-}
-
-//create deployment marker in deployments history bucket
-resource "aws_s3_object" "deployment_file" {
-  bucket = var.deployment_hist_bucket_id
-  key    = "${local.current_datetime}.txt"
-  content = "${local.current_datetime_pretty}\n${var.image_tag}\n${var.env_name}-${var.app_name}"
-  content_type = "text/plain"
-}
