@@ -125,3 +125,194 @@ resource "aws_iam_role" "ecs_events" {
 
   assume_role_policy = data.aws_iam_policy_document.assume_role_events.json
 }
+
+resource "aws_iam_policy" "developers_policy" {
+  name        =  "developers-policy-limited-mfa"
+  description = "Developer accesspolicy"
+
+  policy = jsonencode(
+        {
+          "Statement": [
+            {
+              "Action": [
+                "s3:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "s3fullAccess"
+            },
+            {
+              "Action": [
+                "secretsmanager:Get*",
+                "secretsmanager:List*",
+                "secretsmanager:Describe*"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "SecretManagerViewOnly"
+            },
+            {
+              "Action": [
+                "logs:GetLogEvents",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:Filter*",
+                "cloudwatch:Describe*",
+                "cloudwatch:Get*",
+                "cloudwatch:List*"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "CloudwatchReadOnly"
+            },
+            {
+              "Action": [
+                "ecs:Get*",
+                "ecs:Describe*",
+                "ecs:List*"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "EcsReadOnly"
+            },
+            {
+              "Action": [
+                "iam:ChangePassword"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "IAMChangePassword"
+            },
+            {
+              "Action": [
+                "iam:GetAccountPasswordPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "GetPasswordPolicy"
+            },
+            {
+              "Action": [
+                "iam:ListUsers",
+                "iam:ListVirtualMFADevices"
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "AllowListActions"
+            },
+            {
+              "Action": [
+                "iam:CreateAccessKey",
+                "iam:DeleteAccessKey",
+                "iam:ListAccessKeys",
+                "iam:UpdateAccessKey"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:user/$${aws:username}",
+              "Sid": "AllowManageOwnAccessKeys"
+            },
+            {
+              "Action": [
+                "iam:DeleteSSHPublicKey",
+                "iam:GetSSHPublicKey",
+                "iam:ListSSHPublicKeys",
+                "iam:UpdateSSHPublicKey",
+                "iam:UploadSSHPublicKey"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:user/$${aws:username}",
+              "Sid": "AllowManageOwnSSHPublicKeys"
+            },
+            {
+              "Action": [
+                "iam:ListMFADevices"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:mfa/*",
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "AllowIndividualUserToListOnlyTheirOwnMFA"
+            },
+            {
+              "Action": [
+                "iam:CreateVirtualMFADevice",
+                "iam:DeleteVirtualMFADevice",
+                "iam:EnableMFADevice",
+                "iam:ResyncMFADevice"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:mfa/*",
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "AllowIndividualUserToManageTheirOwnMFA"
+            },
+            {
+              "Action": [
+                "iam:DeactivateMFADevice"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:mfa/*",
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
+            },
+            {
+              "Condition": {
+                "BoolIfExists": {
+                  "aws:MultiFactorAuthPresent": "false"
+                }
+              },
+              "Effect": "Deny",
+              "NotAction": [
+                "iam:CreateVirtualMFADevice",
+                "iam:EnableMFADevice",
+                "iam:ListMFADevices",
+                "iam:ListUsers",
+                "iam:ListVirtualMFADevices",
+                "iam:ResyncMFADevice",
+                "iam:ChangePassword",
+                "s3:*"
+              ],
+              "Resource": "*",
+              "Sid": "BlockMostAccessUnlessSignedInWithMFA"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      )
+}
