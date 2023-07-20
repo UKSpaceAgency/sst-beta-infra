@@ -20,7 +20,7 @@ resource "aws_rds_cluster" "pg-aurora-cluster" {
   storage_encrypted           = true
 
   serverlessv2_scaling_configuration {
-    max_capacity = 2.0
+    max_capacity = var.max_acu
     min_capacity = 0.5
   }
 }
