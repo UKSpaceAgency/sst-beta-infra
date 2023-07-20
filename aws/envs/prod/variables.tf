@@ -1,11 +1,11 @@
 variable "env_name" {
   type    = string
-  default = "dev"
+  default = "prod"
 }
 
 variable "route53_domain" {
   type    = string
-  default = "awsdev.monitor-your-satellites.service.gov.uk"
+  default = ".monitor-your-satellites.service.gov.uk"
 }
 
 #variable "auth_client_id" {

@@ -9,13 +9,12 @@ resource "aws_rds_cluster" "pg-aurora-cluster" {
   vpc_security_group_ids      = var.vpc_security_group_ids
   engine_mode                 = "provisioned"
   master_username             = "postgres"
- # master_password             = random_password.master_password.result
   database_name               = "mys"
   backup_retention_period     = 10
   skip_final_snapshot         = true
   deletion_protection         = false
   engine                      = "aurora-postgresql"
-  engine_version              = "14.6"
+  engine_version              = "15.3"
   apply_immediately           = true
   db_subnet_group_name        = aws_db_subnet_group.default.name
   storage_encrypted           = true

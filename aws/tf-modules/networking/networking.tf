@@ -1,6 +1,6 @@
 locals {
-  public_subnet_bits = 8
-  private_subnet_bits = 8
+  public_subnet_bits = var.public_subnet_bits
+  private_subnet_bits = var.private_subnet_bits
 }
 
 

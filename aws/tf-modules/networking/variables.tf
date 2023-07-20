@@ -7,3 +7,13 @@ variable "cidr_block" {
   type = string
   default = "172.20.0.0/16"
 }
+
+variable "public_subnet_bits" {
+  type = number
+  default = 8
+}
+
+variable "private_subnet_bits" {
+  type = number
+  default = 8
+}

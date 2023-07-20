@@ -60,8 +60,8 @@ jobs:
       - name: Configure AWS credentials
         uses: mcblair/configure-aws-profile-action@v0.1.1
         with:
-          role-arn: arn:aws:iam::007301389989:role/gitlab-ecs-deployment-role
-          profile-name: mys-dev-env
+          role-arn: arn:aws:iam::915338536460:role/ecs_rollout_role
+          profile-name: uksa-mys-dev-env
           region: eu-west-2
 
       - name: Terraform Back-End init and apply
@@ -123,5 +123,5 @@ jobs:
           echo ${{ github.event.inputs.image-tag }} >> $LOCAL_D_FILE
           echo ${{ github.event.inputs.env }}-${{ github.event.inputs.invoker }} >> $LOCAL_D_FILE
           cat $LOCAL_D_FILE
-          aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }} --profile mys-dev-env
+          aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }} --profile uksa-mys-dev-env
  

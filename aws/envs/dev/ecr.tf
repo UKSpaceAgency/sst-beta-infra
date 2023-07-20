@@ -1,3 +1,3 @@
 module "ecr" {
-  source   = "../../tf-modules/ecr"
+  source = "../../tf-modules/ecr"
 }

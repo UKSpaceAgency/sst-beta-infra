@@ -3,8 +3,8 @@ locals {
 }
 
 module "bastion" {
-  source   = "../../tf-modules/bastion"
-  env_name = var.env_name
+  source                 = "../../tf-modules/bastion"
+  env_name               = var.env_name
   vpc_security_group_ids = [module.network.ssh-security-group-id]
-  public_subnet_id = local.first_public_subnet_id
+  public_subnet_id       = local.first_public_subnet_id
 }

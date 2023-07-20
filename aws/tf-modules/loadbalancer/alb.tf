@@ -52,9 +52,10 @@ data "aws_iam_policy_document" "alb_logs" {
   version = "2012-10-17"
 }
 
+resource "random_uuid" "some_uuid" {}
 
 resource "aws_s3_bucket" "elb_logs" {
-  bucket        = "alb-logs-for-mys-env-${var.env_name}"
+  bucket = substr(format("%s-%s", "alb-logs-for-mys-env-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 
