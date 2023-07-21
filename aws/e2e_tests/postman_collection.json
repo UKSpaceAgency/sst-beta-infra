@@ -5642,6 +5642,93 @@
 							]
 						},
 						{
+							"name": "for-analysis",
+							"item": [
+								{
+									"name": "Get events needing analysis by UKSA",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const resp = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code 200\", function() {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"const expected_keys = [\r",
+													"        \"id\",\r",
+													"        \"short_id\",\r",
+													"        \"cdm_external_id\",\r",
+													"        \"primary_object_norad_id\",\r",
+													"        \"secondary_object_norad_id\",\r",
+													"        \"primary_object_common_name\",\r",
+													"        \"secondary_object_common_name\",\r",
+													"        \"tca_time\",\r",
+													"        \"collision_probability\",\r",
+													"        \"collision_probability_method\",\r",
+													"        \"miss_distance\",\r",
+													"        \"primary_object_span\",\r",
+													"        \"primary_object_diameter\",\r",
+													"        \"primary_object_shape\",\r",
+													"        \"primary_object_mass\",\r",
+													"        \"primary_object_height\",\r",
+													"        \"primary_object_depth\",\r",
+													"        \"primary_object_width\",\r",
+													"        \"primary_object_cross_section_min\",\r",
+													"        \"primary_object_cross_section_avg\",\r",
+													"        \"primary_object_cross_section_max\",\r",
+													"        \"secondary_object_span\",\r",
+													"        \"secondary_object_diameter\",\r",
+													"        \"secondary_object_shape\",\r",
+													"        \"secondary_object_mass\",\r",
+													"        \"secondary_object_height\",\r",
+													"        \"secondary_object_depth\",\r",
+													"        \"secondary_object_width\",\r",
+													"        \"secondary_object_cross_section_min\",\r",
+													"        \"secondary_object_cross_section_avg\",\r",
+													"        \"secondary_object_cross_section_max\"\r",
+													"];\r",
+													"\r",
+													"pm.test(\"Events for analysis returned contain expected fields\", () => {\r",
+													"    resp.forEach(function (event) {\r",
+													"        pm.expect(event).to.have.all.keys(expected_keys)\r",
+													"        });\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/v1/events/for-analysis?threshold=0.00001",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"events",
+												"for-analysis"
+											],
+											"query": [
+												{
+													"key": "threshold",
+													"value": "0.00001"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Get Events list with metadata",
 							"event": [
 								{
