@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2f5688f2-e161-46db-8e3f-601f0efb71c5",
+		"_postman_id": "0db77065-d78b-4a76-9425-fda81201243c",
 		"name": "MyS API",
 		"description": "REST API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -3646,7 +3646,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/v1/satellites/by-organizations?sort_by=international_designator&limit=100&offset=0&sort_order=desc",
+											"raw": "{{baseUrl}}/v1/satellites/by-organizations?sort_by=satellites_count&limit=100&offset=0&sort_order=desc",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -3658,7 +3658,7 @@
 											"query": [
 												{
 													"key": "sort_by",
-													"value": "international_designator"
+													"value": "satellites_count"
 												},
 												{
 													"key": "limit",
