@@ -11,6 +11,15 @@ resource "aws_s3_object" "index_html" {
   key          = "index.html"
   source       = "index.html"
   content_type = "text/html"
+  etag         = filemd5("index.html")
+}
+
+resource "aws_cloudfront_function" "redirect_2_www_function" {
+  name    = "redirect-2-www-function"
+  runtime = "cloudfront-js-1.0"
+  comment = "perm redirect"
+  publish = true
+  code    = file("cf_function.js")
 }
 
 resource "aws_cloudfront_origin_access_control" "s3_only_access_control" {
@@ -40,8 +49,14 @@ resource "aws_cloudfront_distribution" "redirect_dist" {
       "OPTIONS"
     ]
     target_origin_id       = "redirect-2-www"
-    viewer_protocol_policy   = "redirect-to-https"
-    cache_policy_id          = data.aws_cloudfront_cache_policy.managed-caching-optimized.id
+    viewer_protocol_policy = "redirect-to-https"
+    cache_policy_id        = data.aws_cloudfront_cache_policy.managed-caching-optimized.id
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.redirect_2_www_function.arn
+    }
+
   }
 
   restrictions {
@@ -56,7 +71,7 @@ resource "aws_cloudfront_distribution" "redirect_dist" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  aliases = [var.route53_domain]
+  aliases             = [var.route53_domain]
   wait_for_deployment = false
   price_class         = "PriceClass_100"
   enabled             = true
