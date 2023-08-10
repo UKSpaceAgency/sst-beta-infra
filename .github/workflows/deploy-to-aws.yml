@@ -60,7 +60,7 @@ jobs:
       - name: Configure AWS credentials
         uses: mcblair/configure-aws-profile-action@v0.1.1
         with:
-          role-arn: arn:aws:iam::915338536460:role/ecs_rollout_role
+          role-arn: ${{ vars.ecs_rollout_role }}
           profile-name: uksa-mys-dev-env
           region: eu-west-2
 
