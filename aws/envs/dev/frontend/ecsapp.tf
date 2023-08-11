@@ -50,6 +50,14 @@ module "frontend" {
     {
       "name": "NEXT_PUBLIC_GA",
       "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicGA::"
+    },
+    {
+      "name": "COSMIC_BUCKET_SLUG",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:cosmicBucketSlug::"
+    },
+    {
+      "name": "COSMIC_READ_KEY",
+      "valueFrom": "${data.aws_secretsmanager_secret.by-name.arn}:cosmicReadKey::"
     }
   ]
   healthcheck_subpath = "/"
