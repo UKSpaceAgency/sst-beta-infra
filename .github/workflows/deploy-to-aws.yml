@@ -98,6 +98,16 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
+      - name: History entry to S3
+        run: |
+          LOCAL_D_FILE=${EPOCHSECONDS}.txt
+          echo $LOCAL_D_FILE
+          echo "$(date +'%Y-%m-%d %H:%M:%S %Z')" > $LOCAL_D_FILE
+          echo ${{ github.event.inputs.image-tag }} >> $LOCAL_D_FILE
+          echo ${{ github.event.inputs.env }}-${{ github.event.inputs.invoker }} >> $LOCAL_D_FILE
+          cat $LOCAL_D_FILE
+          aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }} --profile uksa-mys-dev-env
+
       - name: Execute Backend E2E API tests
         uses: matt-ball/newman-action@master
         if: ${{ github.event.inputs.invoker == 'backend' }}
@@ -114,14 +124,3 @@ jobs:
         with:
           files: |
             **/newman-run-*.xml
-
-      - name: History entry to S3
-        run: |
-          LOCAL_D_FILE=${EPOCHSECONDS}.txt
-          echo $LOCAL_D_FILE
-          echo "$(date +'%Y-%m-%d %H:%M:%S %Z')" > $LOCAL_D_FILE
-          echo ${{ github.event.inputs.image-tag }} >> $LOCAL_D_FILE
-          echo ${{ github.event.inputs.env }}-${{ github.event.inputs.invoker }} >> $LOCAL_D_FILE
-          cat $LOCAL_D_FILE
-          aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }} --profile uksa-mys-dev-env
- 
