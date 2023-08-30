@@ -316,3 +316,116 @@ resource "aws_iam_policy" "developers_policy" {
         }
       )
 }
+
+resource "aws_iam_role" "lambda-assume-role-vpc" {
+  name = "iam-role-for-vpc-lambda"
+
+  assume_role_policy = jsonencode(
+    {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: "sts:AssumeRole",
+          Principal: {
+            Service: "lambda.amazonaws.com"
+          },
+          Effect: "Allow",
+          Sid: ""
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role" "lambda-assume-role-public" {
+  name = "iam-role-for-public-lambda"
+
+  assume_role_policy = jsonencode(
+    {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: "sts:AssumeRole",
+          Principal: {
+            Service: "lambda.amazonaws.com"
+          },
+          Effect: "Allow",
+          Sid: ""
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_policy" "lambda-iam-policy-public" {
+  name        = "iam-policy-for-public-lambda"
+  path        = "/"
+  description = "IAM policy for public lambda"
+
+  policy = jsonencode(
+    {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          Resource: "arn:aws:logs:*:*:*",
+          Effect: "Allow"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_policy" "lambda-iam-policy-vpc" {
+  name        = "iam-policy-for-vpc-lambda"
+  path        = "/"
+  description = "IAM policy for vpc lambda"
+
+  policy = jsonencode(
+    {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          Resource: "arn:aws:logs:*:*:*",
+          Effect: "Allow"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeNetworkInterfaces"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetSecretValue"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+      ]
+    }
+  )
+}

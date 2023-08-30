@@ -4,3 +4,5 @@ credentials.tfvars
 *.backend.conf
 *.tar
 *.sql
+/aws/alarms-lambda/dist/
+/aws/alarm-lambda-notif/dist/

@@ -175,3 +175,39 @@ resource "aws_security_group" "pg-service" {
     Name = "pg-service"
   }
 }
+data "aws_region" "current" {}
+
+#----- VPC endpoint needed for lambda
+resource "aws_vpc_endpoint" "secrets_manager_endpoint" {
+  vpc_id            = aws_vpc.custom_vpc.id
+  service_name      = "com.amazonaws.${data.aws_region.current.id}.secretsmanager"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.allow_ssh.id  ]
+
+  subnet_ids = aws_subnet.private.*.id
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "SecretsManagerVpcEndpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "lambda_endpoint" {
+  vpc_id            = aws_vpc.custom_vpc.id
+  service_name      = "com.amazonaws.${data.aws_region.current.id}.lambda"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.allow_ssh.id  ]
+
+  subnet_ids = aws_subnet.private.*.id
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "LambdaVpcEndpoint"
+  }
+}
