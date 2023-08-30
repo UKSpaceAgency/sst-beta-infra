@@ -41,3 +41,24 @@ module "alarm_lambda_vpc" {
         "vpc_endpoint_secrets" = module.network.vpc_secrets_manager_endpoint_arn
   }
 }
+
+#----- scheduling every 15min
+resource "aws_cloudwatch_event_rule" "event_rule" {
+  name        = "rule-for-alarms-lambda"
+  description = "Invoke Lambda every 15 minutes"
+  schedule_expression = "rate(15 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target" {
+  rule      = aws_cloudwatch_event_rule.event_rule.name
+  target_id = "invoke-lambda"
+  arn = module.alarm_lambda_vpc.vpc_lambda_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.alarm_lambda_vpc.vpc_lambda_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.event_rule.arn
+}
