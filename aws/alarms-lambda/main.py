@@ -21,9 +21,8 @@ def lambda_handler(event, context):
         slack_lambda_arn = os.environ['SLACK_LAMBDA_ARN']
         source_provider = "SpaceTrack"
         source_type = "CDM"
-        must_finish_minutes = 60
+        must_finish_minutes = int(os.environ['TIMEOUT_MINUTES'])
         fire_alarm = False
-
 
         # Do something with the retrieved secret values
         # print("DatabaseUrl:", database_url)
