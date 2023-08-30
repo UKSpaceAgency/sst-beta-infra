@@ -184,7 +184,7 @@ resource "aws_vpc_endpoint" "secrets_manager_endpoint" {
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
-    aws_security_group.allow_ssh.id  ]
+    aws_security_group.allow_ssh.id,data.aws_security_group.default.id  ]
 
   subnet_ids = aws_subnet.private.*.id
 
@@ -201,7 +201,7 @@ resource "aws_vpc_endpoint" "lambda_endpoint" {
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
-    aws_security_group.allow_ssh.id  ]
+    aws_security_group.allow_ssh.id,data.aws_security_group.default.id  ]
 
   subnet_ids = aws_subnet.private.*.id
 
