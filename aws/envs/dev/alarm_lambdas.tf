@@ -38,6 +38,7 @@ module "alarm_lambda_vpc" {
         "SLACK_LAMBDA_ARN"  = module.alarm_lambda_slack.public_lambda_arn
         "SECRET_NAME" = "${var.env_name}-backend"
         "TIMEOUT_MINUTES" = "150"
+        "ENV_NAME" = var.env_name
         "vpc_endpoint_lambda" = module.network.vpc_lambda_endpoint_arn
         "vpc_endpoint_secrets" = module.network.vpc_secrets_manager_endpoint_arn
   }

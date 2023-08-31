@@ -73,9 +73,10 @@ def lambda_handler(event, context):
         if fire_alarm:
             # Invoke the Lambda function outside the VPC
             data = {
-                "source_provider": "SpaceTrack (testing)",
-                "source_type": "CDM",
-                "env": "dev"
+                "source_provider": source_provider,
+                "source_type": source_type,
+                "env": os.environ['ENV_NAME'],
+                "timeout_minutes": must_finish_minutes
             }
             payload_json = json.dumps(data)
 
