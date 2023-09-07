@@ -18,7 +18,7 @@ module "notifications_worker" {
   public_subnet_ids      = data.terraform_remote_state.stack.outputs.public_subnet_ids
   image_tag              = var.image_tag
   enable_ecs_execute     = true
-  worker_command         = ["poetry", "run", "python", "-m", "app.periodics.notifications_worker"]
+  worker_command         = ["poetry", "run", "python", "-m", "app.periodics.notifications_worker", "--cron"]
   env_vars = [
     { "name" : "APP_NAME", "value" : "Notifications worker (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
