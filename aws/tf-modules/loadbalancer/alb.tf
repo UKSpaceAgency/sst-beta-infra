@@ -49,6 +49,31 @@ data "aws_iam_policy_document" "alb_logs" {
     sid = "AWSLogDeliveryAclCheck"
   }
 
+  statement {
+
+    effect = "Deny"
+
+    principals {
+      type = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      aws_s3_bucket.elb_logs.arn,"${aws_s3_bucket.elb_logs.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false"
+      ]
+    }
+  }
+
   version = "2012-10-17"
 }
 

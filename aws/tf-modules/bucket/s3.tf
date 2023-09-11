@@ -5,6 +5,38 @@ resource "aws_s3_bucket" "data_bucket" {
   force_destroy = true
 }
 
+data "aws_iam_policy_document" "deny_pure_http_traffic" {
+  statement {
+
+    effect = "Deny"
+
+    principals {
+      type = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      aws_s3_bucket.data_bucket.arn,"${aws_s3_bucket.data_bucket.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false"
+      ]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "data_bucket_policy" {
+  bucket = aws_s3_bucket.data_bucket.id
+  policy = data.aws_iam_policy_document.deny_pure_http_traffic.json
+}
+
 //deployment history bucket
 resource "aws_s3_bucket" "deployment_history" {
   bucket = substr(format("%s-%s", "mys-deployment-history-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)

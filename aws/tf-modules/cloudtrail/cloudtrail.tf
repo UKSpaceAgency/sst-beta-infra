@@ -53,6 +53,32 @@ data "aws_iam_policy_document" "cloud_trail_policy_document" {
       values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/account-trail-for-${var.env_name}"]
     }
   }
+
+  statement {
+
+    effect = "Deny"
+
+    principals {
+      type = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      aws_s3_bucket.cloudtrail_bucket.arn,"${aws_s3_bucket.cloudtrail_bucket.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false"
+      ]
+    }
+  }
+
 }
 resource "aws_s3_bucket_policy" "cloud_trail_bucket_policy" {
   bucket = aws_s3_bucket.cloudtrail_bucket.id
