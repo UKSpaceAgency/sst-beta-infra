@@ -70,7 +70,7 @@ resource "aws_lb" "alb" {
   load_balancer_type         = "application"
   security_groups            = [var.allow_tls_only_sg_id, var.default_sg_id]
   subnets                    = var.public_subnet_ids
-  enable_deletion_protection = false
+  enable_deletion_protection = true
   drop_invalid_header_fields = true
 
   access_logs {
