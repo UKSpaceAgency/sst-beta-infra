@@ -71,6 +71,13 @@ data "aws_iam_policy_document" "allow_listing_policy_doc" {
       aws_s3_bucket.deployment_history.arn,
       "${aws_s3_bucket.deployment_history.arn}/*",
     ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "true"
+      ]
+    }
   }
 }
 
