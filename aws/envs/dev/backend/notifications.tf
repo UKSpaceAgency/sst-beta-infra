@@ -21,7 +21,7 @@ module "notifications_worker" {
   worker_command         = ["poetry", "run", "python", "-m", "app.periodics.notifications_worker", "--cron"]
   env_vars = [
     { "name" : "APP_NAME", "value" : "Notifications worker (${var.image_tag})" },
-    { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "APP_FRONTEND_URL", "value" : "https://web.${var.route53_domain}" },
   ]

@@ -18,7 +18,7 @@ module "backend" {
   public_subnet_ids      = data.terraform_remote_state.stack.outputs.public_subnet_ids
   env_vars = [
     { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
-    { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_FRONTEND_URL", "value" : "https://web.${var.route53_domain}" },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },

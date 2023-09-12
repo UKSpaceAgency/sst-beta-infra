@@ -21,7 +21,7 @@ module "spacetrack_worker" {
   worker_command         = ["poetry", "run", "python", "-m", "app.periodics.space_track_worker", "--cron"]
   env_vars = [
     { "name" : "APP_NAME", "value" : "Spacetrack worker (${var.image_tag})" },
-    { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
   ]
   secret_env_vars = [
