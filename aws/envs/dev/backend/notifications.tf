@@ -23,7 +23,7 @@ module "notifications_worker" {
     { "name" : "APP_NAME", "value" : "Notifications worker (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
-    { "name" : "APP_FRONTEND_URL", "value" : "https://web.${var.route53_domain}" },
+    { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
   ]
   secret_env_vars = [
     {

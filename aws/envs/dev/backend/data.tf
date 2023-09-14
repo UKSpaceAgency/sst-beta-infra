@@ -1,3 +1,7 @@
+locals {
+  local_r53_domain = data.terraform_remote_state.stack.outputs.route53_domain
+}
+
 data "terraform_remote_state" "stack" {
   backend = "s3"
 

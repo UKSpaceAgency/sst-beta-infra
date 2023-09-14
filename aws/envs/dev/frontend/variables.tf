@@ -5,15 +5,10 @@ variable "env_name" {
 
 variable "app_name" {
   type    = string
-  default = "web"
+  default = "www"
 }
 
 variable "image_tag" {
   type    = string
   default = "latest"
-}
-
-variable "route53_domain" {
-  type    = string
-  default = "awsdev.monitor-your-satellites.service.gov.uk"
 }

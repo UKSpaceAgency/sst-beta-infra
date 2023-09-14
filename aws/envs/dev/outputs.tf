@@ -49,3 +49,7 @@ output "s3_bucket_id" {
 output "deployment_hist_bucket_id" {
   value = module.s3.deployment_hist_bucket_id
 }
+
+output "route53_domain" {
+  value = var.route53_domain
+}
