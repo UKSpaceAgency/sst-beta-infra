@@ -9,9 +9,9 @@ resource "aws_s3_bucket" "redirect" {
 resource "aws_s3_object" "index_html" {
   bucket       = aws_s3_bucket.redirect.id
   key          = "index.html"
-  source       = "index.html"
+  source       = "files/index_redirect.html"
   content_type = "text/html"
-  etag         = filemd5("index.html")
+  etag         = filemd5("files/index_redirect.html")
 }
 
 resource "aws_cloudfront_function" "redirect_2_www_function" {
@@ -19,7 +19,7 @@ resource "aws_cloudfront_function" "redirect_2_www_function" {
   runtime = "cloudfront-js-1.0"
   comment = "perm redirect"
   publish = true
-  code    = file("cf_function.js")
+  code    = file("files/cf_function.js")
 }
 
 resource "aws_cloudfront_origin_access_control" "s3_only_access_control" {
@@ -84,7 +84,7 @@ resource "aws_cloudfront_distribution" "redirect_dist" {
 
 
 resource "aws_route53_record" "redirect_itself" {
-  zone_id = data.aws_route53_zone.primary.zone_id
+  zone_id = module.route53.primary_zone_id
   name    = var.route53_domain
   type    = "A"
 

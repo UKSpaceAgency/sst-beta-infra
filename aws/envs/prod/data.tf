@@ -1,9 +1,3 @@
-
-data "aws_route53_zone" "primary" {
-  name         = var.route53_domain
-  private_zone = false
-}
-
 data "aws_iam_policy_document" "public_frontend_policy" {
   policy_id = "PolicyPublicFrontend11155"
   statement {

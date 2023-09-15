@@ -85,7 +85,7 @@ resource "aws_cloudfront_distribution" "stats_pingdom" {
 
 
 resource "aws_route53_record" "environment_itself" {
-  zone_id = data.aws_route53_zone.primary.zone_id
+  zone_id = module.route53.primary_zone_id
   name    = "status.${var.route53_domain}"
   type    = "A"
 

@@ -147,13 +147,6 @@ resource "aws_ecs_service" "ecs-app" {
     }
   }
 
-
-  lifecycle {
-    ignore_changes = [
-      desired_count
-    ]
-  }
-
   network_configuration {
     subnets          = var.public_subnet_ids
     security_groups  = [var.default_sg_id]

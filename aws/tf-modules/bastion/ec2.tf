@@ -40,13 +40,6 @@ resource "aws_instance" "bastion" {
     Name = "bastion-host-for-${var.env_name}"
   }
 
-  ebs_block_device {
-    device_name = "/dev/sdf"
-    volume_size = 100
-    volume_type = "gp2"
-    delete_on_termination = true
-  }
-
   user_data = <<-EOF
     #!/bin/bash
     mkfs.ext4 /dev/sdf
