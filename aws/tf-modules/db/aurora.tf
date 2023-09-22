@@ -12,7 +12,7 @@ resource "aws_rds_cluster" "pg-aurora-cluster" {
   database_name               = "mys"
   backup_retention_period     = 10
   skip_final_snapshot         = true
-  deletion_protection         = false
+  deletion_protection         = var.default_delete_protection
   engine                      = "aurora-postgresql"
   engine_version              = "15.3"
   apply_immediately           = true
@@ -31,4 +31,5 @@ resource "aws_rds_cluster_instance" "pg-serverless-instance" {
   engine             = aws_rds_cluster.pg-aurora-cluster.engine
   engine_version     = aws_rds_cluster.pg-aurora-cluster.engine_version
   count = var.instances_no
+  monitoring_interval = var.default_monitoring_interval
 }

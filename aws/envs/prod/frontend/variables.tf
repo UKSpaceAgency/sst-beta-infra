@@ -5,7 +5,7 @@ variable "env_name" {
 
 variable "app_name" {
   type    = string
-  default = "www2" //todo
+  default = "www"
 }
 
 variable "image_tag" {

@@ -5,7 +5,7 @@ variable "env_name" {
 
 variable "app_name" {
   type    = string
-  default = "api2" //todo
+  default = "api"
 }
 
 variable "image_tag" {

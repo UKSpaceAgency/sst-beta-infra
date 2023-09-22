@@ -4,7 +4,7 @@ module "frontend" {
   alb_name = data.terraform_remote_state.stack.outputs.alb_name
   app_alb_priority = 5
   app_cpu = 512
-  app_instances_num = 2 //todo
+  app_instances_num = 2
   app_mem = 1024
   app_name = var.app_name
   ecr_app_name = "frontend"
@@ -20,7 +20,7 @@ module "frontend" {
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
-    { "name" : "BASE_API_URL", "value" : "https://www2.${local.local_r53_domain}/api/graphql" }, //todo
+    { "name" : "BASE_API_URL", "value" : "https://www.${local.local_r53_domain}/api/graphql" }, //todo
   ]
   secret_env_vars = [
     {

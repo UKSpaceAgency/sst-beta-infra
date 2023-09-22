@@ -4,7 +4,7 @@ module "backend" {
   alb_name               = data.terraform_remote_state.stack.outputs.alb_name
   app_alb_priority       = 10
   app_cpu                = 512
-  app_instances_num      = 2 //todo
+  app_instances_num      = 2
   app_mem                = 1024
   app_name               = var.app_name
   ecr_app_name           = "backend"
@@ -19,7 +19,7 @@ module "backend" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
-    { "name" : "APP_FRONTEND_URL", "value" : "https://www2.${local.local_r53_domain}" }, //todo
+    { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" }, //todo
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
   ]
