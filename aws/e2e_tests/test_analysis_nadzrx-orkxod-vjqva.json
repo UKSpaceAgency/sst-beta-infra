@@ -1,0 +1,93 @@
+{
+
+  "event_id": "nadzrx-orkxod-vjqva",
+
+  "cdm_id":"225137647",
+
+  "collision_probability":8.7E-6,
+
+  "tca": "2024-04-18T22:57:32.881Z",
+
+  "miss_distance":
+
+  {
+
+
+      "total_value": 262.0,
+
+      "total_uncertainty": null,
+
+      "mean_radial_value": -35.5,
+
+      "mean_radial_uncertainty": null,
+
+      "in_track_value": 131.4,
+
+      "in_track_uncertainty": null,
+
+      "cross_track_value": 224.1,
+
+      "cross_track_uncertainty": null
+
+  },
+
+  "update_time":"2024-04-18T08:54:48.000Z",
+
+  "altitude": 700.3193125,
+
+  "latitude": -65.26039,
+
+  "longitude": -12.531348,
+
+  "relative_velocity": null,
+
+  "estimated_combined_mass": 50,
+
+  "estimated_fragments": null,
+
+  "primary_object":
+
+  {
+
+    "norad_id": "5581",
+
+    "data_received": null,
+
+    "data_source": "UKSA_OA",
+
+    "HBR": 0.8,
+
+    "observations_number": null,
+
+    "observations_available": null,
+
+    "observations_timespan": null,
+
+    "OD_Quality": null
+
+  },
+
+  "secondary_object":
+
+  {
+
+    "norad_id": "34131",
+
+    "data_received": null,
+
+    "data_source": "UKSA_OA",
+
+    "HBR": 0.5,
+
+    "observations_number": null,
+
+    "observations_available": null,
+
+    "observations_timespan": null,
+
+    "OD_Quality": null
+
+  },
+
+  "collision_probability_method": "FOSTER"
+}
