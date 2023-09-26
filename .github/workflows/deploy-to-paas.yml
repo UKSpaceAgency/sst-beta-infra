@@ -48,11 +48,11 @@ jobs:
         uses: actions/checkout@v3
 
 
-     # - name: Download Build Artifacts
-     #   run: |
-     #     ./scripts/download-build-assets.sh
-     #   env:
-     #     TF_GITHUB_TOKEN: ${{ secrets.TF_GITHUB_TOKEN }}
+      - name: Download Build Artifacts
+        run: |
+          ./scripts/download-build-assets.sh
+        env:
+          TF_GITHUB_TOKEN: ${{ secrets.TF_GITHUB_TOKEN }}
 
       - name: Terraform Init
         run: |
