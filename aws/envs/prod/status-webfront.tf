@@ -32,6 +32,14 @@ resource "aws_acm_certificate_validation" "api_cert_validation" {
 }
 
 
+data "aws_cloudfront_cache_policy" "managed-caching-disabled" {
+  name = "Managed-CachingDisabled"
+}
+
+data "aws_cloudfront_origin_request_policy" "managed-all-viewer" {
+  name = "Managed-AllViewer"
+}
+
 resource "aws_cloudfront_distribution" "stats_pingdom" {
   origin {
     domain_name = "secure-stats.pingdom.com"
