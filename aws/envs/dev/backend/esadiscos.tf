@@ -23,6 +23,7 @@ module "esadiscos_worker" {
     { "name" : "APP_NAME", "value" : "Esa Discos worker (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
+    { "name" : "ESA_DISCOS_maximum_requests_per_minute", "value" : "10" },
   ]
   secret_env_vars = [
     {
