@@ -9,3 +9,7 @@ output "bucket_arn" {
 output "deployment_hist_bucket_id" {
   value = aws_s3_bucket.deployment_history.id
 }
+
+output "lambdas_bucket_id" {
+  value = aws_s3_bucket.lambdas_bucket.id
+}

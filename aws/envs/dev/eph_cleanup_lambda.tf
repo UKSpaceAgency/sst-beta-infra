@@ -32,10 +32,10 @@ module "ephemeris_cleanup_lambda" {
   lambda_policy_arn      = module.iam.lambda_iam_policy_vpc_arn
   lambda_role_arn        = aws_iam_role.lambda-assume-role-eph-cleanup.arn
   lambda_role_name       = aws_iam_role.lambda-assume-role-eph-cleanup.name
-  lambda_filename = "../../ephemeris-cleanup/python-package.zip"
+  s3_bucket = module.s3.lambdas_bucket_id
+  s3_key = "ephemeris-cleanup-latest.zip"
 
   env_vars = {
-        "SLACK_LAMBDA_ARN"  = module.alarm_lambda_slack.public_lambda_arn
         "SECRET_NAME" = "${var.env_name}-backend"
         "ENV_NAME" = var.env_name
         "vpc_endpoint_lambda" = module.network.vpc_lambda_endpoint_arn
@@ -73,7 +73,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 
   lambda_function {
     lambda_function_arn = module.ephemeris_cleanup_lambda.vpc_lambda_arn
-    events              = ["s3:ObjectRemoved:*"]
+    events              = ["s3:ObjectRemoved:*","s3:LifecycleExpiration:*"]
     filter_prefix       = local.prefix_name
   }
 }

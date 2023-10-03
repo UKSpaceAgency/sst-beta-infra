@@ -128,3 +128,8 @@ resource "aws_s3_object" "config_js" {
   content = "export const S3_BUCKET_URL = 'https://${aws_s3_bucket.deployment_history.bucket_regional_domain_name}/';"
   content_type = "text/javascript"
 }
+
+resource "aws_s3_bucket" "lambdas_bucket" {
+  bucket = substr(format("%s-%s", "mys-lambdas-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  force_destroy = true
+}

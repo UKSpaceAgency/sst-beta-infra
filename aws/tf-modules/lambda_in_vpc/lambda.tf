@@ -13,8 +13,8 @@ resource "aws_lambda_function" "vpc_lambda" {
   architectures = ["x86_64"]
   role          = var.lambda_role_arn
   handler       = var.lambda_handler_name
-  filename = var.lambda_filename
-  source_code_hash = filebase64sha256(var.lambda_filename)
+  s3_bucket = var.s3_bucket
+  s3_key = var.s3_key
   runtime = "python3.11"
   timeout = 30 //seconds
 
