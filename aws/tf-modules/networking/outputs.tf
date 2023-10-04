@@ -26,10 +26,10 @@ output "custom_vpc_id" {
   value = aws_vpc.custom_vpc.id
 }
 
-output "vpc_lambda_endpoint_arn" {
-  value = aws_vpc_endpoint.lambda_endpoint.arn
-}
-
-output "vpc_secrets_manager_endpoint_arn" {
-  value = aws_vpc_endpoint.secrets_manager_endpoint.arn
-}
+#output "vpc_lambda_endpoint_arn" {
+#  value = aws_vpc_endpoint.lambda_endpoint.arn
+#}
+#
+#output "vpc_secrets_manager_endpoint_arn" {
+#  value = aws_vpc_endpoint.secrets_manager_endpoint.arn
+#}
