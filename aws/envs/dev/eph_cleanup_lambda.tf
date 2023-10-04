@@ -38,7 +38,6 @@ module "ephemeris_cleanup_lambda" {
   env_vars = {
         "SECRET_NAME" = "${var.env_name}-backend"
         "ENV_NAME" = var.env_name
-        "vpc_endpoint_lambda" = module.network.vpc_lambda_endpoint_arn
         "vpc_endpoint_secrets" = module.network.vpc_secrets_manager_endpoint_arn
   }
 }
