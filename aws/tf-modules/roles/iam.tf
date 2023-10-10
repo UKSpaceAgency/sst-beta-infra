@@ -317,6 +317,195 @@ resource "aws_iam_policy" "developers_policy" {
       )
 }
 
+resource "aws_iam_policy" "billing_mfa_policy" {
+  name        =  "billing-policy-limited-mfa"
+  description = "Billing job function plus MFA policy"
+
+  policy = jsonencode(
+        {
+          "Statement": [
+            {
+              "Action": [
+                "account:GetAccountInformation",
+                "aws-portal:*Billing",
+                "aws-portal:*PaymentMethods",
+                "aws-portal:*Usage",
+                "billing:GetBillingData",
+                "billing:GetBillingDetails",
+                "billing:GetBillingNotifications",
+                "billing:GetBillingPreferences",
+                "billing:GetContractInformation",
+                "billing:GetCredits",
+                "billing:GetIAMAccessPreference",
+                "billing:GetSellerOfRecord",
+                "billing:ListBillingViews",
+                "billing:PutContractInformation",
+                "billing:RedeemCredits",
+                "billing:UpdateBillingPreferences",
+                "billing:UpdateIAMAccessPreference",
+                "budgets:ModifyBudget",
+                "budgets:ViewBudget",
+                "ce:CreateNotificationSubscription",
+                "ce:CreateReport",
+                "ce:DeleteNotificationSubscription",
+                "ce:DeleteReport",
+                "ce:ListCostAllocationTags",
+                "ce:UpdateCostAllocationTagsStatus",
+                "ce:UpdateNotificationSubscription",
+                "ce:UpdatePreferences",
+                "ce:UpdateReport",
+                "consolidatedbilling:GetAccountBillingRole",
+                "consolidatedbilling:ListLinkedAccounts",
+                "cur:DeleteReportDefinition",
+                "cur:DescribeReportDefinitions",
+                "cur:GetClassicReport",
+                "cur:GetClassicReportPreferences",
+                "cur:GetUsageReport",
+                "cur:ModifyReportDefinition",
+                "cur:PutClassicReportPreferences",
+                "cur:PutReportDefinition",
+                "cur:ValidateReportDestination",
+                "freetier:GetFreeTierAlertPreference",
+                "freetier:GetFreeTierUsage",
+                "freetier:PutFreeTierAlertPreference",
+                "invoicing:GetInvoiceEmailDeliveryPreferences",
+                "invoicing:GetInvoicePDF",
+                "invoicing:ListInvoiceSummaries",
+                "invoicing:PutInvoiceEmailDeliveryPreferences",
+                "payments:CreatePaymentInstrument",
+                "payments:DeletePaymentInstrument",
+                "payments:GetPaymentInstrument",
+                "payments:GetPaymentStatus",
+                "payments:ListPaymentPreferences",
+                "payments:MakePayment",
+                "payments:UpdatePaymentPreferences",
+                "purchase-orders:AddPurchaseOrder",
+                "purchase-orders:DeletePurchaseOrder",
+                "purchase-orders:GetPurchaseOrder",
+                "purchase-orders:ListPurchaseOrderInvoices",
+                "purchase-orders:ListPurchaseOrders",
+                "purchase-orders:ListTagsForResource",
+                "purchase-orders:ModifyPurchaseOrders",
+                "purchase-orders:TagResource",
+                "purchase-orders:UntagResource",
+                "purchase-orders:UpdatePurchaseOrder",
+                "purchase-orders:UpdatePurchaseOrderStatus",
+                "purchase-orders:ViewPurchaseOrders",
+                "tax:BatchPutTaxRegistration",
+                "tax:DeleteTaxRegistration",
+                "tax:GetExemptions",
+                "tax:GetTaxInheritance",
+                "tax:GetTaxInterview",
+                "tax:GetTaxRegistration",
+                "tax:GetTaxRegistrationDocument",
+                "tax:ListTaxRegistrations",
+                "tax:PutTaxInheritance",
+                "tax:PutTaxInterview",
+                "tax:PutTaxRegistration",
+                "tax:UpdateExemptions"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "BillingPlusMFA"
+            },
+            {
+              "Action": [
+                "iam:ChangePassword"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "IAMChangePassword"
+            },
+            {
+              "Action": [
+                "iam:GetAccountPasswordPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "GetPasswordPolicy"
+            },
+            {
+              "Action": [
+                "iam:ListUsers",
+                "iam:ListVirtualMFADevices"
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "AllowListActions"
+            },
+            {
+              "Action": [
+                "iam:ListMFADevices"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:mfa/*",
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "AllowIndividualUserToListOnlyTheirOwnMFA"
+            },
+            {
+              "Action": [
+                "iam:CreateVirtualMFADevice",
+                "iam:DeleteVirtualMFADevice",
+                "iam:EnableMFADevice",
+                "iam:ResyncMFADevice"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:mfa/*",
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "AllowIndividualUserToManageTheirOwnMFA"
+            },
+            {
+              "Action": [
+                "iam:DeactivateMFADevice"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:iam::*:mfa/*",
+                "arn:aws:iam::*:user/$${aws:username}"
+              ],
+              "Sid": "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
+            },
+            {
+              "Condition": {
+                "BoolIfExists": {
+                  "aws:MultiFactorAuthPresent": "false"
+                }
+              },
+              "Effect": "Deny",
+              "NotAction": [
+                "iam:CreateVirtualMFADevice",
+                "iam:EnableMFADevice",
+                "iam:ListMFADevices",
+                "iam:ListUsers",
+                "iam:ListVirtualMFADevices",
+                "iam:ResyncMFADevice",
+                "iam:ChangePassword"
+              ],
+              "Resource": "*",
+              "Sid": "BlockMostAccessUnlessSignedInWithMFA"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      )
+}
+
 resource "aws_iam_role" "lambda-assume-role-vpc" {
   name = "iam-role-for-vpc-lambda"
 

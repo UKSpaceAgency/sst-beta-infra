@@ -1,5 +1,5 @@
 locals {
-  prefix_name = "tests_ephemeris/"
+  prefix_name = "ephemeris/"
 }
 
 resource "aws_iam_role" "lambda-assume-role-eph-cleanup" {
@@ -33,7 +33,7 @@ module "ephemeris_cleanup_lambda" {
   lambda_role_arn        = aws_iam_role.lambda-assume-role-eph-cleanup.arn
   lambda_role_name       = aws_iam_role.lambda-assume-role-eph-cleanup.name
   s3_bucket = module.s3.lambdas_bucket_id
-  s3_key = "ephemeris-cleanup-latest.zip"
+  s3_key = "ephemeris-cleanup-2988171aab282fd24a97ccfabf24d9672d3a5ea5.zip"
 
   env_vars = {
         "SECRET_NAME" = "${var.env_name}-backend"
@@ -53,7 +53,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule" {
     }
 
     expiration {
-      days = 1
+      days = 500
     }
     status = "Enabled"
   }
