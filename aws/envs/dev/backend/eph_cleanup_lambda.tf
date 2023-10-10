@@ -1,5 +1,6 @@
 locals {
   prefix_name = "ephemeris/"
+  expiration_days = 500
 }
 
 resource "aws_iam_role" "lambda-assume-role-eph-cleanup" {
@@ -23,27 +24,27 @@ resource "aws_iam_role" "lambda-assume-role-eph-cleanup" {
 }
 
 module "ephemeris_cleanup_lambda" {
-  source                 = "../../tf-modules/lambda_in_vpc"
+  source                 = "../../../tf-modules/lambda_in_vpc"
   env_name               = var.env_name
-  vpc_security_group_ids = [module.network.ssh-security-group-id]
-  private_subnet_ids       = module.network.private_subnet_ids
+  vpc_security_group_ids = [data.terraform_remote_state.stack.outputs.default_sg_id]
+  private_subnet_ids       = data.terraform_remote_state.stack.outputs.private_subnet_ids
   lambda_function_name   = "ephemeris-cleanup-${var.env_name}"
   lambda_handler_name    = "main.lambda_handler"
-  lambda_policy_arn      = module.iam.lambda_iam_policy_vpc_arn
+  lambda_policy_arn      = data.terraform_remote_state.stack.outputs.lambda_iam_policy_vpc_arn
   lambda_role_arn        = aws_iam_role.lambda-assume-role-eph-cleanup.arn
   lambda_role_name       = aws_iam_role.lambda-assume-role-eph-cleanup.name
-  s3_bucket = module.s3.lambdas_bucket_id
-  s3_key = "ephemeris-cleanup-2988171aab282fd24a97ccfabf24d9672d3a5ea5.zip"
+  s3_bucket = data.terraform_remote_state.stack.outputs.lambdas_bucket_id
+  s3_key = "ephemeris-cleanup-${var.image_tag}.zip"
 
   env_vars = {
         "SECRET_NAME" = "${var.env_name}-backend"
         "ENV_NAME" = var.env_name
-        "vpc_endpoint_secrets" = module.network.vpc_secrets_manager_endpoint_arn
+        "vpc_endpoint_secrets" = data.terraform_remote_state.stack.outputs.vpc_secrets_manager_endpoint_arn
   }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule" {
-  bucket = module.s3.bucket_id
+  bucket = data.terraform_remote_state.stack.outputs.s3_bucket_id
 
   rule {
     id = "EphemerisCleanupRule"
@@ -53,7 +54,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule" {
     }
 
     expiration {
-      days = 500
+      days = local.expiration_days
     }
     status = "Enabled"
   }
@@ -64,11 +65,11 @@ resource "aws_lambda_permission" "allow_bucket_to_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = module.ephemeris_cleanup_lambda.vpc_lambda_name
   principal     = "s3.amazonaws.com"
-  source_arn    = module.s3.bucket_arn
+  source_arn    = data.terraform_remote_state.stack.outputs.s3_bucket_arn
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = module.s3.bucket_id
+  bucket = data.terraform_remote_state.stack.outputs.s3_bucket_id
 
   lambda_function {
     lambda_function_arn = module.ephemeris_cleanup_lambda.vpc_lambda_arn

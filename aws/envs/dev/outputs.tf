@@ -42,8 +42,16 @@ output "public_subnet_ids" {
   value = module.network.public_subnet_ids
 }
 
+output "private_subnet_ids" {
+  value = module.network.private_subnet_ids
+}
+
 output "s3_bucket_id" {
   value = module.s3.bucket_id
+}
+
+output "s3_bucket_arn" {
+  value = module.s3.bucket_arn
 }
 
 output "deployment_hist_bucket_id" {
@@ -52,4 +60,16 @@ output "deployment_hist_bucket_id" {
 
 output "route53_domain" {
   value = var.route53_domain
+}
+
+output "lambdas_bucket_id" {
+  value = module.s3.lambdas_bucket_id
+}
+
+output "lambda_iam_policy_vpc_arn" {
+  value = module.iam.lambda_iam_policy_vpc_arn
+}
+
+output "vpc_secrets_manager_endpoint_arn" {
+  value = module.network.vpc_secrets_manager_endpoint_arn
 }
