@@ -20,7 +20,7 @@ module "frontend" {
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
-    { "name" : "BASE_API_URL", "value" : "https://${var.app_name}.${var.route53_domain}/api/graphql" },
+    { "name" : "BASE_API_URL", "value" : "https://www.${local.local_r53_domain}/api/graphql" },
   ]
   secret_env_vars = [
     {
@@ -62,6 +62,6 @@ module "frontend" {
   ]
   healthcheck_subpath = "/"
   image_tag = var.image_tag
-  route53_domain = var.route53_domain
+  route53_domain = local.local_r53_domain
   enable_ecs_execute = true
 }
