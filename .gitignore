@@ -6,3 +6,4 @@ credentials.tfvars
 *.sql
 /aws/alarms-lambda/dist/
 /aws/alarm-lambda-notif/dist/
+*.postman_environment.json
