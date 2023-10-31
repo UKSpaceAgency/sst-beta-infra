@@ -8,7 +8,6 @@ on:
 jobs:
 
   deploy:
-    needs: called_with_by
     name: Deploy to AWS
     runs-on: ubuntu-latest
     environment:
