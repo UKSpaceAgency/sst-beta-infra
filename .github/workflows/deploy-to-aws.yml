@@ -126,19 +126,37 @@ jobs:
           cat $LOCAL_D_FILE
           aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }} --profile uksa-mys-dev-env
 
-#      - name: Execute Backend E2E API tests
-#        uses: matt-ball/newman-action@master
-#        if: ${{ github.event.inputs.invoker == 'backend' }}
-#        with:
-#          workingDir: aws/e2e_tests
-#          collection: aws/e2e_tests/postman_collection.json
-#          environment: aws/e2e_tests/postman_environment.json
-#          reporters: '["cli","junit"]'
-#          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
-#
-#      - name: Publish Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        if: always() || failure()
-#        with:
-#          files: |
-#            **/newman-run-*.xml
+  execute-e2e:
+    needs: deploy
+    name: Execute backend E2E tests
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.env }}
+    concurrency: ${{ github.event.inputs.env }}-aws
+
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Execute Backend E2E API tests
+        uses: matt-ball/newman-action@master
+        if: ${{ github.event.inputs.invoker == 'backend' }}
+        with:
+          workingDir: aws/e2e_tests
+          collection: aws/e2e_tests/postman_collection.json
+          environment: aws/e2e_tests/postman_environment.json
+          reporters: '["cli","junit"]'
+          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always() || failure()
+        with:
+          files: |
+            **/newman-run-*.xml
