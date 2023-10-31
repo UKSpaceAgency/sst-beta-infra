@@ -1,4 +1,4 @@
-name: Test e2e on dev env
+name: Test e2e on demo env
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     name: Deploy to AWS
     runs-on: ubuntu-latest
     environment:
-      name: 'dev'
+      name: 'demo'
 
     permissions:
       id-token: write # This is required for requesting the JWT
