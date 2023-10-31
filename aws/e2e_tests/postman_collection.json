@@ -5417,9 +5417,9 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"short_id\",\r",
-													"    \"cdm_count\",\r",
-													"    \"analyses_count\"\r",
+													"    \"shortId\",\r",
+													"    \"cdmCount\",\r",
+													"    \"analysesCount\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -10250,12 +10250,12 @@
 		},
 		{
 			"key": "testUserEmail",
-			"value": "henry.wright@thepsc.co.uk",
+			"value": "e2e@thepsc.co.uk",
 			"type": "string"
 		},
 		{
 			"key": "testUserFirstName",
-			"value": "Henry",
+			"value": "End'to",
 			"type": "string"
 		},
 		{
