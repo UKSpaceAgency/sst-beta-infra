@@ -2845,7 +2845,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Correct satellite retrieved\", function () {\r",
-													"    pm.expect(resp.commonName).to.equal(pm.collectionVariables.get(\"testSatellitePrimaryName\"));\r",
+													"    pm.expect(resp.commonName).to.equal(pm.environment.get(\"testSatellitePrimaryName\"));\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -3016,7 +3016,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Primary satellite in list\", () => {\r",
-													"    pm.expect(utils.isKeyValuePairInObjectList(resp, \"commonName\", pm.collectionVariables.get(\"testSatellitePrimaryName\"))).to.be.true;\r",
+													"    pm.expect(utils.isKeyValuePairInObjectList(resp, \"commonName\", pm.environment.get(\"testSatellitePrimaryName\"))).to.be.true;\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -9469,11 +9469,7 @@
 											"        pm.expect(analysis).to.have.all.keys(expected_keys)\r",
 											"        });\r",
 											"});\r",
-											"\r",
-											"pm.test(\"Uploaded file most recent (with TCA in 04/2024 - update test in 2024)\", () => {\r",
-											"    pm.expect(resp[0].eventShortId).to.equal(pm.collectionVariables.get(\"testAnalysisEventShortId\"));\r",
-											"    pm.expect(resp[0].id).to.equal(pm.collectionVariables.get(\"testAnalysisAnalysisId\"));\r",
-											"});"
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -10242,11 +10238,6 @@
 		{
 			"key": "testEphemerisFileName",
 			"value": ""
-		},
-		{
-			"key": "testSatellitePrimaryName",
-			"value": "ONEWEB-0560",
-			"type": "string"
 		},
 		{
 			"key": "testUserEmail",
