@@ -42,3 +42,14 @@ variable "enable_ecs_execute" {
   type = bool
   default = false
 }
+
+variable "custom_command" {
+  type = list(string)
+  default = null
+  nullable = true
+}
+
+variable "service_connect_enabled" {
+  type = bool
+  default = true
+}

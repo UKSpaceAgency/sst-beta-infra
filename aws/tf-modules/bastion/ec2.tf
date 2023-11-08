@@ -20,7 +20,7 @@ resource "aws_iam_role" "ec2_s3_full_access_role" {
   }
 
   )
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess"]
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess","arn:aws:iam::aws:policy/AmazonECS_FullAccess"]
 }
 
 resource "aws_iam_instance_profile" "bastion_profile" {

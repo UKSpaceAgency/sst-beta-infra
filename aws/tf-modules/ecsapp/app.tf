@@ -35,6 +35,7 @@ resource "aws_ecs_task_definition" "app_service" {
       cpu          = var.app_cpu
       memory       = var.app_mem
       essential    = true
+      command      = var.custom_command
       portMappings = [
         {
           name = var.ecr_app_name
@@ -138,7 +139,7 @@ resource "aws_ecs_service" "ecs-app" {
   enable_execute_command = var.enable_ecs_execute
 
   service_connect_configuration {
-    enabled = true
+    enabled = var.service_connect_enabled
     service {
       port_name = var.ecr_app_name
       client_alias {
