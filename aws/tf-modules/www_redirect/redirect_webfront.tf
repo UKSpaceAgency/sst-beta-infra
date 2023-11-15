@@ -5,6 +5,20 @@ resource "aws_s3_bucket" "redirect" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_versioning" "redirect_versioning" {
+  bucket = aws_s3_bucket.redirect.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "redirect_bucket_logging" {
+  bucket = aws_s3_bucket.redirect.id
+
+  target_bucket = var.log_bucket_id
+  target_prefix = "cloudtrail_bucket/"
+}
 
 resource "aws_s3_object" "index_html" {
   bucket       = aws_s3_bucket.redirect.id

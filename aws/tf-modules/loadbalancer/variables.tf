@@ -6,3 +6,5 @@ variable "public_subnet_ids" {
 variable "allow_tls_only_sg_id" { type = string }
 variable "default_sg_id" { type = string }
 variable "domain_cert_arn" { type = string }
+
+variable "log_bucket_id" { type = string }

@@ -1,8 +1,62 @@
 resource "random_uuid" "some_uuid" {}
 
+resource "aws_s3_bucket" "log_bucket" {
+  bucket = substr(format("%s-%s", "log-bucket-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  force_destroy = true
+}
+
+#expire everything in log bucket after 2w
+resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  rule {
+    id = "Cleanup"
+
+    filter {
+      prefix = "/"
+    }
+
+    expiration {
+      days = 14
+    }
+    status = "Enabled"
+  }
+
+}
+
+resource "aws_s3_bucket_ownership_controls" "log_bucket_ownership" {
+  bucket = aws_s3_bucket.log_bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "log_bucket_acl" {
+  bucket = aws_s3_bucket.log_bucket.id
+  acl    = "log-delivery-write"
+
+  depends_on = [aws_s3_bucket_ownership_controls.log_bucket_ownership]
+
+}
+
 resource "aws_s3_bucket" "data_bucket" {
   bucket = substr(format("%s-%s", "mys-bucket-${var.env_name}-tg", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
+}
+
+resource "aws_s3_bucket_versioning" "data_bucket_versioning" {
+  bucket = aws_s3_bucket.data_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "data_bucket_logging" {
+  bucket = aws_s3_bucket.data_bucket.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "data_bucket/"
 }
 
 data "aws_iam_policy_document" "deny_pure_http_traffic" {
@@ -41,6 +95,21 @@ resource "aws_s3_bucket_policy" "data_bucket_policy" {
 resource "aws_s3_bucket" "deployment_history" {
   bucket = substr(format("%s-%s", "mys-deployment-history-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
+}
+
+resource "aws_s3_bucket_versioning" "deployment_history_versioning" {
+  bucket = aws_s3_bucket.deployment_history.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "deployment_history_logging" {
+  bucket = aws_s3_bucket.deployment_history.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "deployment_history/"
 }
 
 resource "aws_s3_bucket_cors_configuration" "cost_for_bucket" {
@@ -132,4 +201,51 @@ resource "aws_s3_object" "config_js" {
 resource "aws_s3_bucket" "lambdas_bucket" {
   bucket = substr(format("%s-%s", "mys-lambdas-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
+}
+
+data "aws_iam_policy_document" "deny_pure_http_traffic_lambda_bucket" {
+  statement {
+
+    effect = "Deny"
+
+    principals {
+      type = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      aws_s3_bucket.lambdas_bucket.arn,"${aws_s3_bucket.lambdas_bucket.arn}/*",
+    ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values = [
+        "false"
+      ]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "lambda_bucket_policy" {
+  bucket = aws_s3_bucket.lambdas_bucket.id
+  policy = data.aws_iam_policy_document.deny_pure_http_traffic_lambda_bucket.json
+}
+
+resource "aws_s3_bucket_versioning" "lambdas_bucket_versioning" {
+  bucket = aws_s3_bucket.lambdas_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "lambdas_bucket_logging" {
+  bucket = aws_s3_bucket.lambdas_bucket.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "lambdas_bucket/"
 }

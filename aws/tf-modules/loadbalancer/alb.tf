@@ -84,6 +84,21 @@ resource "aws_s3_bucket" "elb_logs" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_versioning" "elb_logs_versioning" {
+  bucket = aws_s3_bucket.elb_logs.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "elb_logs_logging" {
+  bucket = aws_s3_bucket.elb_logs.id
+
+  target_bucket = var.log_bucket_id
+  target_prefix = "elb_logs_bucket/"
+}
+
 resource "aws_s3_bucket_policy" "allow_access_from_alb" {
   bucket = aws_s3_bucket.elb_logs.id
   policy = data.aws_iam_policy_document.alb_logs.json

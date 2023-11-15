@@ -7,3 +7,5 @@ variable "primary_hosted_zone_id" {
   type    = string
 }
 variable "route53_domain" { type = string }
+
+variable "log_bucket_id" { type = string }

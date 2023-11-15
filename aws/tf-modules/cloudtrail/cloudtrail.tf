@@ -11,6 +11,21 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_versioning" "cloudtrail_bucket_versioning" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "cloudtrail_bucket_logging" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+
+  target_bucket = var.log_bucket_id
+  target_prefix = "cloudtrail_bucket/"
+}
+
 data "aws_iam_policy_document" "cloud_trail_policy_document" {
   statement {
     sid    = "AWSCloudTrailAclCheck"
