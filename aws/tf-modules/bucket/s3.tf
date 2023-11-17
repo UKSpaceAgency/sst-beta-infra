@@ -5,19 +5,23 @@ resource "aws_s3_bucket" "log_bucket" {
   force_destroy = true
 }
 
-#expire everything in log bucket after 2w
+resource "aws_s3_bucket_versioning" "log_bucket_versioning" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+#expire everything in log bucket after 1w
 resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule" {
   bucket = aws_s3_bucket.log_bucket.id
 
   rule {
     id = "Cleanup"
 
-    filter {
-      prefix = "/"
-    }
-
     expiration {
-      days = 14
+      days = 7
     }
     status = "Enabled"
   }

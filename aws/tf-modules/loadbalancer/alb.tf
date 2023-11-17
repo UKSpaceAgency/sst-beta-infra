@@ -92,6 +92,20 @@ resource "aws_s3_bucket_versioning" "elb_logs_versioning" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule_alb_logs" {
+  bucket = aws_s3_bucket.elb_logs.id
+
+  rule {
+    id = "Cleanup"
+
+    expiration {
+      days = 60
+    }
+    status = "Enabled"
+  }
+
+}
+
 resource "aws_s3_bucket_logging" "elb_logs_logging" {
   bucket = aws_s3_bucket.elb_logs.id
 

@@ -11,6 +11,20 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule_cloudtrail_logs" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+
+  rule {
+    id = "Cleanup"
+
+    expiration {
+      days = 7
+    }
+    status = "Enabled"
+  }
+
+}
+
 resource "aws_s3_bucket_versioning" "cloudtrail_bucket_versioning" {
   bucket = aws_s3_bucket.cloudtrail_bucket.id
 
