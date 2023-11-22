@@ -162,6 +162,13 @@ resource "aws_iam_policy" "developers_policy" {
                 "logs:DescribeLogGroups",
                 "logs:DescribeLogStreams",
                 "logs:Filter*",
+                "logs:StartQuery",
+                "logs:StopQuery",
+                "logs:DescribeQueries",
+                "logs:GetLogGroupFields",
+                "logs:GetLogRecord",
+                "logs:GetQueryResults",
+                "logs:PutMetricFilter",
                 "cloudwatch:Describe*",
                 "cloudwatch:Get*",
                 "cloudwatch:List*"
