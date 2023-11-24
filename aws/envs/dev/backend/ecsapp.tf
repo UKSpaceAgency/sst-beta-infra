@@ -77,10 +77,6 @@ module "backend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientCredentialsFlowIssuer::"
     },
     {
-      "name" : "NOTIFIERS_WEBHOOK_UR",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifiersWebhookUrl::"
-    },
-    {
       "name" : "HASHID_SALT",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:hashSaltId::"
     },
