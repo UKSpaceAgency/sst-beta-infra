@@ -58,6 +58,10 @@ module "frontend" {
     {
       "name" : "COSMIC_READ_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicReadKey::"
+    },
+    {
+      "name" : "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicMapboxAccessToken::"
     }
   ]
   healthcheck_subpath = "/"
