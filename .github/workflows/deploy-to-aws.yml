@@ -130,6 +130,7 @@ jobs:
     needs: deploy
     name: Execute backend E2E tests
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.env == 'dev' || github.event.inputs.env == 'demo' }} #invoke only for dev OR demo envs. Skips prod backend e2e.
     environment:
       name: ${{ github.event.inputs.env }}
     concurrency: ${{ github.event.inputs.env }}-aws
