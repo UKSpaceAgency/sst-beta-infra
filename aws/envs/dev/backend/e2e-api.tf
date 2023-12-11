@@ -25,6 +25,7 @@ module "e2e-backend" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "API e2e Backend (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
+    { "name" : "FORWARDED_ALLOW_IPS", "value" : "*" },
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
