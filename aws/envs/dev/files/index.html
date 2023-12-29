@@ -76,13 +76,13 @@
 
                   currentMonth = month;
                   count = 1;
-                  html += `<h3>${currentMonth} (Deployments: ${count})</h3><table><tr><th>Date</th><th>Commit ID</th><th>Environment Name</th></tr>`;
+                  html += `<h3>${currentMonth} (Deployments: ${count})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
               } else {
                   count++;
                   html = html.replace(`(Deployments: ${count - 1})`, `(Deployments: ${count})`);
               }
 
-              html += '<tr><td>' + lines[0] + '</td><td>' + lines[1] + '</td><td>' + lines[2] + '</td></tr>';
+              html += '<tr class="govuk-table__row"><td class="govuk-table__cell">' + lines[0] + '</td><td class="govuk-table__cell">' + lines[1] + '</td><td class="govuk-table__cell">' + lines[2] + '</td></tr>';
           });
 
           html += '</table>';
