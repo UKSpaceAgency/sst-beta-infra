@@ -76,7 +76,7 @@
 
                   currentMonth = month;
                   count = 1;
-                  html += `<h3>${currentMonth} (Deployments: ${count})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
+                  html += `<h3 class="govuk-heading-m">${currentMonth} (Deployments: ${count})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
               } else {
                   count++;
                   html = html.replace(`(Deployments: ${count - 1})`, `(Deployments: ${count})`);
