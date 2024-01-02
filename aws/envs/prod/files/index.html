@@ -1,103 +1,104 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <style>
-        .container {
-            width: 50%;
-            margin: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-            padding: 5px;
-        }
-        th {
-            text-align: left;
-        }
-        h3 {
-            color: blue;
-        }
-    </style>
-</head>
-<body>
+<html lang="en" class="govuk-template">
+  <head>
+    <title>Monitor your satellites Production Deployment History</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <link rel="manifest" href="/assets/manifest.json" />
+    <link rel="stylesheet" href="/stylesheets/govuk-frontend-5.0.0.min.css" />
+  </head>
+  <body class="govuk-template__body">
+    <script>
+      document.body.className +=
+        " js-enabled" +
+        ("noModule" in HTMLScriptElement.prototype
+          ? " govuk-frontend-supported"
+          : "");
+    </script>
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper govuk-main-wrapper--l">
+        <h2 class="govuk-heading-l govuk-!-text-align-centre">Monitor your satellites Production Deployment History</h2>
+        <div id="content" class="container"></div>
+      </main>
+    </div>
 
-<h2 style="text-align: center;">Deployment History</h2>
-
-<div id="content" class="container"></div>
-
-<script type="module">
-    // This is the URL to your S3 bucket, replace this with your actual URL
-    //const S3_BUCKET_URL = 'https://deployment-history-mys-dev.s3.eu-west-2.amazonaws.com/';
-    import { S3_BUCKET_URL } from './config.js';
+    <script type="module">
+      // This is the URL to your S3 bucket, replace this with your actual URL
+      //const S3_BUCKET_URL = 'https://deployment-history-mys-dev.s3.eu-west-2.amazonaws.com/';
+      import { S3_BUCKET_URL } from './config.js';
 
 
-    fetch(S3_BUCKET_URL)
-    .then(response => response.text())
-    .then(data => {
-        // Use DOM parser to get the file links
-        let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(data, "text/xml");
+      fetch(S3_BUCKET_URL)
+      .then(response => response.text())
+      .then(data => {
+          // Use DOM parser to get the file links
+          let parser = new DOMParser();
+          let xmlDoc = parser.parseFromString(data, "text/xml");
 
-        // Extract all keys from the S3 bucket XML
-        let keys = xmlDoc.getElementsByTagName('Key');
-        let promises = [];
+          // Extract all keys from the S3 bucket XML
+          let keys = xmlDoc.getElementsByTagName('Key');
+          let promises = [];
 
-        // Loop through keys and fetch each file
-        for(let i = 0; i < keys.length; i++) {
-            let fileName = keys[i].childNodes[0].nodeValue;
-            if (fileName.endsWith('.txt')) {
-                let fileUrl = S3_BUCKET_URL + fileName;
-                promises.push(
-                    fetch(fileUrl).then(response => {
-                        let lastModified = new Date(response.headers.get('last-modified'));
-                        return response.text().then(content => ({lastModified, content}));
-                    })
-                );
-            }
-        }
+          // Loop through keys and fetch each file
+          for(let i = 0; i < keys.length; i++) {
+              let fileName = keys[i].childNodes[0].nodeValue;
+              if (fileName.endsWith('.txt')) {
+                  let fileUrl = S3_BUCKET_URL + fileName;
+                  promises.push(
+                      fetch(fileUrl).then(response => {
+                          let lastModified = new Date(response.headers.get('last-modified'));
+                          return response.text().then(content => ({lastModified, content}));
+                      })
+                  );
+              }
+          }
 
-        return Promise.all(promises);
-    })
-    .then(files => {
-        // Sort files based on 'last-modified' date
-        files.sort((a, b) => b.lastModified - a.lastModified);
+          return Promise.all(promises);
+      })
+      .then(files => {
+          // Sort files based on 'last-modified' date
+          files.sort((a, b) => b.lastModified - a.lastModified);
 
-        let html = '';
-        let currentMonth = '';
-        let count = 0;
+          let html = '';
+          let currentMonth = '';
+          let count = 0;
 
-        files.forEach((file, index) => {
-            let lines = file.content.split('\n');
-            let month = file.lastModified.toLocaleString('default', { month: 'long', year: 'numeric' });
+          files.forEach((file, index) => {
+              let lines = file.content.split('\n');
+              let month = file.lastModified.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-            if (month !== currentMonth) {
-                if (index !== 0) {
-                    html += '</table>';
-                }
+              if (month !== currentMonth) {
+                  if (index !== 0) {
+                      html += '</table>';
+                  }
 
-                currentMonth = month;
-                count = 1;
-                html += `<h3>${currentMonth} (Deployments: ${count})</h3><table><tr><th>Date</th><th>Commit ID</th><th>Environment Name</th></tr>`;
-            } else {
-                count++;
-                html = html.replace(`(Deployments: ${count - 1})`, `(Deployments: ${count})`);
-            }
+                  currentMonth = month;
+                  count = 1;
+                  html += `<h3 class="govuk-heading-m">${currentMonth} (Deployments: ${count})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
+              } else {
+                  count++;
+                  html = html.replace(`(Deployments: ${count - 1})`, `(Deployments: ${count})`);
+              }
 
-            html += '<tr><td>' + lines[0] + '</td><td>' + lines[1] + '</td><td>' + lines[2] + '</td></tr>';
-        });
+              html += '<tr class="govuk-table__row"><td class="govuk-table__cell">' + lines[0] + '</td><td class="govuk-table__cell">' + lines[1] + '</td><td class="govuk-table__cell">' + lines[2] + '</td></tr>';
+          });
 
-        html += '</table>';
-        document.getElementById('content').innerHTML = html;
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-</script>
-
-</body>
+          html += '</table>';
+          document.getElementById('content').innerHTML = html;
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+  </script>
+    <script
+      type="module"
+      src="/javascripts/govuk-frontend-5.0.0.min.js"
+    ></script>
+    <script type="module">
+      import { initAll } from "/javascripts/govuk-frontend-5.0.0.min.js";
+      initAll();
+    </script>
+  </body>
 </html>
-
