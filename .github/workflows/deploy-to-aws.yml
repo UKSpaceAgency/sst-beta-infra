@@ -25,7 +25,7 @@ jobs:
 
       - name: Send start message to Slack
         id: slack
-        uses: slackapi/slack-github-action@v1.23.0
+        uses: slackapi/slack-github-action@v1.25.0
         with:
           # For posting a rich message using Block Kit
           payload: |
@@ -52,10 +52,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: terraform-linters/setup-tflint@v3
         name: Setup TFLint
@@ -104,7 +104,7 @@ jobs:
 
       - name: Send build result to Slack
         id: slack
-        uses: slackapi/slack-github-action@v1.23.0
+        uses: slackapi/slack-github-action@v1.25.0
         with:
           # For posting a rich message using Block Kit
           payload: |
@@ -143,7 +143,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Execute Backend E2E API tests
         uses: matt-ball/newman-action@master
