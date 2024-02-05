@@ -76,11 +76,11 @@ jobs:
           tflint -f compact
 
       - name: Configure AWS credentials
-        uses: mcblair/configure-aws-profile-action@v0.1.1
+        uses: Moulick/configure-multiple-aws-roles@v4
         with:
-          role-arn: ${{ vars.ecs_rollout_role }}
-          profile-name: uksa-mys-dev-env
-          region: eu-west-2
+          role-to-assume: ${{ vars.ecs_rollout_role }}
+          profile: uksa-mys-dev-env
+          aws-region: eu-west-2
 
       - name: Terraform Back-End init and apply
         if: ${{ github.event.inputs.invoker == 'backend' }}
