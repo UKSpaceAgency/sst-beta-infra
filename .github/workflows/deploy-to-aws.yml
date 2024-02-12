@@ -93,7 +93,7 @@ jobs:
           terraform apply -auto-approve
 
       - name: Terraform Front-End init and apply
-        if: ${{ github.event.inputs.invoker == 'frontend' }}
+        if: ${{ github.event.inputs.invoker == 'frontend' || github.event.inputs.invoker == 'frontend2' }}
         run: |
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
           terraform init
