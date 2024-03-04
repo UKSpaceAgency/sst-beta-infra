@@ -37,3 +37,11 @@ output "lambda_public_iam_role_name" {
 output "lambda_public_iam_role_arn" {
   value = aws_iam_role.lambda-assume-role-public.arn
 }
+
+output "state_machine_iam_role_arn" {
+  value = aws_iam_role.state_machine_role.arn
+}
+
+output "event_bridge_invoke_sfn_iam_role_arn" {
+  value = aws_iam_role.event_bridge_invoke_sfn_iam_role.arn
+}

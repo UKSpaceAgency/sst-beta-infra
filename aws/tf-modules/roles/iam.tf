@@ -630,6 +630,129 @@ resource "aws_iam_policy" "lambda-iam-policy-vpc" {
   )
 }
 
+resource "aws_iam_role" "state_machine_role" {
+  name = "iam-role-for-state-machine"
+
+  assume_role_policy = jsonencode(
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "states.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+    }
+  )
+}
+
+resource "aws_iam_policy" "state_machine_iam_policy" {
+  name        = "iam-policy-for-state_machine"
+  path        = "/"
+  description = "IAM policy for state machine"
+
+  policy = jsonencode(
+    {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: [
+            "logs:CreateLogDelivery",
+            "logs:CreateLogStream",
+            "logs:GetLogDelivery",
+            "logs:UpdateLogDelivery",
+            "logs:DeleteLogDelivery",
+            "logs:ListLogDeliveries",
+            "logs:PutLogEvents",
+            "logs:PutResourcePolicy",
+            "logs:DescribeResourcePolicies",
+            "logs:DescribeLogGroups"
+          ],
+         "Resource": [
+                "*"
+            ]
+          Effect: "Allow"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "cloudwatch:DescribeAlarms"
+            ]
+            "Resource": [
+                "*"
+            ]
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "state_machine_policy_attachment" {
+  role       = aws_iam_role.state_machine_role.name
+  policy_arn = aws_iam_policy.state_machine_iam_policy.arn
+}
+
+resource "aws_iam_role" "event_bridge_invoke_sfn_iam_role" {
+  name = "iam-role-for-event-bridge-invoke"
+
+  assume_role_policy = jsonencode(
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "events.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+    }
+  )
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_policy" "event_bridge_invoke_sfn_iam_policy" {
+  name        = "iam-policy-for-event-bridge_invoke"
+  path        = "/"
+  description = "IAM policy for event bridge"
+
+  policy = jsonencode(
+    {
+      Version: "2012-10-17",
+      Statement: [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "states:StartExecution"
+            ],
+            "Resource": [
+                "arn:aws:states:eu-west-2:${data.aws_caller_identity.current.account_id}:stateMachine:*"
+            ]
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "event_bridge_policy_attachment" {
+  role       = aws_iam_role.event_bridge_invoke_sfn_iam_role.name
+  policy_arn = aws_iam_policy.event_bridge_invoke_sfn_iam_policy.arn
+}
+
 resource "aws_iam_account_password_policy" "strict" {
   minimum_password_length        = 14
   require_lowercase_characters   = true
