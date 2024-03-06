@@ -26,30 +26,30 @@ variable "ecs_cluster_arn" { type = string }
 variable "alb_name" { type = string }
 variable "env_vars" {
   type = list(object({
-    name   = string
+    name  = string
     value = string
   }))
 }
 
 variable "secret_env_vars" {
   type = list(object({
-    name   = string
+    name      = string
     valueFrom = string
   }))
 }
 
 variable "enable_ecs_execute" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "custom_command" {
-  type = list(string)
-  default = null
+  type     = list(string)
+  default  = null
   nullable = true
 }
 
 variable "service_connect_enabled" {
-  type = bool
+  type    = bool
   default = true
 }

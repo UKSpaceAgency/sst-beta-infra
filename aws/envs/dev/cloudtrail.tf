@@ -1,5 +1,5 @@
 module "cloudtrail" {
-  source   = "../../tf-modules/cloudtrail"
-  env_name = var.env_name
+  source        = "../../tf-modules/cloudtrail"
+  env_name      = var.env_name
   log_bucket_id = module.s3.log_bucket_id
 }

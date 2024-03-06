@@ -1,12 +1,12 @@
 module "e2e-backend" {
-  source                 = "../../../tf-modules/ecsapp"
-  env_name               = var.env_name
-  alb_name               = data.terraform_remote_state.stack.outputs.alb_name
-  app_alb_priority       = 15
-  app_cpu                = 512
-  app_instances_num      = 0
-  app_mem                = 1024
-  app_name               = "api-e2e"
+  source                  = "../../../tf-modules/ecsapp"
+  env_name                = var.env_name
+  alb_name                = data.terraform_remote_state.stack.outputs.alb_name
+  app_alb_priority        = 15
+  app_cpu                 = 512
+  app_instances_num       = 0
+  app_mem                 = 1024
+  app_name                = "api-e2e"
   service_connect_enabled = false
   custom_command = [
     "sh",

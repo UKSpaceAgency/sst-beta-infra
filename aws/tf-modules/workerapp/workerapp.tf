@@ -24,20 +24,20 @@ resource "aws_ecs_task_definition" "app_service" {
   memory = var.app_mem
 
   tags = {
-    task-family = var.app_name
+    task-family          = var.app_name
     image_size_fail_pass = data.aws_ecr_image.service_image.image_size_in_bytes
   }
 
   container_definitions = jsonencode([
     {
-      name         = var.app_name
-      image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_app_name}:${data.aws_ecr_image.service_image.image_tag}"
-      cpu          = var.app_cpu
-      memory       = var.app_mem
-      essential    = true
-      command      = var.worker_command
+      name        = var.app_name
+      image       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_app_name}:${data.aws_ecr_image.service_image.image_tag}"
+      cpu         = var.app_cpu
+      memory      = var.app_mem
+      essential   = true
+      command     = var.worker_command
       environment = var.env_vars
-      secrets = var.secret_env_vars
+      secrets     = var.secret_env_vars
 
       logConfiguration = {
         "logDriver" : "awslogs",
@@ -75,8 +75,8 @@ resource "aws_iam_role_policy" "ecs_events_run_task_with_any_role" {
 
 
 resource "aws_cloudwatch_event_rule" "scheduled_rule" {
-  name        = "rule-for-${var.app_name}"
-  description = "Run ECS task at configured time"
+  name                = "rule-for-${var.app_name}"
+  description         = "Run ECS task at configured time"
   schedule_expression = "cron(${var.cron_expression})"
 }
 
@@ -90,13 +90,13 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
   ecs_target {
     task_count          = 1
     task_definition_arn = aws_ecs_task_definition.app_service.arn
-    launch_type = "FARGATE"
-    propagate_tags = "TASK_DEFINITION"
-    platform_version = "LATEST"
+    launch_type         = "FARGATE"
+    propagate_tags      = "TASK_DEFINITION"
+    platform_version    = "LATEST"
 
     network_configuration {
-      subnets = var.public_subnet_ids
-      security_groups = [var.default_sg_id]
+      subnets          = var.public_subnet_ids
+      security_groups  = [var.default_sg_id]
       assign_public_ip = true
     }
   }

@@ -3,24 +3,24 @@ resource "aws_iam_role" "ec2_s3_full_access_role" {
 
   assume_role_policy = jsonencode(
     {
-    "Version": "2012-10-17",
-    "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-            "Effect": "Allow",
-            "Action": [
-                "sts:AssumeRole"
-            ],
-            "Principal": {
-                "Service": [
-                    "ec2.amazonaws.com"
-                ]
-            }
+          "Effect" : "Allow",
+          "Action" : [
+            "sts:AssumeRole"
+          ],
+          "Principal" : {
+            "Service" : [
+              "ec2.amazonaws.com"
+            ]
+          }
         }
-    ]
-  }
+      ]
+    }
 
   )
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess","arn:aws:iam::aws:policy/AmazonECS_FullAccess"]
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess", "arn:aws:iam::aws:policy/AmazonECS_FullAccess"]
 }
 
 resource "aws_iam_instance_profile" "bastion_profile" {
@@ -35,8 +35,8 @@ resource "aws_instance" "bastion" {
   key_name               = "go_keypair"
   vpc_security_group_ids = var.vpc_security_group_ids
   subnet_id              = var.public_subnet_id
-  iam_instance_profile = aws_iam_instance_profile.bastion_profile.name
-  tags                   = {
+  iam_instance_profile   = aws_iam_instance_profile.bastion_profile.name
+  tags = {
     Name = "bastion-host-for-${var.env_name}"
   }
 

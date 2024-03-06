@@ -14,7 +14,7 @@ variable "private_subnet_ids" {
 }
 
 variable "env_vars" {
-    type = map(any)
+  type = map(any)
 }
 
 variable "s3_bucket" { type = string }

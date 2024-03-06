@@ -4,16 +4,16 @@ variable "az_names" {
   default = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }
 variable "cidr_block" {
-  type = string
+  type    = string
   default = "172.20.0.0/16"
 }
 
 variable "public_subnet_bits" {
-  type = number
+  type    = number
   default = 8
 }
 
 variable "private_subnet_bits" {
-  type = number
+  type    = number
   default = 8
 }

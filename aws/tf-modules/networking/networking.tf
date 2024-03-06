@@ -1,16 +1,16 @@
 locals {
-  public_subnet_bits = var.public_subnet_bits
+  public_subnet_bits  = var.public_subnet_bits
   private_subnet_bits = var.private_subnet_bits
 }
 
 
 resource "aws_vpc" "custom_vpc" {
-  cidr_block       = var.cidr_block
+  cidr_block = var.cidr_block
   tags = {
     Name = "${var.env_name}-net-vpc"
   }
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
 }
 
 resource "aws_internet_gateway" "gw" {
@@ -26,10 +26,10 @@ resource "aws_internet_gateway" "gw" {
 resource "aws_subnet" "public" {
   count = 3
 
-  cidr_block = cidrsubnet(var.cidr_block, local.public_subnet_bits, count.index)
-  vpc_id = aws_vpc.custom_vpc.id
+  cidr_block              = cidrsubnet(var.cidr_block, local.public_subnet_bits, count.index)
+  vpc_id                  = aws_vpc.custom_vpc.id
   map_public_ip_on_launch = true
-  availability_zone = var.az_names[count.index]
+  availability_zone       = var.az_names[count.index]
 
   tags = {
     Name = "public-subnet-${count.index}"
@@ -39,8 +39,8 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count = 3
 
-  cidr_block = cidrsubnet(var.cidr_block, local.private_subnet_bits, count.index + 3)
-  vpc_id = aws_vpc.custom_vpc.id
+  cidr_block        = cidrsubnet(var.cidr_block, local.private_subnet_bits, count.index + 3)
+  vpc_id            = aws_vpc.custom_vpc.id
   availability_zone = var.az_names[count.index]
 
   tags = {
@@ -54,9 +54,9 @@ data "aws_route_tables" "rts" {
 }
 
 resource "aws_route" "public_internet" {
-  route_table_id = data.aws_route_tables.rts.ids[0]
+  route_table_id         = data.aws_route_tables.rts.ids[0]
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.gw.id
+  gateway_id             = aws_internet_gateway.gw.id
 }
 
 data "aws_security_group" "default" {
@@ -74,26 +74,26 @@ resource "aws_security_group" "allow_ssh" {
   vpc_id      = aws_vpc.custom_vpc.id
 
   ingress {
-    description      = "SSH to bastion"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "SSH to bastion"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    description      = "All self"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    self = true
+    description = "All self"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -107,26 +107,26 @@ resource "aws_security_group" "allow_tls" {
   vpc_id      = aws_vpc.custom_vpc.id
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    description      = "All self"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    self = true
+    description = "All self"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -140,35 +140,35 @@ resource "aws_security_group" "pg-service" {
   vpc_id      = aws_vpc.custom_vpc.id
 
   ingress {
-    description      = "PG traffic from ECS only"
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
+    description     = "PG traffic from ECS only"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
     security_groups = [data.aws_security_group.default.id]
   }
 
   ingress {
-    description      = "PG traffic from Bastion only"
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
+    description     = "PG traffic from Bastion only"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
     security_groups = [aws_security_group.allow_ssh.id]
   }
 
   ingress {
-    description      = "All self"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    self = true
+    description = "All self"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
   }
 
   egress {
-    description      = "All out"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "All out"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -184,7 +184,7 @@ resource "aws_vpc_endpoint" "secrets_manager_endpoint" {
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
-    aws_security_group.allow_ssh.id,data.aws_security_group.default.id  ]
+  aws_security_group.allow_ssh.id, data.aws_security_group.default.id]
 
   subnet_ids = aws_subnet.private.*.id
 

@@ -10,13 +10,13 @@ variable "auth_client_id" { type = string }
 variable "auth_client_secret" { type = string }
 
 variable "allowed_logout_urls_list" {
-   type    = list(string)
+  type = list(string)
 }
 
 variable "callbacks_list" {
-   type    = list(string)
+  type = list(string)
 }
 
 variable "allowed_web_origins_list" {
-   type    = list(string)
+  type = list(string)
 }

@@ -39,9 +39,9 @@ resource "auth0_client" "web_client" {
     token_lifetime               = "2592000"
   }
 
-  sso                        = "false"
-  sso_disabled               = "false"
-  web_origins                = var.allowed_web_origins_list
+  sso          = "false"
+  sso_disabled = "false"
+  web_origins  = var.allowed_web_origins_list
 }
 
 resource "auth0_client" "sst_backend_m2m" {
@@ -82,6 +82,6 @@ resource "auth0_client" "sst_backend_m2m" {
     token_lifetime               = "31557600"
   }
 
-  sso                        = "false"
-  sso_disabled               = "false"
+  sso          = "false"
+  sso_disabled = "false"
 }

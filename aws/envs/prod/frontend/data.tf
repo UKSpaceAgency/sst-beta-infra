@@ -9,7 +9,7 @@ data "terraform_remote_state" "stack" {
     bucket  = "uksa-mys-prod-tf-states"
     region  = "eu-west-2"
     key     = "prod-env-structures"
-    profile  = "uksa-mys-dev-env"
+    profile = "uksa-mys-dev-env"
   }
 }
 

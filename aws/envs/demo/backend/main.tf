@@ -9,10 +9,10 @@ terraform {
   }
 
   backend "s3" {
-    encrypt = true
-    bucket  = "uksa-mys-demo-tf-states"
-    region  = "eu-west-2"
-    key     = "demo-env-structures.backend"
+    encrypt  = true
+    bucket   = "uksa-mys-demo-tf-states"
+    region   = "eu-west-2"
+    key      = "demo-env-structures.backend"
     profile  = "uksa-mys-dev-env"
     role_arn = "arn:aws:iam::469816118475:role/tf-power-role"
   }

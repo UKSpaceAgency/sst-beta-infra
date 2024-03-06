@@ -1,7 +1,7 @@
 resource "random_uuid" "some_uuid" {}
 
 resource "aws_s3_bucket" "log_bucket" {
-  bucket = substr(format("%s-%s", "log-bucket-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  bucket        = substr(format("%s-%s", "log-bucket-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 
@@ -44,7 +44,7 @@ resource "aws_s3_bucket_acl" "log_bucket_acl" {
 }
 
 resource "aws_s3_bucket" "data_bucket" {
-  bucket = substr(format("%s-%s", "mys-bucket-${var.env_name}-tg", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  bucket        = substr(format("%s-%s", "mys-bucket-${var.env_name}-tg", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "deny_pure_http_traffic" {
     effect = "Deny"
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "deny_pure_http_traffic" {
     ]
 
     resources = [
-      aws_s3_bucket.data_bucket.arn,"${aws_s3_bucket.data_bucket.arn}/*",
+      aws_s3_bucket.data_bucket.arn, "${aws_s3_bucket.data_bucket.arn}/*",
     ]
     condition {
       test     = "Bool"
@@ -97,7 +97,7 @@ resource "aws_s3_bucket_policy" "data_bucket_policy" {
 
 //deployment history bucket
 resource "aws_s3_bucket" "deployment_history" {
-  bucket = substr(format("%s-%s", "mys-deployment-history-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  bucket        = substr(format("%s-%s", "mys-deployment-history-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 
@@ -163,7 +163,7 @@ data "aws_iam_policy_document" "allow_listing_policy_doc" {
   statement {
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
@@ -187,23 +187,23 @@ data "aws_iam_policy_document" "allow_listing_policy_doc" {
 }
 
 resource "aws_s3_object" "index_html" {
-  bucket = aws_s3_bucket.deployment_history.id
-  key    = "index.html"
-  source = "files/index.html"
+  bucket       = aws_s3_bucket.deployment_history.id
+  key          = "index.html"
+  source       = "files/index.html"
   content_type = "text/html"
 
-   etag = filemd5("files/index.html")
+  etag = filemd5("files/index.html")
 }
 
 resource "aws_s3_object" "config_js" {
-  bucket = aws_s3_bucket.deployment_history.id
-  key    = "config.js"
-  content = "export const S3_BUCKET_URL = 'https://${aws_s3_bucket.deployment_history.bucket_regional_domain_name}/';"
+  bucket       = aws_s3_bucket.deployment_history.id
+  key          = "config.js"
+  content      = "export const S3_BUCKET_URL = 'https://${aws_s3_bucket.deployment_history.bucket_regional_domain_name}/';"
   content_type = "text/javascript"
 }
 
 resource "aws_s3_bucket" "lambdas_bucket" {
-  bucket = substr(format("%s-%s", "mys-lambdas-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  bucket        = substr(format("%s-%s", "mys-lambdas-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 
@@ -213,7 +213,7 @@ data "aws_iam_policy_document" "deny_pure_http_traffic_lambda_bucket" {
     effect = "Deny"
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
@@ -222,7 +222,7 @@ data "aws_iam_policy_document" "deny_pure_http_traffic_lambda_bucket" {
     ]
 
     resources = [
-      aws_s3_bucket.lambdas_bucket.arn,"${aws_s3_bucket.lambdas_bucket.arn}/*",
+      aws_s3_bucket.lambdas_bucket.arn, "${aws_s3_bucket.lambdas_bucket.arn}/*",
     ]
     condition {
       test     = "Bool"

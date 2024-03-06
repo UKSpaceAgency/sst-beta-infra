@@ -7,7 +7,7 @@ data "aws_region" "current" {}
 resource "random_uuid" "some_uuid" {}
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
-  bucket = substr(format("%s-%s", "mys-${var.env_name}-cloudtrail", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  bucket        = substr(format("%s-%s", "mys-${var.env_name}-cloudtrail", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 
@@ -88,7 +88,7 @@ data "aws_iam_policy_document" "cloud_trail_policy_document" {
     effect = "Deny"
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "cloud_trail_policy_document" {
     ]
 
     resources = [
-      aws_s3_bucket.cloudtrail_bucket.arn,"${aws_s3_bucket.cloudtrail_bucket.arn}/*",
+      aws_s3_bucket.cloudtrail_bucket.arn, "${aws_s3_bucket.cloudtrail_bucket.arn}/*",
     ]
     condition {
       test     = "Bool"
@@ -118,7 +118,7 @@ resource "aws_cloudtrail" "account-trail" {
   name                          = "account-trail-for-${var.env_name}"
   s3_bucket_name                = aws_s3_bucket.cloudtrail_bucket.id
   include_global_service_events = var.include_global
-  s3_key_prefix = "prefix"
+  s3_key_prefix                 = "prefix"
 
   depends_on = [
     aws_s3_bucket_policy.cloud_trail_bucket_policy

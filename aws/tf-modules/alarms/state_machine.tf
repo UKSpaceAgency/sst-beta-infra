@@ -6,7 +6,7 @@ resource "aws_cloudwatch_log_group" "state_machine_logs" {
 resource "aws_sfn_state_machine" "alarms_state_machine" {
   name     = "Alarms-State-Machine-${var.env_name}"
   role_arn = var.state_machine_role_arn
-  publish = true
+  publish  = true
 
   logging_configuration {
     log_destination        = "${aws_cloudwatch_log_group.state_machine_logs.arn}:*"

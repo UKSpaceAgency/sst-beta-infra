@@ -7,7 +7,7 @@ module "frontend" {
   app_instances_num      = 1
   app_mem                = 1024
   app_name               = var.app_name
-  ecr_app_name           = "frontend2"  # important as per www2
+  ecr_app_name           = "frontend2" # important as per www2
   app_port_num           = 4200
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
@@ -20,7 +20,7 @@ module "frontend" {
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
-    { "name" : "BASE_API_URL", "value" : "https://www2.${local.local_r53_domain}/api/graphql" },  # important as per www2
+    { "name" : "BASE_API_URL", "value" : "https://www2.${local.local_r53_domain}/api/graphql" }, # important as per www2
   ]
   secret_env_vars = [
     {

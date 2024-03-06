@@ -18,10 +18,10 @@ resource "aws_cloudwatch_log_metric_filter" "metric_filter" {
   log_group_name = var.cluster_log_group_name
 
   metric_transformation {
-    name      = var.metric_name
-    namespace = var.metric_namespace
-    value     = "1"
+    name          = var.metric_name
+    namespace     = var.metric_namespace
+    value         = "1"
     default_value = "0"
-    unit = var.default_unit
+    unit          = var.default_unit
   }
 }

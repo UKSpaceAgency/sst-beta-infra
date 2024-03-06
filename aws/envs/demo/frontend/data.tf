@@ -9,7 +9,7 @@ data "terraform_remote_state" "stack" {
     bucket  = "uksa-mys-demo-tf-states"
     region  = "eu-west-2"
     key     = "demo-env-structures"
-    profile  = "uksa-mys-dev-env"
+    profile = "uksa-mys-dev-env"
     assume_role = {
       role_arn = "arn:aws:iam::469816118475:role/tf-power-role"
     }

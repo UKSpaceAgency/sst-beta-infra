@@ -24,21 +24,21 @@ resource "aws_ecs_task_definition" "app_service" {
   memory = var.app_mem
 
   tags = {
-    task-family = var.app_name
+    task-family          = var.app_name
     image_size_fail_pass = data.aws_ecr_image.service_image.image_size_in_bytes
   }
 
   container_definitions = jsonencode([
     {
-      name         = var.app_name
-      image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_app_name}:${data.aws_ecr_image.service_image.image_tag}"
-      cpu          = var.app_cpu
-      memory       = var.app_mem
-      essential    = true
-      command      = var.custom_command
+      name      = var.app_name
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_app_name}:${data.aws_ecr_image.service_image.image_tag}"
+      cpu       = var.app_cpu
+      memory    = var.app_mem
+      essential = true
+      command   = var.custom_command
       portMappings = [
         {
-          name = var.ecr_app_name
+          name          = var.ecr_app_name
           containerPort = var.app_port_num
           hostPort      = var.app_port_num
         }
@@ -77,21 +77,21 @@ resource "aws_ecs_task_definition" "app_service" {
 resource "random_uuid" "some_uuid" {}
 
 resource "aws_lb_target_group" "app-tg" {
-  name        = substr(format("%s-%s", "${var.app_name}-${var.env_name}-tg", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
-  port        = var.app_port_num
-  protocol    = "HTTP"
-  protocol_version = "HTTP1"
-  target_type = "ip"
-  vpc_id      = var.custom_vpc_id
+  name                 = substr(format("%s-%s", "${var.app_name}-${var.env_name}-tg", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  port                 = var.app_port_num
+  protocol             = "HTTP"
+  protocol_version     = "HTTP1"
+  target_type          = "ip"
+  vpc_id               = var.custom_vpc_id
   deregistration_delay = 30
 
   health_check {
     path                = var.healthcheck_subpath
     interval            = 20
     unhealthy_threshold = 5
-    timeout = 5
-    healthy_threshold = 3
-    protocol = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 3
+    protocol            = "HTTP"
   }
 
 
@@ -130,12 +130,12 @@ resource "aws_lb_listener_rule" "host_based_weighted_routing" {
 
 
 resource "aws_ecs_service" "ecs-app" {
-  name                  = var.app_name
-  cluster               = var.ecs_cluster_arn
-  task_definition       = aws_ecs_task_definition.app_service.arn
-  launch_type           = "FARGATE"
-  desired_count         = var.app_instances_num
-  wait_for_steady_state = true
+  name                   = var.app_name
+  cluster                = var.ecs_cluster_arn
+  task_definition        = aws_ecs_task_definition.app_service.arn
+  launch_type            = "FARGATE"
+  desired_count          = var.app_instances_num
+  wait_for_steady_state  = true
   enable_execute_command = var.enable_ecs_execute
 
   service_connect_configuration {

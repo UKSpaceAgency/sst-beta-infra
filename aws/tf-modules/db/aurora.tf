@@ -26,10 +26,10 @@ resource "aws_rds_cluster" "pg-aurora-cluster" {
 }
 
 resource "aws_rds_cluster_instance" "pg-serverless-instance" {
-  cluster_identifier = aws_rds_cluster.pg-aurora-cluster.id
-  instance_class     = "db.serverless"
-  engine             = aws_rds_cluster.pg-aurora-cluster.engine
-  engine_version     = aws_rds_cluster.pg-aurora-cluster.engine_version
-  count = var.instances_no
+  cluster_identifier  = aws_rds_cluster.pg-aurora-cluster.id
+  instance_class      = "db.serverless"
+  engine              = aws_rds_cluster.pg-aurora-cluster.engine
+  engine_version      = aws_rds_cluster.pg-aurora-cluster.engine_version
+  count               = var.instances_no
   monitoring_interval = var.default_monitoring_interval
 }

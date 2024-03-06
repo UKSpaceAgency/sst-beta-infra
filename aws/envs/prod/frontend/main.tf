@@ -13,7 +13,7 @@ terraform {
     bucket  = "uksa-mys-prod-tf-states"
     region  = "eu-west-2"
     key     = "prod-env-structures.frontend"
-    profile  = "uksa-mys-dev-env"
+    profile = "uksa-mys-dev-env"
   }
 }
 

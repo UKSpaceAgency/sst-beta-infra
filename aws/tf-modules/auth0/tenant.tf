@@ -33,6 +33,6 @@ resource "auth0_tenant" "tenant_config" {
   sandbox_version       = "12"
   support_email         = var.support_email
   idle_session_lifetime = 72
-  session_lifetime = 168
+  session_lifetime      = 168
 
 }

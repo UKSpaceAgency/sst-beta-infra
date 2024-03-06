@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "alb_logs" {
     effect = "Deny"
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "alb_logs" {
     ]
 
     resources = [
-      aws_s3_bucket.elb_logs.arn,"${aws_s3_bucket.elb_logs.arn}/*",
+      aws_s3_bucket.elb_logs.arn, "${aws_s3_bucket.elb_logs.arn}/*",
     ]
     condition {
       test     = "Bool"
@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "alb_logs" {
 resource "random_uuid" "some_uuid" {}
 
 resource "aws_s3_bucket" "elb_logs" {
-  bucket = substr(format("%s-%s", "alb-logs-for-mys-env-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  bucket        = substr(format("%s-%s", "alb-logs-for-mys-env-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
 }
 

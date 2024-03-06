@@ -1,11 +1,11 @@
 locals {
-  space_track_namespace = "space-track"
-  esa_discos_namespace = "esa-discos"
-  notifications_namespace = "notifications"
-  six_hours_in_seconds = 60*60*6
-  six_and_half_hours_in_seconds = 60*60*6.5
-  fourteen_hours_in_seconds = 60*60*14
-  one_day_in_seconds = 60*60*24 #24hrs
+  space_track_namespace         = "space-track"
+  esa_discos_namespace          = "esa-discos"
+  notifications_namespace       = "notifications"
+  six_hours_in_seconds          = 60 * 60 * 6
+  six_and_half_hours_in_seconds = 60 * 60 * 6.5
+  fourteen_hours_in_seconds     = 60 * 60 * 14
+  one_day_in_seconds            = 60 * 60 * 24 #24hrs
 }
 
 module "space_track_no_cdms" {

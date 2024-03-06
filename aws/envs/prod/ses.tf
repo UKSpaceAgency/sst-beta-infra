@@ -6,7 +6,7 @@ locals {
   account_id       = data.aws_caller_identity.this.account_id
   region           = data.aws_region.this.name
   ses_identity_arn = "arn:aws:ses:${local.region}:${local.account_id}:identity/${var.route53_domain}"
-  retention = 0
+  retention        = 0
 }
 
 resource "aws_iam_user" "mail" {
@@ -35,7 +35,7 @@ resource "aws_iam_access_key" "mail_user_access_key" {
 }
 
 resource "aws_secretsmanager_secret_version" "iam_user_credentials" {
-  secret_id     = aws_secretsmanager_secret.mail-secrets.id
+  secret_id = aws_secretsmanager_secret.mail-secrets.id
   secret_string = jsonencode({
     access_key = aws_iam_access_key.mail_user_access_key.id
     secret_key = aws_iam_access_key.mail_user_access_key.secret

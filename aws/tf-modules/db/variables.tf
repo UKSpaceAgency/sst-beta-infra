@@ -8,16 +8,16 @@ variable "db_subnet_ids" {
 }
 
 variable "max_acu" {
-  type = number
+  type    = number
   default = 2.0
 }
 
 variable "default_delete_protection" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "default_monitoring_interval" {
-  type = number
+  type    = number
   default = 0
 }

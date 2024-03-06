@@ -7,7 +7,7 @@ variable "lambda_handler_name" { type = string }
 
 
 variable "env_vars" {
-    type = map(any)
+  type = map(any)
 }
 
 variable "s3_bucket" { type = string }

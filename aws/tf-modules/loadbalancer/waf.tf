@@ -20,17 +20,17 @@ resource "aws_wafv2_web_acl" "rate-based-acl" {
         limit              = 10000
         aggregate_key_type = "IP"
 
-#        scope_down_statement {
-#          geo_match_statement {
-#            country_codes = ["US", "NL"]
-#          }
-#        }
+        #        scope_down_statement {
+        #          geo_match_statement {
+        #            country_codes = ["US", "NL"]
+        #          }
+        #        }
       }
     }
 
     visibility_config {
       cloudwatch_metrics_enabled = false
-      metric_name = "${replace(var.env_name, "-", "")}WafWebACL"
+      metric_name                = "${replace(var.env_name, "-", "")}WafWebACL"
       sampled_requests_enabled   = false
     }
   }
@@ -38,7 +38,7 @@ resource "aws_wafv2_web_acl" "rate-based-acl" {
 
   visibility_config {
     cloudwatch_metrics_enabled = false
-    metric_name = "${replace(var.env_name, "-", "")}WafWebACL"
+    metric_name                = "${replace(var.env_name, "-", "")}WafWebACL"
     sampled_requests_enabled   = false
   }
 }
