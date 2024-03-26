@@ -5,7 +5,7 @@ function handler(event) {
         statusCode: 301,
         statusDescription: 'Moved Permanently',
         headers: {
-            'location': { value: 'https://www.demo.monitor-space-hazards.service.gov.uk'+event.request.uri }
+            'location': { value: 'https://www.dev.monitor-space-hazards.service.gov.uk'+event.request.uri }
         }
     };
     return response;

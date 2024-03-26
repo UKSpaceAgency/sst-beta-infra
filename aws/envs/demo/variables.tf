@@ -5,7 +5,7 @@ variable "env_name" {
 
 variable "route53_domain" {
   type    = string
-  default = "demo.monitor-your-satellites.service.gov.uk"
+  default = "demo.monitor-space-hazards.service.gov.uk"
 }
 
 #variable "auth_client_id" {

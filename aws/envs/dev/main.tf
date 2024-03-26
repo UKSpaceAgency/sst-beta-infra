@@ -35,3 +35,19 @@ provider "aws" {
     }
   }
 }
+
+provider "aws" {
+  alias   = "useast1"
+  region  = "us-east-1"
+  profile = "uksa-mys-dev-env"
+  assume_role {
+    role_arn = "arn:aws:iam::915338536460:role/tf-power-role"
+  }
+  default_tags {
+    tags = {
+      Environment = var.env_name
+      Owner       = "UKSA"
+      Project     = "MyS"
+    }
+  }
+}
