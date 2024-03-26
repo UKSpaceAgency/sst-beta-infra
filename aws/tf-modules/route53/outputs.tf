@@ -3,5 +3,5 @@ output "main_cert_arn" {
 }
 
 output "primary_zone_id" {
-  value = aws_route53_zone.primary.zone_id
+  value = data.aws_route53_zone.primary.zone_id
 }
