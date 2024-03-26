@@ -14,7 +14,7 @@ resource "aws_rds_cluster" "pg-aurora-cluster" {
   skip_final_snapshot         = true
   deletion_protection         = var.default_delete_protection
   engine                      = "aurora-postgresql"
-  engine_version              = "15.3"
+  engine_version              = "15.4"
   apply_immediately           = true
   db_subnet_group_name        = aws_db_subnet_group.default.name
   storage_encrypted           = true
