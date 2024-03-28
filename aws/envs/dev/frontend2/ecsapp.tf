@@ -19,6 +19,7 @@ module "frontend" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "HOSTNAME", "value" : "0.0.0.0" },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
     { "name" : "BASE_API_URL", "value" : "https://www2.${local.local_r53_domain}/api/graphql" }, # important as per www2
   ]
@@ -64,7 +65,7 @@ module "frontend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicMapboxAccessToken::"
     }
   ]
-  healthcheck_subpath = "/"
+  healthcheck_subpath = "/api/health"
   image_tag           = var.image_tag
   route53_domain      = local.local_r53_domain
   enable_ecs_execute  = true
