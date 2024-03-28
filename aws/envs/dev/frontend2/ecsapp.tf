@@ -64,7 +64,7 @@ module "frontend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicMapboxAccessToken::"
     }
   ]
-  healthcheck_subpath = "/api/health"
+  healthcheck_subpath = "/"
   image_tag           = var.image_tag
   route53_domain      = local.local_r53_domain
   enable_ecs_execute  = true
