@@ -1,6 +1,6 @@
-# Monitor your satellites (infrastructure)
+# Monitor Space Hazards (infrastructure)
 
-`sst-beta-infra` is the Terraform code for managing the Monitor your satellites infrastructure on AWS Cloud. Monitor your satellites is the collision avoidance service for UK registered satellites.
+`sst-beta-infra` is the Terraform code for managing the Monitor Space Hazards infrastructure on AWS Cloud. Monitor Space Hazards is the space hazards tracking service for UK operators and approved government employees. It includes the formerly Monitor your satellites collision avoidance service, as well as a re-entry and satellite activity monitoring service. 
 
 ## Technical documentation
 
@@ -19,4 +19,4 @@ You will need to ask the team for any secrets required (e.g. Auth0, etc)
 [MIT Licence](LICENCE)
 
 ## Support
-This software is maintained by the team at: `monitoryoursatellites [at] ukspaceagency [dot] gov [dot] uk`
+This software is maintained by the team at: `monitorspacehazards [at] ukspaceagency [dot] gov [dot] uk`
