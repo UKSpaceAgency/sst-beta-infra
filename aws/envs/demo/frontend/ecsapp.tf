@@ -20,6 +20,7 @@ module "frontend" {
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
+    { "name" : "HOSTNAME", "value" : "0.0.0.0" },
     { "name" : "BASE_API_URL", "value" : "https://www.${local.local_r53_domain}/api/graphql" },
   ]
   secret_env_vars = [
@@ -58,6 +59,10 @@ module "frontend" {
     {
       "name" : "COSMIC_READ_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicReadKey::"
+    },
+    {
+      "name" : "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicMapboxAccessToken::"
     }
   ]
   healthcheck_subpath = "/"
