@@ -73,3 +73,15 @@ output "lambda_iam_policy_vpc_arn" {
 output "vpc_secrets_manager_endpoint_arn" {
   value = module.network.vpc_secrets_manager_endpoint_arn
 }
+
+output "lambda_iam_policy_public_arn" {
+  value = module.iam.lambda_iam_policy_public_arn
+}
+
+output "state_machine_iam_role_arn" {
+  value = module.iam.state_machine_iam_role_arn
+}
+
+output "event_bridge_iam_role_arn" {
+  value = module.iam.event_bridge_invoke_sfn_iam_role_arn
+}
