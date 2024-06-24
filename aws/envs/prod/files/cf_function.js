@@ -5,7 +5,7 @@ function handler(event) {
         statusCode: 301,
         statusDescription: 'Moved Permanently',
         headers: {
-            'location': { value: 'https://www.monitor-your-satellites.service.gov.uk'+event.request.uri }
+            'location': { value: 'https://www.monitor-space-hazards.service.gov.uk'+event.request.uri }
         }
     };
     return response;

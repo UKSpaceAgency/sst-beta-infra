@@ -5,6 +5,11 @@ variable "env_name" {
 
 variable "route53_domain" {
   type    = string
+  default = "monitor-space-hazards.service.gov.uk"
+}
+
+variable "mys_route53_domain" {
+  type    = string
   default = "monitor-your-satellites.service.gov.uk"
 }
 
