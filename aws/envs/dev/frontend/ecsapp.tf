@@ -19,6 +19,7 @@ module "frontend" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "Web App (${var.image_tag})" },
     { "name" : "APP_ENV", "value" : var.env_name },
+    { "name" : "HOSTNAME", "value" : "0.0.0.0" },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
     { "name" : "BASE_API_URL", "value" : "https://www.${local.local_r53_domain}/api/graphql" },
   ]
