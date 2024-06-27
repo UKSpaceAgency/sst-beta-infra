@@ -13,7 +13,7 @@ Navigate to the `aws` folder and run `terraform init`. You can then run `terrafo
 You will need to ask the team for any secrets required (e.g. Auth0, etc)
 
 ### Additional docs
-* [Tech docs website for Monitor your satellites - including further architecture information](https://mys-tech-docs.onrender.com/)
+* [Tech docs website for Monitor Space Hazards - including further architecture information](https://mys-tech-docs.onrender.com/)
 
 ## Licence
 [MIT Licence](LICENCE)
