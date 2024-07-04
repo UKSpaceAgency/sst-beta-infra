@@ -1,9 +1,9 @@
 module "notifications_worker" {
   source                 = "../../../tf-modules/workerapp"
   env_name               = var.env_name
-  app_cpu                = 256
+  app_cpu                = 512
   app_instances_num      = 1
-  app_mem                = 512
+  app_mem                = 1024
   app_name               = "notifications"
   ecr_app_name           = "backend"
   cron_expression        = lookup(local.ingestion_schedule, lower("notifications"), "0 0 31 2 *")
