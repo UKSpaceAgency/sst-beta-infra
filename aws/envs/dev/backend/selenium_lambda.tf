@@ -50,13 +50,13 @@ resource "aws_lambda_permission" "allow_bucket_to_selenium_lambda" {
   source_arn    = data.terraform_remote_state.stack.outputs.s3_bucket_arn
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification_selenium_lambda" {
-  bucket = data.terraform_remote_state.stack.outputs.s3_bucket_id
-
-  lambda_function {
-    lambda_function_arn = module.selenium_lambda.public_lambda_arn
-    events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "reentry_event_reports/"
-    filter_suffix       = ".json"
-  }
-}
+#resource "aws_s3_bucket_notification" "bucket_notification_selenium_lambda" {
+#  bucket = data.terraform_remote_state.stack.outputs.s3_bucket_id
+#
+#  lambda_function {
+#    lambda_function_arn = module.selenium_lambda.public_lambda_arn
+#    events              = ["s3:ObjectCreated:*"]
+#    filter_prefix       = "reentry_event_reports/"
+#    filter_suffix       = ".json"
+#  }
+#}
