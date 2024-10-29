@@ -47,16 +47,38 @@ resource "aws_lambda_permission" "allow_bucket_to_selenium_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = module.selenium_lambda.vpc_lambda_name
   principal     = "s3.amazonaws.com"
-  source_arn    = data.terraform_remote_state.stack.outputs.s3_bucket_arn
+  source_arn    = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn
 }
 
-#resource "aws_s3_bucket_notification" "bucket_notification_selenium_lambda" {
-#  bucket = data.terraform_remote_state.stack.outputs.s3_bucket_id
-#
-#  lambda_function {
-#    lambda_function_arn = module.selenium_lambda.public_lambda_arn
-#    events              = ["s3:ObjectCreated:*"]
-#    filter_prefix       = "reentry_event_reports/"
-#    filter_suffix       = ".json"
-#  }
-#}
+resource "aws_s3_bucket_notification" "bucket_notification_selenium_lambda" {
+ bucket = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id
+
+ lambda_function {
+   lambda_function_arn = module.selenium_lambda.public_lambda_arn
+   events              = ["s3:ObjectCreated:*"]
+   filter_prefix       = "reentry_event_reports/"
+   filter_suffix       = ".json"
+ }
+}
+
+
+# CloudWatch Event rule to trigger every 6 hours
+resource "aws_cloudwatch_event_rule" "schedule_rule" {
+  name                = "selenium_lambda_schedule_rule"
+  schedule_expression = "rate(6 hours)"
+}
+
+# Event target to invoke Lambda
+resource "aws_cloudwatch_event_target" "lambda_target" {
+  rule      = aws_cloudwatch_event_rule.schedule_rule.name
+  arn       = module.selenium_lambda.public_lambda_arn
+}
+
+# Grant CloudWatch Events permission to invoke the Lambda function
+resource "aws_lambda_permission" "allow_cloudwatch_invoke" {
+  statement_id  = "AllowCloudWatchEvents"
+  action        = "lambda:InvokeFunction"
+  function_name = module.selenium_lambda.vpc_lambda_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.schedule_rule.arn
+}

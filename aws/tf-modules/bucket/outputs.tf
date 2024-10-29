@@ -17,3 +17,11 @@ output "lambdas_bucket_id" {
 output "log_bucket_id" {
   value = aws_s3_bucket.log_bucket.id
 }
+
+output "reentry_bucket_id" {
+  value = aws_s3_bucket.reentry_data_bucket.id
+}
+
+output "reentry_bucket_arn" {
+  value = aws_s3_bucket.reentry_data_bucket.arn
+}

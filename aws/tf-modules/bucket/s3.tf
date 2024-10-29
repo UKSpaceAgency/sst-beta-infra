@@ -253,3 +253,8 @@ resource "aws_s3_bucket_logging" "lambdas_bucket_logging" {
   target_bucket = aws_s3_bucket.log_bucket.id
   target_prefix = "lambdas_bucket/"
 }
+
+resource "aws_s3_bucket" "reentry_data_bucket" {
+  bucket        = substr(format("%s-%s", "mys-reentry-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
+  force_destroy = true
+}

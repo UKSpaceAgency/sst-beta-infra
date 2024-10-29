@@ -22,6 +22,7 @@ module "backend" {
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
+    { "name" : "S3_REENTRY_EVENT_REPORTS_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id },
   ]
   secret_env_vars = [
     {

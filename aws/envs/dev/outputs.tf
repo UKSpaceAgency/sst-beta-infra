@@ -86,3 +86,12 @@ output "event_bridge_iam_role_arn" {
 output "vpc_secrets_manager_endpoint_arn" {
   value = module.network.vpc_secrets_manager_endpoint_arn
 }
+
+
+output "s3_reentry_bucket_id" {
+  value = module.s3.reentry_bucket_id
+}
+
+output "s3_reentry_bucket_arn" {
+  value = module.s3.reentry_bucket_arn
+}
