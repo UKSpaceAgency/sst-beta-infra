@@ -59,7 +59,8 @@ resource "aws_iam_role" "lambda-assume-role-selenium-lambda" {
 
 data "aws_ecr_image" "service_image" {
   repository_name = "selenium-lambda"
-  image_tag       = var.image_tag
+  #image_tag       = var.image_tag
+  image_tag = "latest"
 }
 
 data "aws_secretsmanager_secret" "frontend_secret" {
