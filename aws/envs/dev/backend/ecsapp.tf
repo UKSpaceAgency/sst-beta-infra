@@ -84,6 +84,14 @@ module "backend" {
     {
       "name" : "NOTIFY_API_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
+    },
+    {
+      "name" : "SES_SMTP_USERNAME",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpUsername::"
+    },
+    {
+      "name" : "SES_SMTP_PASSWORD",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
     }
   ]
   healthcheck_subpath = "/"
