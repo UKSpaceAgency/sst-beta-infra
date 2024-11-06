@@ -86,11 +86,11 @@ module "backend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
     },
     {
-      "name" : "SES_SMTP_USERNAME",
+      "name" : "APP_SES_SMTP_USERNAME",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpUsername::"
     },
     {
-      "name" : "SES_SMTP_PASSWORD",
+      "name" : "APP_SES_SMTP_PASSWORD",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
     }
   ]
