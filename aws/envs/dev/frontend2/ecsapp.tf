@@ -55,6 +55,15 @@ module "frontend2" {
       "name" : "SENTRY_DSN",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sentryDsn::"
     },
+    {
+      "name" : "COSMIC_BUCKET_SLUG",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicBucketSlug::"
+    },
+    {
+      "name" : "COSMIC_READ_KEY",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicReadKey::"
+    },
+
 
     # {
     #   "name" : "COSMIC_BUCKET_SLUG",
