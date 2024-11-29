@@ -14,7 +14,9 @@ terraform {
     region   = "eu-west-2"
     key      = "demo-env-structures.backend"
     profile  = "uksa-mys-dev-env"
-    role_arn = "arn:aws:iam::469816118475:role/tf-power-role"
+    assume_role  = {
+      role_arn = "arn:aws:iam::469816118475:role/tf-power-role"
+    }
   }
 }
 
