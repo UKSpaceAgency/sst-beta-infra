@@ -63,6 +63,10 @@ module "frontend2" {
       "name" : "COSMIC_READ_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicReadKey::"
     },
+    {
+      "name" : "FEEDBACK_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:feedbackUrl::"
+    },
 
 
     # {
