@@ -9,6 +9,7 @@ module "frontend2" {
   app_name               = var.app_name
   ecr_app_name           = "frontend2" # important as per www2
   app_port_num           = 3000
+  default_capacity_provider = "FARGATE_SPOT"
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
   default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id

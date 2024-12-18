@@ -15,6 +15,7 @@ module "e2e-backend" {
   ]
   ecr_app_name           = "backend"
   app_port_num           = 8080
+  default_capacity_provider = "FARGATE_SPOT"
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
   default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id

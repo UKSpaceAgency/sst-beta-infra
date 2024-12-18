@@ -53,3 +53,8 @@ variable "service_connect_enabled" {
   type    = bool
   default = true
 }
+
+variable "default_capacity_provider" {
+  default = "FARGATE"
+  type = string
+}

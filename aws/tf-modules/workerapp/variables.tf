@@ -47,3 +47,8 @@ variable "ecs_events_role_id" {
 variable "cron_expression" {
   type = string
 }
+
+variable "default_capacity_provider" {
+  default = "FARGATE"
+  type = string
+}

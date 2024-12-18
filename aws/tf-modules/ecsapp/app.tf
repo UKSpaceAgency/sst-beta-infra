@@ -133,7 +133,10 @@ resource "aws_ecs_service" "ecs-app" {
   name                   = var.app_name
   cluster                = var.ecs_cluster_arn
   task_definition        = aws_ecs_task_definition.app_service.arn
-  launch_type            = "FARGATE"
+  capacity_provider_strategy {
+    capacity_provider = var.default_capacity_provider
+    weight = 1
+  }
   desired_count          = var.app_instances_num
   wait_for_steady_state  = true
   enable_execute_command = var.enable_ecs_execute

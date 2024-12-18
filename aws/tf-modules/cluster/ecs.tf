@@ -22,3 +22,8 @@ resource "aws_cloudwatch_log_group" "log_group_cluster" {
   name              = "/ecs/mys-${var.env_name}"
   retention_in_days = var.logs_retention_days
 }
+
+resource "aws_ecs_cluster_capacity_providers" "capacity_provider" {
+  cluster_name = aws_ecs_cluster.cluster.name
+  capacity_providers = var.default_capacity_provider_list
+}

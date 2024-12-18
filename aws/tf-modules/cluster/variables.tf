@@ -5,3 +5,9 @@ variable "logs_retention_days" {
   default = 30
 }
 variable "container_insights_enabled" { type = bool }
+
+variable "default_capacity_provider_list" {
+  type     = list(string)
+  default  = ["FARGATE"]
+  nullable = false
+}

@@ -90,7 +90,11 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
   ecs_target {
     task_count          = 1
     task_definition_arn = aws_ecs_task_definition.app_service.arn
-    launch_type         = "FARGATE"
+    #launch_type         = "FARGATE"
+    capacity_provider_strategy {
+      capacity_provider = var.default_capacity_provider
+      weight = 1
+    }
     propagate_tags      = "TASK_DEFINITION"
     platform_version    = "LATEST"
 
