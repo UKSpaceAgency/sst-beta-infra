@@ -52,10 +52,6 @@ module "frontend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientSecret::"
     },
     {
-      "name" : "SENTRY_DSN",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sentryDsn::"
-    },
-    {
       "name" : "COSMIC_BUCKET_SLUG",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicBucketSlug::"
     },
