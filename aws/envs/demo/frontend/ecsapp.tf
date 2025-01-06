@@ -8,7 +8,7 @@ module "frontend" {
   app_mem                = 1024
   app_name               = var.app_name
   ecr_app_name           = "frontend"
-  app_port_num           = 4200
+  app_port_num           = 3000
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
   default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id
@@ -21,16 +21,19 @@ module "frontend" {
     { "name" : "APP_ENV", "value" : var.env_name },
     { "name" : "API_URL", "value" : "http://backend.internal:8080" },
     { "name" : "HOSTNAME", "value" : "0.0.0.0" },
-    { "name" : "BASE_API_URL", "value" : "https://www.${local.local_r53_domain}/api/graphql" },
   ]
   secret_env_vars = [
     {
-      "name" : "AUTH0_CLIENT_ID",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientId::"
+      "name" : "NEXTAUTH_SECRET",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextauthSecret::"
     },
     {
-      "name" : "AUTH0_CLIENT_SECRET",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientSecret::"
+      "name" : "NEXTAUTH_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextauthUrl::"
+    },
+    {
+      "name" : "AUTH_TRUST_HOST",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextauthUrl::"
     },
     {
       "name" : "AUTH0_BASEURL",
@@ -41,16 +44,16 @@ module "frontend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0Audience::"
     },
     {
-      "name" : "NEXTAUTH_SECRET",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextauthSecret::"
+      "name" : "AUTH0_CLIENT_ID",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientId::"
     },
     {
-      "name" : "NEXTAUTH_URL",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextauthUrl::"
+      "name" : "AUTH0_CLIENT_SECRET",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:auth0ClientSecret::"
     },
     {
-      "name" : "NEXT_PUBLIC_GA",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicGA::"
+      "name" : "SENTRY_DSN",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sentryDsn::"
     },
     {
       "name" : "COSMIC_BUCKET_SLUG",
@@ -61,11 +64,11 @@ module "frontend" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:cosmicReadKey::"
     },
     {
-      "name" : "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:nextPublicMapboxAccessToken::"
-    }
+      "name" : "FEEDBACK_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:feedbackUrl::"
+    },
   ]
-  healthcheck_subpath = "/"
+  healthcheck_subpath = "/api/health"
   image_tag           = var.image_tag
   route53_domain      = local.local_r53_domain
   enable_ecs_execute  = true

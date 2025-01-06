@@ -6,6 +6,7 @@ module "spacetrack_worker" {
   app_mem                = 2048
   app_name               = "spacetrack"
   ecr_app_name           = "backend"
+  default_capacity_provider = "FARGATE_SPOT"
   cron_expression        = lookup(local.ingestion_schedule, lower("spacetrack"), "0 0 31 2 *")
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id

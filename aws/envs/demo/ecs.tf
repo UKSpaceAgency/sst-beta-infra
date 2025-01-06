@@ -4,4 +4,5 @@ module "ecs" {
   container_insights_enabled = false
   custom_vpc_id              = module.network.custom_vpc_id
   logs_retention_days        = 14
+  default_capacity_provider_list = ["FARGATE_SPOT","FARGATE"]
 }
