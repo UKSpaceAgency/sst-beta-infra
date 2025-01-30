@@ -1,19 +1,19 @@
 name: Deploy to AWS
-#on:
-#  workflow_dispatch:
-#    inputs:
-#      invoker:
-#        description: 'Invoker'
-#        required: true
-#        default: ''
-#      env:
-#        description: 'Environment'
-#        required: false
-#        default: 'dev'
-#      image-tag:
-#        description: 'image ecr sha tag'
-#        required: true
-#        default: 'latest'
+on:
+  workflow_dispatch:
+    inputs:
+      invoker:
+        description: 'Invoker'
+        required: true
+        default: ''
+      env:
+        description: 'Environment'
+        required: false
+        default: 'dev'
+      image-tag:
+        description: 'image ecr sha tag'
+        required: true
+        default: 'latest'
 
 jobs:
   called_with_by:
