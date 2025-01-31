@@ -85,3 +85,11 @@ output "state_machine_iam_role_arn" {
 output "event_bridge_iam_role_arn" {
   value = module.iam.event_bridge_invoke_sfn_iam_role_arn
 }
+
+output "s3_reentry_bucket_id" {
+  value = module.s3.reentry_bucket_id
+}
+
+output "s3_reentry_bucket_arn" {
+  value = module.s3.reentry_bucket_arn
+}
