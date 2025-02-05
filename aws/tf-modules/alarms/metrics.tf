@@ -6,6 +6,7 @@ locals {
   six_and_half_hours_in_seconds = 60 * 60 * 6.5
   fourteen_hours_in_seconds     = 60 * 60 * 14
   one_day_in_seconds            = 60 * 60 * 24 #24hrs
+  twenty_five_hrs_in_seconds    = 60 * 60 * 25
 }
 
 module "space_track_no_cdms" {
@@ -52,13 +53,13 @@ module "space_track_satellites_ingestion_finished" {
   source                 = "../alarm_metric"
   cluster_log_group_name = var.cluster_log_group_name
   env_name               = var.env_name
-  alarm_name             = "No ingestion of Satellites from Space-Track has been completed in last 24 hours"
-  alarm_description      = "No ingestion of Satellites from Space-Track has been completed in last 24 hours"
+  alarm_name             = "No ingestion of Satellites from Space-Track has been completed in last 25 hours"
+  alarm_description      = "No ingestion of Satellites from Space-Track has been completed in last 25 hours"
   metric_filter_name     = "space-track-satellites-ingestion-finished"
   metric_filter_pattern  = "%Finished pulling Satellites from SpaceTrack%"
   metric_name            = "satellites-ingestion-finished"
   metric_namespace       = local.space_track_namespace
-  period_in_seconds      = local.one_day_in_seconds
+  period_in_seconds      = local.twenty_five_hrs_in_seconds
   default_statistic      = "Maximum"
 }
 
