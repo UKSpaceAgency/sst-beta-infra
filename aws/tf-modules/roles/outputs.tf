@@ -45,3 +45,7 @@ output "state_machine_iam_role_arn" {
 output "event_bridge_invoke_sfn_iam_role_arn" {
   value = aws_iam_role.event_bridge_invoke_sfn_iam_role.arn
 }
+
+output "guard_duty_malware_protection_s3_role_arn" {
+  value = aws_iam_role.malware_s3_protection_role.arn
+}

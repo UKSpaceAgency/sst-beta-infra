@@ -147,6 +147,13 @@ resource "aws_lb_listener" "basic_listener" {
     name = "alb-${var.env_name}"
   }
 
+  routing_http_response_server_enabled = false
+  routing_http_response_strict_transport_security_header_value = "max-age=31536000; includeSubDomains; preload"
+  routing_http_response_x_content_type_options_header_value = "nosniff"
+
+  #routing_http_response_x_frame_options_header_value = "ALLOW-FROM https://${var.route53_domain}"
+  routing_http_response_x_frame_options_header_value = "SAMEORIGIN"
+
   default_action {
     type = "fixed-response"
 
