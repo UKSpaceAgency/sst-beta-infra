@@ -52,21 +52,35 @@ resource "aws_iam_policy" "allow_ecs_command_execution" {
 resource "aws_iam_role" "ecs-task-role" {
   name = "ecs-task-role-for-${var.env_name}"
 
-  managed_policy_arns = [data.aws_iam_policy.secrets-manager.arn, data.aws_iam_policy.s3-full-access.arn, aws_iam_policy.allow_ecs_command_execution.arn]
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com"
-        }
-      },
-    ]
-  })
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action = "sts:AssumeRole"
+          Effect = "Allow"
+          Sid    = ""
+          Principal = {
+            Service = "ecs-tasks.amazonaws.com"
+          }
+        },
+      ]
+    })
 
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_role_secret_manager" {
+  role       = aws_iam_role.ecs-task-role.name
+  policy_arn = data.aws_iam_policy.secrets-manager.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_role_s3_full" {
+  role       = aws_iam_role.ecs-task-role.name
+  policy_arn = data.aws_iam_policy.s3-full-access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_role_ecs_exec" {
+  role       = aws_iam_role.ecs-task-role.name
+  policy_arn = aws_iam_policy.allow_ecs_command_execution.arn
 }
 
 
@@ -81,11 +95,6 @@ data "aws_iam_policy" "ec2-service-role" {
 resource "aws_iam_role" "ecs-execution-role" {
   name = "ecs-execution-role-for-${var.env_name}"
 
-  managed_policy_arns = [
-    data.aws_iam_policy.ecs-task-exec.arn, data.aws_iam_policy.ec2-service-role.arn,
-    aws_iam_policy.access-secrets-from-ecs.arn
-  ]
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -100,6 +109,21 @@ resource "aws_iam_role" "ecs-execution-role" {
     ]
   })
 
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_task_exec" {
+  role       = aws_iam_role.ecs-execution-role.name
+  policy_arn = data.aws_iam_policy.ecs-task-exec.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_ec2_service" {
+  role       = aws_iam_role.ecs-execution-role.name
+  policy_arn = data.aws_iam_policy.ec2-service-role.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_secrets" {
+  role       = aws_iam_role.ecs-execution-role.name
+  policy_arn = aws_iam_policy.access-secrets-from-ecs.arn
 }
 
 data "aws_iam_policy_document" "assume_role_events" {
@@ -117,13 +141,22 @@ data "aws_iam_policy_document" "assume_role_events" {
 
 resource "aws_iam_role" "ecs_events" {
   name = "ecs_events_role-for-${var.env_name}"
-
-  managed_policy_arns = [
-    data.aws_iam_policy.ecs-task-exec.arn, data.aws_iam_policy.ec2-service-role.arn,
-    aws_iam_policy.access-secrets-from-ecs.arn
-  ]
-
   assume_role_policy = data.aws_iam_policy_document.assume_role_events.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_events_task_exec" {
+  role       = aws_iam_role.ecs_events.name
+  policy_arn = data.aws_iam_policy.ecs-task-exec.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_events_ec2_service" {
+  role       = aws_iam_role.ecs_events.name
+  policy_arn = data.aws_iam_policy.ec2-service-role.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_events_secrets" {
+  role       = aws_iam_role.ecs_events.name
+  policy_arn = aws_iam_policy.access-secrets-from-ecs.arn
 }
 
 resource "aws_iam_policy" "developers_policy" {

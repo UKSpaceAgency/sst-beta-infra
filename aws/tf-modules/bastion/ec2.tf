@@ -20,7 +20,26 @@ resource "aws_iam_role" "ec2_s3_full_access_role" {
     }
 
   )
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess", "arn:aws:iam::aws:policy/AmazonECS_FullAccess"]
+
+  #managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess", "arn:aws:iam::aws:policy/AmazonECS_FullAccess"]
+}
+
+resource "aws_iam_role_policy_attachment" "bastion_s3_full_access" {
+
+  role       = aws_iam_role.ec2_s3_full_access_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "bastion_ecs_full" {
+
+  role       = aws_iam_role.ec2_s3_full_access_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "bastion_ssml" {
+
+  role       = aws_iam_role.ec2_s3_full_access_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_instance_profile" "bastion_profile" {
