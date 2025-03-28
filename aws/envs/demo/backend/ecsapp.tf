@@ -23,6 +23,8 @@ module "backend" {
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "APP_FAKE_DATA", "value" : "True" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
+    { "name" : "APP_SES_SENDER_EMAIL", "value" : "demo-no-reply@monitor-space-hazards.service.gov.uk" },
+    { "name" : "APP_FF_ENABLE_SES_SENDER", "value" : "True" },
   ]
   secret_env_vars = [
     {
@@ -84,6 +86,14 @@ module "backend" {
     {
       "name" : "NOTIFY_API_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
+    },
+    {
+      "name" : "APP_SES_SMTP_USERNAME",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpUsername::"
+    },
+    {
+      "name" : "APP_SES_SMTP_PASSWORD",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
     }
   ]
   healthcheck_subpath = "/"
