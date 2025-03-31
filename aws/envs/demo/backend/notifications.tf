@@ -25,6 +25,7 @@ module "notifications_worker" {
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
+    { "name" : "APP_SES_SENDER_EMAIL", "value" : "demo-no-reply@monitor-space-hazards.service.gov.uk" },
   ]
   secret_env_vars = [
     {
@@ -50,6 +51,14 @@ module "notifications_worker" {
     {
       "name" : "NOTIFY_API_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
+    },
+    {
+      "name" : "APP_SES_SMTP_USERNAME",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpUsername::"
+    },
+    {
+      "name" : "APP_SES_SMTP_PASSWORD",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
     }
   ]
 
