@@ -24,7 +24,8 @@ module "backend" {
     { "name" : "APP_FAKE_DATA", "value" : "True" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
     { "name" : "S3_REENTRY_EVENT_REPORTS_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id },
-    { "name" : "APP_SES_SENDER_EMAIL", "value" : "demo-no-reply@monitor-space-hazards.service.gov.uk" },
+    { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
+    { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
     { "name" : "APP_FF_ENABLE_SES_SENDER", "value" : "True" },
   ]
   secret_env_vars = [

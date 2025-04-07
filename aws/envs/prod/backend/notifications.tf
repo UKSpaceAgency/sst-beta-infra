@@ -24,7 +24,8 @@ module "notifications_worker" {
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
-    { "name" : "APP_SES_SENDER_EMAIL", "value" : "no-reply@monitor-space-hazards.service.gov.uk" },
+    { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
+    { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
   ]
   secret_env_vars = [
     {
