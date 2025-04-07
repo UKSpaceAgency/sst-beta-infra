@@ -167,6 +167,34 @@ resource "aws_iam_policy" "developers_policy" {
     {
       "Statement" : [
         {
+            "Sid": "QueryEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "tag:GetResources",
+                "dbqms:CreateFavoriteQuery",
+                "dbqms:DescribeFavoriteQueries",
+                "dbqms:UpdateFavoriteQuery",
+                "dbqms:DeleteFavoriteQueries",
+                "dbqms:GetQueryString",
+                "dbqms:CreateQueryHistory",
+                "dbqms:UpdateQueryHistory",
+                "dbqms:DeleteQueryHistory",
+                "dbqms:DescribeQueryHistory",
+                "rds-data:BatchExecuteStatement",
+                "rds-data:BeginTransaction",
+                "rds-data:CommitTransaction",
+                "rds-data:ExecuteStatement",
+                "rds-data:RollbackTransaction",
+                "rds:Describe*"
+            ],
+            "Resource": "*",
+            "Condition" : {
+            "Bool" : {
+              "aws:MultiFactorAuthPresent" : "true"
+            }
+          },
+        },
+        {
           "Action" : [
             "s3:*"
           ],
