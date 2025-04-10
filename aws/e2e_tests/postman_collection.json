@@ -5796,6 +5796,11 @@
 											"description": "Pattern search value, ie: 'ONE-'"
 										},
 										{
+											"key": "epoch",
+											"value": "past",
+											"description": "Describes future or past Events"
+										},
+										{
 											"key": "limit",
 											"value": "100",
 											"disabled": true
