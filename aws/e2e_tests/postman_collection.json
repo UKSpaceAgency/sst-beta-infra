@@ -6072,7 +6072,7 @@
 											"key": "file",
 											"description": "(Required) .oem compatible file. Filename MUST contain NORAD_ID and must match MEME_xxxxx_yyyy... pattern, where xxxxx is NORAD ID.",
 											"type": "file",
-											"src": "MEME_55145_20211101.txt"
+											"src": "MEME_61604_20211101.txt"
 										}
 									]
 								},
