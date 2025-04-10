@@ -9212,7 +9212,7 @@
 									"script": {
 										"exec": [
 											"// run post request to log the long ID for next request\r",
-											"const new_long_id = pm.response.json()[0].id;\r",
+											"const new_long_id = pm.response.json()[pm.response.json().length - 1].id;\r",
 											"\r",
 											"pm.collectionVariables.set(\"testAnalysisAnalysisId\", new_long_id);"
 										],
@@ -9229,7 +9229,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/v1/events/:event_id/summary?limit=1&offset=0&sort_order=asc",
+									"raw": "{{baseUrl}}/v1/events/:event_id/summary?limit=10&offset=0&sort_order=asc",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -9242,7 +9242,7 @@
 									"query": [
 										{
 											"key": "limit",
-											"value": "1"
+											"value": "10"
 										},
 										{
 											"key": "offset",
