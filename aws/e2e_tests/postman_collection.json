@@ -5769,7 +5769,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/v1/events/?norad_id={{testSatellitePrimaryNorad}}&search_like={{testEventShortId}}",
+									"raw": "{{baseUrl}}/v1/events/?norad_id={{testSatellitePrimaryNorad}}&search_like={{testEventShortId}}&epoch=past",
 									"host": [
 										"{{baseUrl}}"
 									],
