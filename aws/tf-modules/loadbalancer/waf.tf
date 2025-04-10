@@ -197,7 +197,7 @@ resource "aws_wafv2_web_acl" "rate-based-acl" {
             field_to_match {
               uri_path {}
             }
-            regex_string = "^/v1/ephemeris"  # Matches everything under /v1/
+            regex_string = "^/v1/ephemeris$"   # Exactly /v1/ephemeris
             text_transformation {
               priority = 0
               type     = "NONE"
