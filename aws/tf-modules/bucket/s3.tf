@@ -20,6 +20,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "expiration_rule" {
   rule {
     id = "Cleanup"
 
+    filter {
+      prefix = "/"
+    }
+
     expiration {
       days = 7
     }
