@@ -215,4 +215,4 @@ jobs:
                     --region eu-west-2 \
                     --profile uksa-mys-dev-env \
                     --query "Command.CommandId" \
-                    --output text)
+                    --output text
