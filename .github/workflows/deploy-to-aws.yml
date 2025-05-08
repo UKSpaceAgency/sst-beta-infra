@@ -206,6 +206,7 @@ jobs:
             **/newman-run-*.xml
 
       - name: Shutdown api-e2e service
+        if: always() || failure()
         run: |
           aws ssm send-command \
                     --instance-ids ${{ vars.bastion_instance_id }} \
