@@ -130,7 +130,7 @@ jobs:
     needs: deploy
     name: Execute backend E2E tests
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.env == 'dev' || github.event.inputs.env == 'demo' }} #invoke only for dev OR demo envs. Skips prod backend e2e.
+    if: ${{ github.event.inputs.env == 'dev' }} #invoke only for dev.
     environment:
       name: ${{ github.event.inputs.env }}
     concurrency: ${{ github.event.inputs.env }}-aws
@@ -144,6 +144,41 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: Moulick/configure-multiple-aws-roles@v4
+        with:
+          role-to-assume: ${{ vars.ecs_rollout_role }}
+          profile: uksa-mys-dev-env
+          aws-region: eu-west-2
+
+      - name: Setup api-e2e service
+        run: |
+          COMMAND_ID=$(aws ssm send-command \
+          --instance-ids ${{ vars.bastion_instance_id }} \
+          --document-name "AWS-RunShellScript" \
+          --parameters commands=["$(< /home/ec2-user/test-script.sh)"] \
+          --region eu-west-2 \
+          --profile uksa-mys-dev-env \
+          --query "Command.CommandId" \
+          --output text)
+        
+          while true; do
+            STATUS=$(aws ssm list-command-invocations \
+              --command-id "$COMMAND_ID" \
+              --details \
+              --region eu-west-2 \
+              --profile uksa-mys-dev-env \
+              --query "CommandInvocations[0].Status" \
+              --output text)
+          
+            echo "Command status: $STATUS"
+          
+            [[ "$STATUS" == "Success" || "$STATUS" == "Failed" ]] && break
+          
+            sleep 5
+          done
+        
 
       - name: Execute Backend E2E API tests
         uses: matt-ball/newman-action@master
@@ -161,3 +196,7 @@ jobs:
         with:
           files: |
             **/newman-run-*.xml
+
+      - name: Shutdown api-e2e service
+        run: |
+          echo xd
