@@ -205,14 +205,3 @@ jobs:
           files: |
             **/newman-run-*.xml
 
-      - name: Shutdown api-e2e service
-        if: always() || failure()
-        run: |
-          aws ssm send-command \
-                    --instance-ids ${{ vars.bastion_instance_id }} \
-                    --document-name "AWS-RunShellScript" \
-                    --parameters commands=["bash /home/ec2-user/e2e-shutdown.sh"] \
-                    --region eu-west-2 \
-                    --profile uksa-mys-dev-env \
-                    --query "Command.CommandId" \
-                    --output text
