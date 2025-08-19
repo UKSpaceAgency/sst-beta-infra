@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "cdn_dist" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  aliases             = [var.route53_domain,"cdn.${var.route53_domain}"]
+  aliases             = ["cdn.${var.route53_domain}"]
   wait_for_deployment = false
   price_class         = "PriceClass_100"
   enabled             = true
@@ -62,19 +62,7 @@ resource "aws_cloudfront_distribution" "cdn_dist" {
 }
 
 
-resource "aws_route53_record" "redirect_itself" {
-  zone_id = var.primary_hosted_zone_id
-  name    = var.route53_domain
-  type    = "A"
-
-  alias {
-    name                   = aws_cloudfront_distribution.cdn_dist.domain_name
-    zone_id                = "Z2FDTNDATAQYW2"
-    evaluate_target_health = false
-  }
-}
-
-resource "aws_route53_record" "redirect_itself_www" {
+resource "aws_route53_record" "proper_name" {
   zone_id = var.primary_hosted_zone_id
   name    = "cdn.${var.route53_domain}"
   type    = "A"
@@ -85,6 +73,7 @@ resource "aws_route53_record" "redirect_itself_www" {
     evaluate_target_health = false
   }
 }
+
 
 
 resource "aws_s3_bucket_policy" "allow_public_frontend" {
