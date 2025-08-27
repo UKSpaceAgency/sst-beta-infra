@@ -24,7 +24,6 @@ module "spacetrack_worker" {
     { "name" : "APP_NAME", "value" : "Spacetrack worker (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
-    { "name" : "SPACE_TRACK_SETTINGS_BASE_URL", "value" : "https://for-testing-only.space-track.org" },
   ]
   secret_env_vars = [
     {
@@ -58,6 +57,10 @@ module "spacetrack_worker" {
     {
       "name" : "SPACE_TRACK_IDENTITY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackIdentity::"
+    },
+    {
+      "name" : "SPACE_TRACK_BASE_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackBaseUrl::"
     }
   ]
 

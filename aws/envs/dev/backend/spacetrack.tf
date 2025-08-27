@@ -57,6 +57,10 @@ module "spacetrack_worker" {
     {
       "name" : "SPACE_TRACK_IDENTITY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackIdentity::"
+    },
+    {
+      "name" : "SPACE_TRACK_BASE_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackBaseUrl::"
     }
   ]
 
