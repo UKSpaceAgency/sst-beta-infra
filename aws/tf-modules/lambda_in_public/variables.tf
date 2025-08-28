@@ -12,3 +12,14 @@ variable "env_vars" {
 
 variable "s3_bucket" { type = string }
 variable "s3_key" { type = string }
+
+
+variable "lambda_memory_size" {
+  type = number
+  default = 128
+}
+
+variable "runtime" {
+  type = string
+  default = "python3.11"
+}

@@ -20,3 +20,7 @@ data "terraform_remote_state" "stack" {
 data "aws_secretsmanager_secret" "by-name" {
   name = "${var.env_name}-backend"
 }
+
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}

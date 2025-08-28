@@ -1,6 +1,3 @@
-data "aws_region" "current" {}
-
-data "aws_caller_identity" "current" {}
 
 
 resource "aws_iam_policy" "lambda-iam-policy-selenium" {
@@ -101,6 +98,8 @@ resource "aws_lambda_permission" "allow_bucket_to_selenium_lambda" {
 
 resource "aws_s3_bucket_notification" "bucket_notification_selenium_lambda" {
  bucket = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id
+
+ eventbridge = true
 
  lambda_function {
    lambda_function_arn = module.selenium_lambda.public_lambda_arn

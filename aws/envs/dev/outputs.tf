@@ -95,3 +95,11 @@ output "s3_reentry_bucket_id" {
 output "s3_reentry_bucket_arn" {
   value = module.s3.reentry_bucket_arn
 }
+
+output "cdn_bucket_id" {
+  value = module.cdn.cdn_bucket_id
+}
+
+output "cdn_bucket_arn" {
+  value =module.cdn.cdn_bucket_arn
+}
