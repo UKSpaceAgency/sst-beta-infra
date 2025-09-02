@@ -62,6 +62,10 @@ module "spacetrack_worker" {
       "name" : "SPACE_TRACK_RAW_BASE_URL",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackBaseUrl::"
     }
+    {
+      "name" : "SPACE_TRACK_API_RATE_LIMIT_PER_MINUTE",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackAPIRateLimitPerMinute::"
+    }
   ]
 
 }
