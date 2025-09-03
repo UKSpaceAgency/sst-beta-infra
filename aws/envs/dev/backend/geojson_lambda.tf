@@ -59,7 +59,7 @@ module "geojson_lambda" {
   source               = "../../../tf-modules/lambda_in_public"
   env_name             = var.env_name
   lambda_function_name = "generate-geojson-${var.env_name}"
-  lambda_handler_name  = "main.lambda_handler"
+  lambda_handler_name  = "main.handler"
   lambda_policy_arn    = aws_iam_policy.lambda-iam-policy-geojson.arn
   lambda_role_arn      = aws_iam_role.lambda-assume-role-notifications-sender.arn
   lambda_role_name     = aws_iam_role.lambda-assume-role-notifications-sender.name
@@ -75,23 +75,10 @@ module "geojson_lambda" {
   }
 }
 
-# resource "aws_lambda_permission" "allow_bucket_to_geojson_lambda" {
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.geojson_lambda.public_lambda_name
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn
-# }
-#
-# resource "aws_s3_bucket_notification" "bucket_notification_geojson_lambda" {
-#  bucket = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id
-#
-#  eventbridge = true
-#
-#  lambda_function {
-#    lambda_function_arn = module.geojson_lambda.public_lambda_arn
-#    events              = ["s3:ObjectCreated:*"]
-#    filter_prefix       = "reentry_event_reports/"
-#    filter_suffix       = ".json"
-#  }
-# }
+resource "aws_lambda_permission" "allow_sns_to_geojson_lambda" {
+  statement_id  = "AllowExecutionFromSNSSubscription"
+  action        = "lambda:InvokeFunction"
+  function_name = module.geojson_lambda.public_lambda_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.lambda_dispatcher.arn
+}
