@@ -66,7 +66,8 @@ module "geojson_lambda" {
   s3_bucket            = data.terraform_remote_state.stack.outputs.lambdas_bucket_id
   s3_key               = "generate-geojson-files-${var.image_tag}.zip"
   runtime              = "python3.13"
-  lambda_memory_size   = 512
+  lambda_memory_size   = 2048
+  timeout              = 300 //in seconds = 5min.
 
   env_vars = {
     "ENVIRONMENT_NAME" = upper(var.env_name),

@@ -16,7 +16,7 @@ resource "aws_lambda_function" "public_lambda" {
   s3_bucket     = var.s3_bucket
   s3_key        = var.s3_key
   runtime       = var.runtime
-  timeout       = 30 //seconds
+  timeout       = var.timeout
   memory_size   = var.lambda_memory_size
 
   environment {
