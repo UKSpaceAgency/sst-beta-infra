@@ -65,6 +65,10 @@ module "spacetrack_worker" {
     {
       "name" : "SPACE_TRACK_API_RATE_LIMIT_PER_MINUTE",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackAPIRateLimitPerMinute::"
+    },
+    {
+      "name" : "SPACE_TRACK_CDMS_ITERATOR_LIMIT",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:spacetrackCdmsIteratorLimit::"
     }
   ]
 
