@@ -76,3 +76,17 @@ module "space_track_ingestion_finished" {
   period_in_seconds      = local.six_and_half_hours_in_seconds
   default_statistic      = "Maximum"
 }
+
+module "space_track_tips_ingestion_finished" {
+  source                 = "../alarm_metric"
+  cluster_log_group_name = var.cluster_log_group_name
+  env_name               = var.env_name
+  alarm_name             = "No ingestion of TIPs has been completed in the last 6.5 hours"
+  alarm_description      = "No ingestion of TIPs has been completed in the last 6.5 hours"
+  metric_filter_name     = "sync_with_space_track_tips_finished"
+  metric_filter_pattern  = "%Finished pulling TIPs from Space-Track%"
+  metric_name            = "tips-ingestion-finished"
+  metric_namespace       = local.space_track_namespace
+  period_in_seconds      = local.six_and_half_hours_in_seconds
+  default_statistic      = "Maximum"
+}
