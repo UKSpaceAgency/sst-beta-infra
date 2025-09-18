@@ -1,5 +1,9 @@
 resource "random_uuid" "some_uuid" {}
 
+data "aws_cloudfront_response_headers_policy" "managed-cors-security" {
+  name = "Managed-CORS-with-preflight-and-SecurityHeadersPolicy"
+}
+
 resource "aws_s3_bucket" "cdn" {
   bucket        = substr(format("%s-%s", "cdn-msh-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   force_destroy = true
@@ -35,7 +39,7 @@ resource "aws_cloudfront_distribution" "cdn_dist" {
     target_origin_id       = "cdn-msh"
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = data.aws_cloudfront_cache_policy.managed-caching-optimized.id
-
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.managed-cors-security.id
   }
 
   restrictions {

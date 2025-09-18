@@ -378,7 +378,8 @@ resource "aws_iam_policy" "developers_policy" {
             "iam:ListVirtualMFADevices",
             "iam:ResyncMFADevice",
             "iam:ChangePassword",
-            "s3:*"
+            "s3:*",
+            "dynamodb:*"
           ],
           "Resource" : "*",
           "Sid" : "BlockMostAccessUnlessSignedInWithMFA"
