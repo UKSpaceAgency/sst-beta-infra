@@ -1,0 +1,56 @@
+meta {
+  name: Patch User (with ID)
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/v1/users/:user_id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  user_id: {{testUserId}}
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "first_name": "{{testUserFirstName}}"
+  }
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Name set back successfully", function () {
+      expect(resp.first_name).to.equal(bru.getVar("testUserFirstName"));
+  });
+}
+
+docs {
+  ## Description
+  Updates information about specific user.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can update all users.                                            |
+  |Organization admin |Can update users from his/hers organization.                     |
+  |Everyone else      |Can't update users.                                              |
+  
+  Organization admins cannot update role to Analyst/Superuser.
+}

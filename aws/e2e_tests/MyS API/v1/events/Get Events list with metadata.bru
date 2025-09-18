@@ -1,0 +1,52 @@
+meta {
+  name: Get Events list with metadata
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/events/?norad_id={{testSatellitePrimaryNorad}}&search_like={{testEventShortId}}&epoch=past
+  body: none
+  auth: bearer
+}
+
+params:query {
+  norad_id: {{testSatellitePrimaryNorad}}
+  search_like: {{testEventShortId}}
+  epoch: past
+  ~sort_by: tca_time
+  ~limit: 100
+  ~offset: 0
+  ~sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody()
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Search works with NORAD and Short ID filter", function () {
+      expect(resp[0].shortId).to.eql(bru.getVar("testEventShortId"));
+      expect(resp[0].primaryObjectNoradId).to.eql(bru.getVar("testSatellitePrimaryNorad"));
+      expect(resp[0].secondaryObjectNoradId).to.eql(bru.getVar("testSatelliteSecondaryNorad"));
+  })
+}
+
+docs {
+  ## User Roles
+  |User Role       |Permissions                                                  |
+  |----------------|-------------------------------------------------------------|
+  |Superuser       |Can list all events.                                         |
+  |Analyst         |Can list all events.                                         |
+  |Everyone else   |Can list events concerning user's organization.              |
+}

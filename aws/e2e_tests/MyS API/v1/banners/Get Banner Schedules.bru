@@ -1,0 +1,50 @@
+meta {
+  name: Get Banner Schedules
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/banners/schedules?show_inactive=false&sort_by=created_by_id&limit=100&offset=0&sort_order=asc
+  body: none
+  auth: bearer
+}
+
+params:query {
+  show_inactive: false
+  sort_by: created_by_id
+  limit: 100
+  offset: 0
+  sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  resp = res.getBody();
+  
+  test("Created banner schedule can be retrieved", () => {
+      expect(resp[0].id).to.equal(bru.getVar("testBannerScheduleId"))
+  });
+}
+
+docs {
+  ## Description
+  Gets a list of defined banner schedules.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can list schedules.                                              |
+  |Everyone else      |Can't list schedules.                                            |
+}

@@ -1,0 +1,54 @@
+meta {
+  name: Create Banner Message
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/banners/messages
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "content": "This banner will be deleted shortly! Please ignore it.",
+    "title": "E2E API Integration Tests in Postman - please ignore",
+    "severity": "High",
+    "isActive": true
+  }
+}
+
+tests {
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const resp = res.getBody();
+  
+  test("Banner ID returned in body", () => {
+      expect(resp.id).to.exist;
+  });
+  
+  bru.setVar("testBannerId", resp.id);
+}
+
+docs {
+  ## Description
+  Create a banner message.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can create messages.                                             |
+  |Everyone else      |Can't create messages.                                           |
+}

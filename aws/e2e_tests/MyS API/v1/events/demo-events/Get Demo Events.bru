@@ -1,0 +1,59 @@
+meta {
+  name: Get Demo Events
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/events/demo-events?sort_by=tca_time&limit=10
+  body: none
+  auth: bearer
+}
+
+params:query {
+  sort_by: tca_time
+  limit: 10
+  ~offset: 0
+  ~sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  const expected_keys = [
+      "shortId",
+      "cdmCount",
+      "analysesCount"
+  ];
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Demo events returned contain expected fields", () => {
+      resp.forEach(function (demoEvent) {
+          expect(demoEvent).to.have.all.keys(expected_keys)
+          });
+  });
+}
+
+docs {
+  ## Description
+  Returns the "most interesting" Events (those who have the most CDMs and Analyses).
+  Useful for demo purposes.
+  
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |Superuser       |Can list all events.                                             |
+  |Analyst         |Can list all events.                                             |
+  |Everyone else   |Can't list any events                                            |
+}

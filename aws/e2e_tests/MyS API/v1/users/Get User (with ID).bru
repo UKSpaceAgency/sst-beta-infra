@@ -1,0 +1,51 @@
+meta {
+  name: Get User (with ID)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/users/:user_id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  user_id: {{testUserId}}
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Correct user retrieved", function () {
+      expect(resp.email).to.equal(bru.getVar("testUserEmail"));
+  });
+  
+  test("Updated name stored", function () {
+      expect(resp.first_name).to.equal("TestFirstName");
+  });
+}
+
+docs {
+  ## Description
+  Retrieves specific user.
+  
+  ## User Roles
+  |User Role            |Permissions                                                      |
+  |---------------------|-----------------------------------------------------------------|
+  |Superuser            |Can retrieve all users.                                          |
+  |Organization admin   |Can retrieve users from his/hers organization.                   |
+  |Everyone else        |Can't retrieve users.                                            |
+}

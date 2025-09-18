@@ -1,0 +1,73 @@
+meta {
+  name: Events By Organization (timezone)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/stats/events-by-organization?start_date={{date5DaysAgo}}&end_date={{dateToday}}&timestamp_column=created_at&limit=100&offset=0&sort_order=asc
+  body: none
+  auth: bearer
+}
+
+params:query {
+  start_date: {{date5DaysAgo}}
+  end_date: {{dateToday}}
+  timestamp_column: created_at
+  limit: 100
+  offset: 0
+  sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+script:pre-request {
+  const dateToday = bru.getVar("dateToday");
+  const date5DaysAgo = bru.getVar("date5DaysAgo");
+  
+  const tzDateToday = dateToday.replace("Z", encodeURIComponent("+01:00"));
+  const tzDate5DaysAgo = date5DaysAgo.replace("Z", encodeURIComponent("+01:00"));
+  
+  bru.setVar("dateToday", tzDateToday);
+  bru.setVar("date5DaysAgo", tzDate5DaysAgo);
+}
+
+tests {
+  const resp = res.getBody();
+  
+  const expected_keys = [
+      "name",
+      "id",
+      "events",
+      "collisionProbabilityRange"
+  ];
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Events by satellite (stats) returned contain expected fields", () => {
+      resp.forEach(function (stat) {
+          expect(stat).to.have.all.keys(expected_keys)
+          });
+  });
+}
+
+docs {
+  ## Description
+  Gets the number of Events per organization, groupped into probability of collision ranges: 0..10e-5..10e-3..1.
+  
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can see events across all organizations.                         |
+  |Analyst            |Can see events across all organizations.                         |
+  |Everyone           |Can see events in their own organization.                        |
+}

@@ -1,0 +1,47 @@
+meta {
+  name: Update Banner Message
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/v1/banners/messages
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "messageId": "{{testBannerId}}",
+    "content": "Ignore this banner - it is part of Postman E2E integration tests for the API",
+    "severity": "Low",
+    "title": "Integration test - changed the content of the banner",
+    "isActive": true
+  }
+}
+
+tests {
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  ## Description
+  Modify a banner message.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can modify messages.                                             |
+  |Everyone else      |Can't modify messages.                                           |
+}

@@ -1,0 +1,48 @@
+meta {
+  name: Tracked Satellites
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/stats/objects-tracked
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  const expected_keys = [
+      "objectType",
+      "count"
+  ];
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Objects tracked (stats) returned contain expected fields", () => {
+      resp.forEach(function (stat) {
+          expect(stat).to.have.all.keys(expected_keys)
+          });
+  });
+}
+
+docs {
+  ## Description
+  Gets number of Satellites groupped by type (debris/payload/etc)
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Everyone           |Can see events across all organizations.                         |
+}

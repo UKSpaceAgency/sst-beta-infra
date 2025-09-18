@@ -1,0 +1,30 @@
+meta {
+  name: Healthcheck
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/
+  body: none
+  auth: apikey
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:apikey {
+  key: Authorization
+  value: {{apiKey}}
+  placement: header
+}
+
+tests {
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  // after all tests, unset the bearer token
+  // pm.environment.unset("bearerToken");
+}

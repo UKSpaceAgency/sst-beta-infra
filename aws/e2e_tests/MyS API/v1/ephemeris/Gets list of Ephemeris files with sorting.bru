@@ -1,0 +1,92 @@
+meta {
+  name: Gets list of Ephemeris files with sorting
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/ephemeris/?norad_id={{testSatellitePrimaryNorad}}&sort_by=international_designator&show_inactive=false&limit=100&offset=0&sort_order=asc
+  body: none
+  auth: bearer
+}
+
+params:query {
+  norad_id: {{testSatellitePrimaryNorad}}
+  sort_by: international_designator
+  show_inactive: false
+  limit: 100
+  offset: 0
+  sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  const expected_keys = [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "isActive",
+          "creationDate",
+          "originator",
+          "objectName",
+          "internationalDesignator",
+          "refFrame",
+          "timeSystem",
+          "startTime",
+          "stopTime",
+          "centerName",
+          "fileName",
+          "satellite",
+          "uploader",
+          "uploaderOrganization",
+          "deletedById",
+          "restoredById",
+          "uploadedByEmail",
+          "uploadedByOrganizationName"
+  ];
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Ephemerites returned contain expected fields", () => {
+      resp.forEach(function (ephemeris) {
+          expect(ephemeris).to.have.all.keys(expected_keys)
+          });
+  });
+  
+  const targetFileName = bru.getVar("testEphemerisFileName");
+  
+  test("Ephemeris returned contains our upload", () => {
+      var found = false;
+      resp.forEach((ephemeris) => {
+          found = found || (ephemeris.fileName === targetFileName);
+      })
+      expect(found).to.be.true;
+  })
+  
+  bru.setVar("testEphemerisId", resp[0].id);
+}
+
+docs {
+  ## Description
+  List Ephemeris with metadata from Users table.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can list all ephemeris.                                          |
+  |Analyst            |Can list all ephemeris.                                          |
+  |Operator           |Can list ephemeris in his organization.                          |
+  |Organization Admin |Can list ephemeris in his organization.                          |
+  |Everyone else      |Can't list ephemeris.                                            |
+}

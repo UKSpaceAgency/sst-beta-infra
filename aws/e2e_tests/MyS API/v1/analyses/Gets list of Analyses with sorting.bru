@@ -1,0 +1,88 @@
+meta {
+  name: Gets list of Analyses with sorting
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/analyses/?sort_by=tca_time&sort_order=desc
+  body: none
+  auth: bearer
+}
+
+params:query {
+  sort_by: tca_time
+  sort_order: desc
+  ~limit: 10
+  ~offset: 0
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  const expected_keys = [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "tcaTime",
+          "collisionProbability",
+          "collisionProbabilityMethod",
+          "updateTime",
+          "cdmExternalId",
+          "isActive",
+          "missDistance",
+          "radialMissDistance",
+          "intrackMissDistance",
+          "crosstrackMissDistance",
+          "missDistanceUncertainty",
+          "altitude",
+          "latitude",
+          "longitude",
+          "relativeVelocity",
+          "combinedMass",
+          "possibleFragments",
+          "primaryObjectNoradId",
+          "secondaryObjectNoradId",
+          "primaryObjectObservationsData",
+          "secondaryObjectObservationsData",
+          "eventId",
+          "eventShortId",
+          "uploadedById",
+          "deletedById",
+          "restoredById",
+          "uploadedByEmail",
+          "deletedByEmail",
+          "restoredByEmail"
+  ];
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Analysis returned contains expected fields", () => {
+      resp.forEach(function (analysis) {
+          expect(analysis).to.have.all.keys(expected_keys)
+          });
+  });
+  
+}
+
+docs {
+  ## Description
+  Lists Analyses with metadata from Users table.
+  
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |Superuser       |Can list all analyses.                                           |
+  |Analyst         |Can list all analyses.                                           |
+  |Everyone else   |Can't list analyses.                                             |
+}

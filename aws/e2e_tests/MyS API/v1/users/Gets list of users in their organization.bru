@@ -1,0 +1,43 @@
+meta {
+  name: Gets list of users in their organization
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/users
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Test user in list", () => {
+      expect(utils.isKeyValuePairInObjectList(resp, "id", bru.getVar("testUserId"))).to.be.true;
+  });
+}
+
+docs {
+  ## Description
+  Gets list of users with metadata in their organization.
+  
+  ## User Roles
+  |User Role           |Permissions                                                      |
+  |--------------------|-----------------------------------------------------------------|
+  |Superuser           |Can list users in their organization.                            |
+  |Organization admin  |Can list users in their organization.                            |
+  |Everyone else       |Can't list users.                                                |
+}

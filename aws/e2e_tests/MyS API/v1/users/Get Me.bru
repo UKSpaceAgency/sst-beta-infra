@@ -1,0 +1,43 @@
+meta {
+  name: Get Me
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/users/me
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Correct user retrieved", function () {
+      expect(resp.email).to.equal(bru.getVar("testUserEmail"));
+  });
+  
+  bru.setVar("testUserId", resp.id);
+}
+
+docs {
+  ## Description
+  Retrieves information about yourself.
+  
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |All             |Can retrieve information about themselves.                       |
+}

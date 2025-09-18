@@ -1,0 +1,42 @@
+meta {
+  name: Get Current Banner Messages With Sorting
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/banners/messages/current?sort_by=created_by_id
+  body: none
+  auth: bearer
+}
+
+params:query {
+  sort_by: created_by_id
+  ~limit: 100
+  ~offset: 0
+  ~sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  ## Description
+  Gets currently broadcasted banner messages.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Active user        |Can get currently broadcasted banner(s)                          |
+}

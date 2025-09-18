@@ -1,0 +1,40 @@
+meta {
+  name: Delete Banner Schedule
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/v1/banners/schedules/:schedule_id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  schedule_id: {{testBannerScheduleId}}
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  test("Status code 204", function() {
+      expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  ## Description
+  Soft-deletes a schedule.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can delete a schedule.                                           |
+  |Everyone else      |Can't delete a schedule.                                         |
+}

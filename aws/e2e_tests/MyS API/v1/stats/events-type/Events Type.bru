@@ -1,0 +1,60 @@
+meta {
+  name: Events Type
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/stats/events-type?start_date={{date5DaysAgo}}&end_date={{dateToday}}&group_by_timestamp_column=created_at&limit=100&offset=0&sort_order=asc
+  body: none
+  auth: bearer
+}
+
+params:query {
+  start_date: {{date5DaysAgo}}
+  end_date: {{dateToday}}
+  group_by_timestamp_column: created_at
+  limit: 100
+  offset: 0
+  sort_order: asc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  const expected_keys = [
+      "eventType",
+      "count"
+  ];
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Event types (stats) returned contain expected fields", () => {
+      resp.forEach(function (stat) {
+          expect(stat).to.have.all.keys(expected_keys)
+          });
+  });
+}
+
+docs {
+  ## Description
+  Returns number of Events between different types of objects, ie. between UK licensed satellites,
+  debris or non-UK licensed satellites.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can see events across all organizations.                         |
+  |Analyst            |Can see events across all organizations.                         |
+  |Everyone           |Can only see events with satellites in their organizations.      |
+}

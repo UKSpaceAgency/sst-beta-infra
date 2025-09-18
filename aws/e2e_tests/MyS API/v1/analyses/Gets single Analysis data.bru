@@ -1,0 +1,44 @@
+meta {
+  name: Gets single Analysis data
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/analyses/:analysis_id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  analysis_id: {{testAnalysisAnalysisId}}
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Returned object matches uploaded", () => {
+      expect(resp.tca_time).to.equal("2024-04-18T22:57:32.881000");
+      expect(resp.id).to.equal(bru.getVar("testAnalysisAnalysisId"));
+      expect(resp.event_short_id).to.equal(bru.getVar("testAnalysisEventShortId"));
+  });
+}
+
+docs {
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |All             |Can retrieve all analyses.                                       |
+}

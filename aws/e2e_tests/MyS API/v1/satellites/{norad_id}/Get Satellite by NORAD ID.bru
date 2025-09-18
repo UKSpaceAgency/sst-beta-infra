@@ -1,0 +1,45 @@
+meta {
+  name: Get Satellite by NORAD ID
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/satellites/:norad_id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  norad_id: {{testSatellitePrimaryNorad}}
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Correct satellite retrieved", function () {
+      expect(resp.commonName).to.equal(bru.getEnvVar("testSatellitePrimaryName"));
+  });
+}
+
+docs {
+  ## Description
+  Retrieves basic information of a Satellite.
+  
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |All             |Can retrieve all satellites.                                     |
+}

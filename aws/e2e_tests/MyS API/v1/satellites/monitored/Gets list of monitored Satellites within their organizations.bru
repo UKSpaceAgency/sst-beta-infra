@@ -1,0 +1,50 @@
+meta {
+  name: Gets list of monitored Satellites within their organizations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/satellites/monitored?sort_by=norad_id&limit=1000&offset=0&sort_order=desc
+  body: none
+  auth: bearer
+}
+
+params:query {
+  sort_by: norad_id
+  limit: 1000
+  offset: 0
+  sort_order: desc
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Primary satellite in list", () => {
+      expect(utils.isKeyValuePairInObjectList(resp, "noradId", bru.getVar("testSatellitePrimaryNorad"))).to.be.true;
+  });
+}
+
+docs {
+  ## Description
+  Lists Satellites with organization data.
+  
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |Superuser       |Can list all satellites.                                         |
+  |Analyst         |Can list all satellites.                                         |
+  |Everyone else   |Can list satellites in their organization.                       |
+}

@@ -1,0 +1,60 @@
+meta {
+  name: Post User
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/users
+  body: json
+  auth: apikey
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+auth:apikey {
+  key: Authorization
+  value: {{apiKey}}
+  placement: header
+}
+
+body:json {
+  {
+    "email": "<email>",
+    "organization_id": "<uuid>",
+    "is_active": true,
+    "is_verified": false,
+    "role": "USER",
+    "notification_settings": {},
+    "notification_thresholds": [
+      {
+        "type": "PROBABILITY_OF_COLLISION",
+        "value": "<number>"
+      },
+      {
+        "type": "MEAN_RADIAL_MISS_DISTANCE",
+        "value": "<number>"
+      }
+    ],
+    "first_name": "<string>",
+    "last_name": "<string>",
+    "phone_number": "<string>",
+    "toc_accepted_at": "<dateTime>",
+    "account_details_confirmed_at": "<dateTime>"
+  }
+}
+
+docs {
+  ## Description
+  Creates user.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can create users.                                                |
+  |Organization admin |Can create non-analyst users for his/hers organization.          |
+  |Everyone else      |Can't create users.                                              |
+}

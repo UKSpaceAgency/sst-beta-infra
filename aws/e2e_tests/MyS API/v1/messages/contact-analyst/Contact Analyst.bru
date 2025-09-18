@@ -1,0 +1,43 @@
+meta {
+  name: Contact Analyst
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/messages/contact-analyst
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "eventId": "<string>",
+    "messageContent": "<string>",
+    "ccEmail": "<string>"
+  }
+}
+
+tests {
+  // We do not test this endpoint to avoid spamming analysts
+  //  instead it is used to check auth is working
+  
+  test("Status code 403 with no auth in header", function() {
+      expect(res.getStatus()).to.equal(403);
+  });
+}
+
+docs {
+  ## Description
+  Sends a message to pre-defined analyst email address
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Everyone           |Can send messages.                                               |
+}

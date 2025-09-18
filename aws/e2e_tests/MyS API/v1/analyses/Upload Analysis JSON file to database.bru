@@ -1,0 +1,46 @@
+meta {
+  name: Upload Analysis JSON file to database
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/analyses/
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Content-Type: multipart/form-data
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:multipart-form {
+  json_file: @file(test_analysis_laepogz-erkdrld-dadlkr.json)
+  event_short_id: {{testAnalysisEventShortId}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Message status OK", function () {
+      expect(resp.message[0].status).to.equal("OK");
+  });
+}
+
+docs {
+  ## User Roles
+  |User Role       |Permissions                                                      |
+  |----------------|-----------------------------------------------------------------|
+  |Superuser       |Can create analyses.                                             |
+  |Analyst         |Can create analyses.                                             |
+  |Everyone else   |Can't create analyses.                                           |
+}

@@ -1,0 +1,37 @@
+meta {
+  name: Delete User
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{baseUrl}}/v1/users/:user_id
+  body: none
+  auth: apikey
+}
+
+params:path {
+  user_id: <uuid>
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:apikey {
+  key: Authorization
+  value: {{apiKey}}
+  placement: header
+}
+
+docs {
+  ## Description
+  Soft-deletes user and deletes it permanently from Auth0.
+  
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can delete all users.                                            |
+  |Organization Admin |Can delete users from his/hers organization.                     |
+  |Everyone else      |Can't delete users.                                              |
+}

@@ -1,0 +1,54 @@
+meta {
+  name: Event Data Sources table
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/events/:event_id/data-sources
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~cdm_external_id: {{testCDMId}}
+}
+
+params:path {
+  event_id: {{testEventShortId}}
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Contains both Space Track CDM and UKSA Analysis", function() {
+      expect(resp.spaceTrackCdm[0].dataSource).to.equal("Space-Track CDM");
+      expect(resp.uksaAnalysis[0].dataSource).to.equal("UKSA Analysis");
+  });
+}
+
+docs {
+  ## Description
+  Used for providing Data Sources part of a single Event page.
+  Data is provided in order for primary and secondary object.
+  Optional SpaceTrack CDM ID can be used to provide not the most recent CDM/Analysis but those for selected CDM ID.
+  
+  ## User Roles
+  |User Role       |Permissions                                                          |
+  |----------------|---------------------------------------------------------------------|
+  |Superuser       |Can retrieve data sources for all events.                            |
+  |Analyst         |Can retrieve data sources for all events.                            |
+  |Everyone else   |Can retrieve data sources for events concerning user's organization. |
+}

@@ -1,0 +1,40 @@
+meta {
+  name: Get Ephemeris file metadata
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/ephemeris/:ephemeris_id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  ephemeris_id: {{testEphemerisId}}
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  ## User Roles
+  |User Role          |Permissions                                                      |
+  |-------------------|-----------------------------------------------------------------|
+  |Superuser          |Can retrieve ephemeris files from any organization.              |
+  |Analyst            |Can retrieve ephemeris files from any organization.              |
+  |Operator           |Can retrieve ephemeris files in his organization                 |
+  |Organization Admin |Can retrieve ephemeris files in his organization                 |
+  |Everyone else      |Can't retrieve ephemeris files.                                  |
+}

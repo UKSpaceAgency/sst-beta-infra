@@ -1,0 +1,43 @@
+meta {
+  name: Get Statistics
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/stats
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+tests {
+  const resp = res.getBody();
+  
+  test("Status code 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Satellites count over expected range (> 50000)", function() {
+      expect(resp.satellites_count).to.be.above(50000);
+  });
+  
+  test("Ephemeris count over expected range (> 30)", function() {
+      expect(resp.ephemeris_count).to.be.above(30);
+  });
+  
+  test("Events count over expected range (> 900000)", function() {
+      expect(resp.events_count).to.be.above(900000);
+  });
+  
+  test("CDMs count bigger than event count", function() {
+      expect(resp.cdms_count).to.be.above(resp.events_count);
+  });
+}
