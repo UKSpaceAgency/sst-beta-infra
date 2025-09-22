@@ -165,19 +165,3 @@ resource "aws_ecs_service" "ecs-app" {
 
 }
 
-data "aws_route53_zone" "selected" {
-  name         = "${var.route53_domain}."
-  private_zone = false
-}
-
-resource "aws_route53_record" "app_record_a" {
-  zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "${var.app_name}.${var.route53_domain}"
-  type    = "A"
-
-  alias {
-    name                   = data.aws_lb.selected.dns_name
-    zone_id                = data.aws_lb.selected.zone_id
-    evaluate_target_health = false
-  }
-}

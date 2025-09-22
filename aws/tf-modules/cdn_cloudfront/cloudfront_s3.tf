@@ -21,25 +21,60 @@ resource "aws_cloudfront_origin_access_control" "s3_only_access_control" {
 resource "aws_cloudfront_distribution" "cdn_dist" {
   origin {
     domain_name              = aws_s3_bucket.cdn.bucket_regional_domain_name
-    origin_id                = "cdn-msh"
+    origin_id                = "msh-cdn"
     origin_access_control_id = aws_cloudfront_origin_access_control.s3_only_access_control.id
   }
+
+  origin {
+    domain_name = var.alb_domain_name
+    origin_id   = "msh-alb"
+
+    custom_origin_config {
+      http_port                = 80
+      https_port               = 443
+      origin_protocol_policy   = "https-only"
+      origin_ssl_protocols     = ["TLSv1.2"]
+      origin_read_timeout      = 30
+      origin_keepalive_timeout = 5
+    }
+  }
+
+
 
   default_cache_behavior {
     allowed_methods = [
       "HEAD",
+      "DELETE",
+      "POST",
       "GET",
-      "OPTIONS"
+      "OPTIONS",
+      "PUT",
+      "PATCH"
     ]
     cached_methods = [
       "HEAD",
-      "GET",
-      "OPTIONS"
+      "GET"
     ]
-    target_origin_id       = "cdn-msh"
+    target_origin_id       = "msh-alb"
     viewer_protocol_policy = "redirect-to-https"
+    cache_policy_id        = data.aws_cloudfront_cache_policy.managed-caching-disabled.id
+    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.managed-all-viewer.id
+  }
+
+  ordered_cache_behavior {
+    allowed_methods = [
+      "HEAD",
+      "GET"
+    ]
+    cached_methods = [
+      "HEAD",
+      "GET"
+    ]
+    path_pattern           = "/reentry_event_reports/*"
+    target_origin_id       = "msh-cdn"
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
     cache_policy_id        = data.aws_cloudfront_cache_policy.managed-caching-optimized.id
-    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.managed-cors-security.id
   }
 
   restrictions {
@@ -54,22 +89,32 @@ resource "aws_cloudfront_distribution" "cdn_dist" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  aliases             = ["cdn.${var.route53_domain}"]
+  aliases             = ["${var.cdn_name}.${var.route53_domain}"]
   wait_for_deployment = false
   price_class         = "PriceClass_100"
   enabled             = true
   is_ipv6_enabled     = true
   http_version        = "http2"
-  comment             = "cdn-msh"
-  default_root_object = "index.html"
-
+  comment             = "www-cdn-msh"
 }
 
 
 resource "aws_route53_record" "proper_name" {
   zone_id = var.primary_hosted_zone_id
-  name    = "cdn.${var.route53_domain}"
+  name    = "${var.cdn_name}.${var.route53_domain}"
   type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.cdn_dist.domain_name
+    zone_id                = "Z2FDTNDATAQYW2"
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "proper_name_aaaa" {
+  zone_id = var.primary_hosted_zone_id
+  name    = "${var.cdn_name}.${var.route53_domain}"
+  type    = "AAAA"
 
   alias {
     name                   = aws_cloudfront_distribution.cdn_dist.domain_name
