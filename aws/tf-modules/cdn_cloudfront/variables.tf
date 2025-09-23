@@ -16,3 +16,11 @@ variable "cdn_name" {
   type = string
   default = "www"
 }
+
+variable "bucket_id" {
+  type = string
+}
+
+variable "bucket_regional_name" {
+  type = string
+}

@@ -100,6 +100,3 @@ output "cdn_bucket_id" {
   value = module.cdn.cdn_bucket_id
 }
 
-output "cdn_bucket_arn" {
-  value =module.cdn.cdn_bucket_arn
-}

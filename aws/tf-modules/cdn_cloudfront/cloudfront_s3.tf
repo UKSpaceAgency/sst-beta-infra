@@ -4,10 +4,6 @@ data "aws_cloudfront_response_headers_policy" "managed-cors-security" {
   name = "Managed-CORS-with-preflight-and-SecurityHeadersPolicy"
 }
 
-resource "aws_s3_bucket" "cdn" {
-  bucket        = substr(format("%s-%s", "cdn-msh-${var.env_name}", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
-  force_destroy = true
-}
 
 
 resource "aws_cloudfront_origin_access_control" "s3_only_access_control" {
@@ -20,7 +16,7 @@ resource "aws_cloudfront_origin_access_control" "s3_only_access_control" {
 
 resource "aws_cloudfront_distribution" "cdn_dist" {
   origin {
-    domain_name              = aws_s3_bucket.cdn.bucket_regional_domain_name
+    domain_name              = var.bucket_regional_name
     origin_id                = "msh-cdn"
     origin_access_control_id = aws_cloudfront_origin_access_control.s3_only_access_control.id
   }
@@ -126,6 +122,6 @@ resource "aws_route53_record" "proper_name_aaaa" {
 
 
 resource "aws_s3_bucket_policy" "allow_public_frontend" {
-  bucket = aws_s3_bucket.cdn.id
+  bucket = var.bucket_id
   policy = data.aws_iam_policy_document.public_frontend_policy.json
 }

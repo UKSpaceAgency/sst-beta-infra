@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "public_frontend_policy" {
       "s3:GetObject"
     ]
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.cdn.bucket}/*"
+      "arn:aws:s3:::${var.bucket_id}/reentry_event_reports/*"
     ]
     condition {
       test     = "StringEquals"

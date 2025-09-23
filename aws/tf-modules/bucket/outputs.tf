@@ -25,3 +25,6 @@ output "reentry_bucket_id" {
 output "reentry_bucket_arn" {
   value = aws_s3_bucket.reentry_data_bucket.arn
 }
+output "reentry_bucket_regional_domain_name" {
+  value = aws_s3_bucket.reentry_data_bucket.bucket_regional_domain_name
+}
