@@ -44,10 +44,7 @@ resource "aws_iam_policy" "lambda-iam-policy-geojson" {
           "Effect": "Allow",
           "Resource": [
             data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn,
-            "${data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn}/*",
-            data.terraform_remote_state.stack.outputs.cdn_bucket_arn,
-            "${data.terraform_remote_state.stack.outputs.cdn_bucket_arn}/*"
-
+            "${data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn}/*"
           ]
         }
       ]
@@ -72,7 +69,7 @@ module "geojson_lambda" {
   env_vars = {
     "ENVIRONMENT_NAME" = upper(var.env_name),
     "SOURCE_BUCKET_NAME" = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id,
-    "DESTINATION_BUCKET_NAME" = data.terraform_remote_state.stack.outputs.cdn_bucket_id,
+    "DESTINATION_BUCKET_NAME" = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id,
   }
 }
 
