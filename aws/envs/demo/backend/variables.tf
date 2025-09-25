@@ -10,7 +10,7 @@ variable "app_name" {
 
 variable "image_tag" {
   type    = string
-  default = "6f2cf579eee22f9df0a383edd47f95ff5c9c6ed0"
+  default = "latest-demo"
 }
 
 variable "ses_email_from" {
