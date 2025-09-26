@@ -1,6 +1,3 @@
-data "aws_region" "current" {}
-
-data "aws_caller_identity" "current" {}
 
 
 resource "aws_iam_policy" "lambda-iam-policy-selenium" {
@@ -91,23 +88,12 @@ module "selenium_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "allow_bucket_to_selenium_lambda" {
-  statement_id  = "AllowExecutionFromS3Bucket"
+resource "aws_lambda_permission" "allow_sns_to_selenium_lambda" {
+  statement_id  = "AllowExecutionFromSNSSubscription"
   action        = "lambda:InvokeFunction"
   function_name = module.selenium_lambda.vpc_lambda_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn
-}
-
-resource "aws_s3_bucket_notification" "bucket_notification_selenium_lambda" {
- bucket = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id
-
- lambda_function {
-   lambda_function_arn = module.selenium_lambda.public_lambda_arn
-   events              = ["s3:ObjectCreated:*"]
-   filter_prefix       = "reentry_event_reports/"
-   filter_suffix       = ".json"
- }
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.lambda_dispatcher.arn
 }
 
 
