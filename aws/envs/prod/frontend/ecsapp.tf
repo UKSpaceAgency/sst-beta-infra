@@ -70,7 +70,11 @@ module "frontend" {
     {
       "name" : "NEXT_PUBLIC_SENTRY_DSN",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sentryDsn::"
-    }
+    },
+    {
+      "name" : "NEXT_PUBLIC_FEEDBACK_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:feedbackUrl::"
+    },
   ]
   healthcheck_subpath = "/api/health"
   image_tag           = var.image_tag

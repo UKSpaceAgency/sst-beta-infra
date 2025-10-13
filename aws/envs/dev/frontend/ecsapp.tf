@@ -68,6 +68,10 @@ module "frontend" {
       "name" : "FEEDBACK_URL",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:feedbackUrl::"
     },
+    {
+      "name" : "NEXT_PUBLIC_FEEDBACK_URL",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:feedbackUrl::"
+    },
 
   ]
   healthcheck_subpath = "/api/health"
