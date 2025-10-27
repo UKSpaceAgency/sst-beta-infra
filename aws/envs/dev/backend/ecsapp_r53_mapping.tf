@@ -18,3 +18,15 @@ resource "aws_route53_record" "app_record_a" {
     evaluate_target_health = false
   }
 }
+
+resource "aws_route53_record" "data_cache_record_a" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "data-cache-client.${local.local_r53_domain}"
+  type    = "A"
+
+  alias {
+    name                   = data.aws_lb.selected.dns_name
+    zone_id                = data.aws_lb.selected.zone_id
+    evaluate_target_health = false
+  }
+}

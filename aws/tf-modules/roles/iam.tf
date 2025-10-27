@@ -6,6 +6,10 @@ data "aws_iam_policy" "s3-full-access" {
   name = "AmazonS3FullAccess"
 }
 
+data "aws_iam_policy" "sqs-full-access" {
+  name = "AmazonSQSFullAccess"
+}
+
 resource "aws_iam_policy" "access-secrets-from-ecs" {
   name = "access-secrets-from-ecs"
   policy = jsonencode({
@@ -83,6 +87,10 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_ecs_exec" {
   policy_arn = aws_iam_policy.allow_ecs_command_execution.arn
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_task_role_sqs" {
+  role       = aws_iam_role.ecs-task-role.name
+  policy_arn = data.aws_iam_policy.sqs-full-access.arn
+}
 
 data "aws_iam_policy" "ecs-task-exec" {
   name = "AmazonECSTaskExecutionRolePolicy"
