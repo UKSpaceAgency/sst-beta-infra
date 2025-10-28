@@ -29,7 +29,7 @@ module "data_cache_client" {
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:databaseUrl::"
     }
   ]
-  healthcheck_subpath = "/healtcheck"
+  healthcheck_subpath = "/healthcheck"
   image_tag           = var.image_tag
   route53_domain      = local.local_r53_domain
   enable_ecs_execute  = true
