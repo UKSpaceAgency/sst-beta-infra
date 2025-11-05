@@ -81,3 +81,32 @@ resource "aws_ecr_lifecycle_policy" "lambda_policy_1" {
 }
 EOF
 }
+
+resource "aws_ecr_repository" "data-cache" {
+  name = "data-cache"
+}
+
+resource "aws_ecr_lifecycle_policy" "data_cache_policy" {
+  repository = aws_ecr_repository.data-cache.name
+
+  policy = <<EOF
+{
+    "rules": [
+        {
+            "rulePriority": 1,
+            "description": "Expire images older than 14 days",
+            "selection": {
+                "tagStatus": "untagged",
+                "countType": "sinceImagePushed",
+                "countUnit": "days",
+                "countNumber": 14
+            },
+            "action": {
+                "type": "expire"
+            }
+        }
+    ]
+}
+EOF
+}
+
