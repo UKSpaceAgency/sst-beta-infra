@@ -100,3 +100,6 @@ output "cdn_bucket_id" {
   value = module.cdn.cdn_bucket_id
 }
 
+output "data-cache-client-sqs" {
+  value = module.data-cache-sqs.data-cache-sqs-arn
+}

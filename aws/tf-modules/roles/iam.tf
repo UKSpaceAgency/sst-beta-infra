@@ -10,6 +10,10 @@ data "aws_iam_policy" "sqs-full-access" {
   name = "AmazonSQSFullAccess"
 }
 
+data "aws_iam_policy" "dynamo-full-access" {
+  name = "AmazonDynamoDBFullAccess_v2"
+}
+
 resource "aws_iam_policy" "access-secrets-from-ecs" {
   name = "access-secrets-from-ecs"
   policy = jsonencode({
@@ -91,6 +95,12 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_sqs" {
   role       = aws_iam_role.ecs-task-role.name
   policy_arn = data.aws_iam_policy.sqs-full-access.arn
 }
+
+resource "aws_iam_role_policy_attachment" "ecs_task_role_dynamo" {
+  role       = aws_iam_role.ecs-task-role.name
+  policy_arn = data.aws_iam_policy.dynamo-full-access.arn
+}
+
 
 data "aws_iam_policy" "ecs-task-exec" {
   name = "AmazonECSTaskExecutionRolePolicy"

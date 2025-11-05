@@ -93,3 +93,7 @@ output "s3_reentry_bucket_id" {
 output "s3_reentry_bucket_arn" {
   value = module.s3.reentry_bucket_arn
 }
+
+output "data_cache_bucket_id" {
+  value = module.data-cache.data_cache_bucket_id
+}
