@@ -82,8 +82,8 @@ jobs:
           profile: uksa-mys-dev-env
           aws-region: eu-west-2
 
-      - name: Terraform Back-End init and apply
-        if: ${{ github.event.inputs.invoker == 'backend' }}
+      - name: Terraform Back-End (or Data Cache) init and apply
+        if: ${{ github.event.inputs.invoker == 'backend' || github.event.inputs.invoker == 'data-cache'  }}
         run: |
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
           terraform init
