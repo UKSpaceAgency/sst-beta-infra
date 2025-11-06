@@ -4,7 +4,7 @@ module "data_cache_producer" {
   alb_name               = data.terraform_remote_state.stack.outputs.alb_name
   app_alb_priority       = 20
   app_cpu                = 256
-  app_instances_num      = 0
+  app_instances_num      = 1
   app_mem                = 512
   app_name               = "data-cache-producer"
   ecr_app_name           = "data-cache"
@@ -20,7 +20,7 @@ module "data_cache_producer" {
   env_vars = [
     { "name" : "APP_NAME", "value" : "Data Cache Producer (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
-    { "name" : "BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.data_cache_bucket_id },
+    { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.data_cache_bucket_id },
   ]
   secret_env_vars = [
     {
