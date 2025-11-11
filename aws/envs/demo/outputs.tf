@@ -94,3 +94,7 @@ output "s3_reentry_bucket_id" {
 output "s3_reentry_bucket_arn" {
   value = module.s3.reentry_bucket_arn
 }
+
+output "data-cache-client-sqs" {
+  value = module.data-cache-sqs.data-cache-sqs-arn
+}

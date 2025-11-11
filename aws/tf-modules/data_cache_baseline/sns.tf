@@ -35,6 +35,25 @@ data "aws_iam_policy_document" "topic_policy" {
       values   = ["arn:aws:sqs:eu-west-2:915338536460:data-cache-*"]
     }
   }
+
+  statement {
+    effect = "Allow"
+    sid = "AllowSubscribeFromDevDemo"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["469816118475"]
+    }
+
+    actions   = ["SNS:Subscribe"]
+    resources = ["arn:aws:sns:*:*:data-cache-${var.env_name}"]
+
+    condition {
+      test     = "StringLike"
+      variable = "sns:Endpoint"
+      values   = ["arn:aws:sqs:eu-west-2:469816118475:data-cache-*"]
+    }
+  }
 }
 
 resource "aws_sns_topic" "data-cache-topic-dispatcher" {
