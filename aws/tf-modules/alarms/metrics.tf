@@ -9,18 +9,18 @@ locals {
   twenty_five_hrs_in_seconds    = 60 * 60 * 25
 }
 
-module "space_track_no_cdms" {
-  source                 = "../alarm_metric"
-  cluster_log_group_name = var.cluster_log_group_name
-  env_name               = var.env_name
-  alarm_name             = "No CDMs have been ingested in last 6 hours"
-  alarm_description      = "No CDMs have been ingested in last 6 hours"
-  metric_filter_name     = "cdms_iterator_yielding_cdm"
-  metric_filter_pattern  = "cdms_iterator yielding cdm"
-  metric_name            = "ingested-cdms"
-  metric_namespace       = local.space_track_namespace
-  period_in_seconds      = local.six_hours_in_seconds
-}
+# module "space_track_no_cdms" {
+#   source                 = "../alarm_metric"
+#   cluster_log_group_name = var.cluster_log_group_name
+#   env_name               = var.env_name
+#   alarm_name             = "No CDMs have been ingested in last 6 hours"
+#   alarm_description      = "No CDMs have been ingested in last 6 hours"
+#   metric_filter_name     = "cdms_iterator_yielding_cdm"
+#   metric_filter_pattern  = "cdms_iterator yielding cdm"
+#   metric_name            = "ingested-cdms"
+#   metric_namespace       = local.space_track_namespace
+#   period_in_seconds      = local.six_hours_in_seconds
+# }
 
 module "esa_discos_ingestion_finished" {
   source                 = "../alarm_metric"
