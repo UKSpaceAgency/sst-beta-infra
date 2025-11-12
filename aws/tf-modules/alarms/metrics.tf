@@ -56,7 +56,7 @@ module "space_track_satellites_ingestion_finished" {
   alarm_name             = "No ingestion of Satellites from Space-Track has been completed in last 25 hours"
   alarm_description      = "No ingestion of Satellites from Space-Track has been completed in last 25 hours"
   metric_filter_name     = "space-track-satellites-ingestion-finished"
-  metric_filter_pattern  = "%Finished pulling Satellites from SpaceTrack%"
+  metric_filter_pattern  = "%Finished pulling pack of satellites from SpaceTrack%"
   metric_name            = "satellites-ingestion-finished"
   metric_namespace       = local.space_track_namespace
   period_in_seconds      = local.twenty_five_hrs_in_seconds
