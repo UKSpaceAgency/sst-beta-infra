@@ -27,6 +27,10 @@ module "data_cache_client" {
     {
       "name" : "DATABASE_URL",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:databaseUrl::"
+    },
+    {
+      "name" : "HASHID_SALT",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:hashSaltId::"
     }
   ]
   healthcheck_subpath = "/healthcheck"
