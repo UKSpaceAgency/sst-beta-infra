@@ -57,6 +57,21 @@ data "aws_iam_policy_document" "data_cache_bucket_policy" {
       "${aws_s3_bucket.data_cache_bucket.arn}/*"
     ]
   }
+
+  statement {
+    sid = "AllowGetFromProdAccount"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::744996504263:role/ecs-task-role-for-prod"]
+    }
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${aws_s3_bucket.data_cache_bucket.arn}/*"
+    ]
+  }
 }
 
 resource "aws_s3_bucket_policy" "data_cache_bucket_policy" {
