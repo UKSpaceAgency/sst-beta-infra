@@ -3,9 +3,9 @@ module "data_cache_client" {
   env_name               = var.env_name
   alb_name               = data.terraform_remote_state.stack.outputs.alb_name
   app_alb_priority       = 15
-  app_cpu                = 256
+  app_cpu                = 512
   app_instances_num      = 1
-  app_mem                = 512
+  app_mem                = 1024
   app_name               = "data-cache-client"
   ecr_app_name           = "backend"
   app_port_num           = 8080
@@ -37,4 +37,89 @@ module "data_cache_client" {
   image_tag           = var.image_tag
   route53_domain      = local.local_r53_domain
   enable_ecs_execute  = true
+}
+
+resource "aws_appautoscaling_target" "ecs_service_scaling" {
+  service_namespace  = "ecs"
+  scalable_dimension = "ecs:service:DesiredCount"
+  resource_id        = "service/mys-${var.env_name}/data-cache-client"
+
+  min_capacity = 0   # allow scale-to-zero
+  max_capacity = 1   # default
+}
+
+resource "aws_appautoscaling_policy" "scale_out" {
+  name               = "ecs-scale-out-on-sqs"
+  policy_type        = "StepScaling"
+  service_namespace  = aws_appautoscaling_target.ecs_service_scaling.service_namespace
+  resource_id        = aws_appautoscaling_target.ecs_service_scaling.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_service_scaling.scalable_dimension
+
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 60
+    metric_aggregation_type = "Maximum"
+
+    step_adjustment {
+      metric_interval_lower_bound = 0
+      scaling_adjustment          = 1  # add 1 task
+    }
+  }
+}
+
+resource "aws_appautoscaling_policy" "scale_in" {
+  name               = "ecs-scale-in-on-empty-sqs"
+  policy_type        = "StepScaling"
+  service_namespace  = aws_appautoscaling_target.ecs_service_scaling.service_namespace
+  resource_id        = aws_appautoscaling_target.ecs_service_scaling.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_service_scaling.scalable_dimension
+
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 300  # 5 minutes cooldown to avoid flapping
+    metric_aggregation_type = "Maximum"
+
+    step_adjustment {
+      metric_interval_upper_bound = 0
+      scaling_adjustment          = -1 # remove 1 task
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_empty_5m" {
+  alarm_name          = "sqs-empty-5min-scale-in-ecs"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesVisible"
+  statistic           = "Maximum"
+  period              = 60              # 1 minute
+  evaluation_periods  = 5              # 5 × 1min = 5 minutes
+  threshold           = 0
+  comparison_operator = "LessThanOrEqualToThreshold"
+
+  dimensions = {
+    QueueName = "data-cache-client-${var.env_name}"
+  }
+
+  alarm_actions = [
+    aws_appautoscaling_policy.scale_in.arn
+  ]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_has_messages" {
+  alarm_name          = "sqs-has-messages-scale-out-ecs"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesVisible"
+  statistic           = "Maximum"
+  period              = 60             # 1 minute
+  evaluation_periods  = 1
+  threshold           = 1
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+
+  dimensions = {
+    QueueName = "data-cache-client-${var.env_name}"
+  }
+
+  alarm_actions = [
+    aws_appautoscaling_policy.scale_out.arn
+  ]
 }
