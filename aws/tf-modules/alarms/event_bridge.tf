@@ -5,6 +5,17 @@ resource "aws_cloudwatch_event_rule" "on_alarm_state_change" {
   event_pattern = jsonencode({
     "source" : ["aws.cloudwatch"],
     "detail-type" : ["CloudWatch Alarm State Change"]
+    "detail" = {
+      "alarmName": {
+        "or": [
+          { "prefix": "No ingestion" },
+          { "prefix": "RDS" },
+          { "prefix": "No sending of Notifications" },
+          { "prefix": "Conjunctions bucket malware" },
+          { "prefix": "Re-entries bucket malware" }
+        ]
+      }
+    }
   })
 }
 
