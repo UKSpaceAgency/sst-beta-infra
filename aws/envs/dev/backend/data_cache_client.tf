@@ -88,16 +88,55 @@ resource "aws_appautoscaling_policy" "scale_in" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs_empty_5m" {
   alarm_name          = "sqs-empty-5min-scale-in-ecs"
-  namespace           = "AWS/SQS"
-  metric_name         = "ApproximateNumberOfMessagesVisible"
-  statistic           = "Maximum"
-  period              = 60              # 1 minute
-  evaluation_periods  = 5              # 5 × 1min = 5 minutes
-  threshold           = 0
   comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = 5          # 5 × 60s = 5 minutes
+  threshold           = 0
+  treat_missing_data  = "notBreaching"
 
-  dimensions = {
-    QueueName = "data-cache-client-${var.env_name}"
+  # This alarm is now based on metric math, so we use metric_query blocks
+  # instead of top-level namespace/metric_name/statistic/period.
+
+  # m1 = ApproximateNumberOfMessagesVisible (backlog)
+  metric_query {
+    id          = "m1"
+    return_data = false
+
+    metric {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesVisible"
+      stat        = "Maximum"
+      period      = 60
+
+      dimensions = {
+        QueueName = "data-cache-client-${var.env_name}"
+      }
+    }
+  }
+
+  # m2 = ApproximateNumberOfMessagesNotVisible (in-flight)
+  metric_query {
+    id          = "m2"
+    return_data = false
+
+    metric {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesNotVisible"
+      stat        = "Maximum"
+      period      = 60
+
+      dimensions = {
+        QueueName = "data-cache-client-${var.env_name}"
+      }
+    }
+  }
+
+  # e1 = m1 + m2  → total messages (waiting + in-flight)
+  # Alarm when this stays == 0 for 10 minutes
+  metric_query {
+    id          = "e1"
+    expression  = "m1 + m2"
+    label       = "TotalMessagesVisibleAndNotVisible"
+    return_data = true
   }
 
   alarm_actions = [
