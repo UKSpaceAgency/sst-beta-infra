@@ -27,13 +27,13 @@ module "esa_discos_ingestion_finished" {
   source                 = "../alarm_metric"
   cluster_log_group_name = var.cluster_log_group_name
   env_name               = var.env_name
-  alarm_name             = "No ingestion of Satellites from ESA-Discos has been completed in last 14 hours"
-  alarm_description      = "No ingestion of Satellites from ESA-Discos has been completed in last 14 hours"
+  alarm_name             = "No ingestion of Satellites from ESA-Discos has been completed in last 25 hours"
+  alarm_description      = "No ingestion of Satellites from ESA-Discos has been completed in last 25 hours"
   metric_filter_name     = "esa-discos-ingestion-finished"
   metric_filter_pattern  = "Finished pulling satellite data from ESA Discos"
   metric_name            = "ingestion-finished"
   metric_namespace       = local.esa_discos_namespace
-  period_in_seconds      = local.fourteen_hours_in_seconds
+  period_in_seconds      = local.twenty_five_hrs_in_seconds
 }
 
 module "notifications_sending_finished" {

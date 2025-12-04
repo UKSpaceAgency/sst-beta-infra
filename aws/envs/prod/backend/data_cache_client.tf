@@ -3,13 +3,13 @@ module "data_cache_client" {
   env_name               = var.env_name
   alb_name               = data.terraform_remote_state.stack.outputs.alb_name
   app_alb_priority       = 15
-  app_cpu                = 256
+  app_cpu                = 512
   app_instances_num      = 1
-  app_mem                = 512
+  app_mem                = 1024
   app_name               = "data-cache-client"
   ecr_app_name           = "backend"
   app_port_num           = 8080
-  default_capacity_provider = "FARGATE_SPOT"
+  default_capacity_provider = "FARGATE"
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
   default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id
@@ -37,4 +37,9 @@ module "data_cache_client" {
   image_tag           = var.image_tag
   route53_domain      = local.local_r53_domain
   enable_ecs_execute  = true
+}
+
+module "data_cache_scaling" {
+  source = "../../../tf-modules/data-cache-scaling"
+  env_name = var.env_name
 }
