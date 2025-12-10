@@ -9,7 +9,7 @@ module "backend" {
   app_name               = var.app_name
   ecr_app_name           = "backend"
   app_port_num           = 8080
-  default_capacity_provider = "FARGATE_SPOT"
+  default_capacity_provider = "FARGATE"
   awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
   custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
   default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id
