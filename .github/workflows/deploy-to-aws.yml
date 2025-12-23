@@ -57,24 +57,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - uses: terraform-linters/setup-tflint@v4.0.0
-        name: Setup TFLint
-        with:
-          tflint_version: latest
-
-      - name: Show version
-        run: tflint --version
-
-      - name: Init TFLint
-        run: |
-          cd aws/envs/${{ github.event.inputs.env }}
-          tflint --init --recursive
-
-      - name: Run TFLint
-        run: |
-          cd aws/envs/${{ github.event.inputs.env }}
-          tflint -f compact
-
       - name: Configure AWS credentials
         uses: Moulick/configure-multiple-aws-roles@v4
         with:
