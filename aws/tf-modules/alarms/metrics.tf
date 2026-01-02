@@ -2,6 +2,7 @@ locals {
   space_track_namespace         = "space-track"
   esa_discos_namespace          = "esa-discos"
   notifications_namespace       = "notifications"
+  three_hours_in_seconds        = 60 * 60 * 3
   six_hours_in_seconds          = 60 * 60 * 6
   six_and_half_hours_in_seconds = 60 * 60 * 6.5
   fourteen_hours_in_seconds     = 60 * 60 * 14
@@ -10,18 +11,18 @@ locals {
   twelve_hrs_in_seconds         = 60 * 60 * 12
 }
 
-# module "space_track_no_cdms" {
-#   source                 = "../alarm_metric"
-#   cluster_log_group_name = var.cluster_log_group_name
-#   env_name               = var.env_name
-#   alarm_name             = "No CDMs have been ingested in last 6 hours"
-#   alarm_description      = "No CDMs have been ingested in last 6 hours"
-#   metric_filter_name     = "cdms_iterator_yielding_cdm"
-#   metric_filter_pattern  = "cdms_iterator yielding cdm"
-#   metric_name            = "ingested-cdms"
-#   metric_namespace       = local.space_track_namespace
-#   period_in_seconds      = local.six_hours_in_seconds
-# }
+module "space_track_no_cdms" {
+  source                 = "../alarm_metric"
+  cluster_log_group_name = var.cluster_log_group_name
+  env_name               = var.env_name
+  alarm_name             = "No CDMs have been ingested in last 6 hours"
+  alarm_description      = "No CDMs have been ingested in last 6 hours"
+  metric_filter_name     = "cdms_iterator_yielding_cdm"
+  metric_filter_pattern  = "cdms_iterator yielding cdm"
+  metric_name            = "ingested-cdms"
+  metric_namespace       = local.space_track_namespace
+  period_in_seconds      = local.three_hours_in_seconds
+}
 
 module "esa_discos_ingestion_finished" {
   source                 = "../alarm_metric"
@@ -46,7 +47,7 @@ module "notifications_sending_finished" {
   metric_filter_pattern  = "%Finished sending notifications%"
   metric_name            = "sending-finished"
   metric_namespace       = local.notifications_namespace
-  period_in_seconds      = local.one_day_in_seconds
+  period_in_seconds      = local.twenty_five_hrs_in_seconds
   default_statistic      = "Maximum"
 }
 
@@ -88,6 +89,6 @@ module "space_track_tips_ingestion_finished" {
   metric_filter_pattern  = "%Finished pulling TIPs from Space-Track%"
   metric_name            = "tips-ingestion-finished"
   metric_namespace       = local.space_track_namespace
-  period_in_seconds      = local.twelve_hrs_in_seconds
+  period_in_seconds      = local.twenty_five_hrs_in_seconds
   default_statistic      = "Maximum"
 }
