@@ -17,7 +17,7 @@ module "data_cache_client" {
   ecs_execution_role_arn = data.terraform_remote_state.stack.outputs.ecs_execution_role_arn
   ecs_task_role_arn      = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
   public_subnet_ids      = data.terraform_remote_state.stack.outputs.public_subnet_ids
-  custom_command = ["poetry", "run", "uvicorn", "--host=0.0.0.0", "--port=8080", "app.cache_consumer.main:app", "--workers", "1"]
+  custom_command = ["uv", "run", "uvicorn", "--host=0.0.0.0", "--port=8080", "app.cache_consumer.main:app", "--workers", "1"]
   env_vars = [
     { "name" : "APP_NAME", "value" : "Data Cache Client (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
