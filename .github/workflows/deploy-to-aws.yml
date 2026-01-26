@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: Deploy to AWS env ${{ github.event.inputs.env }}
 on:
   workflow_dispatch:
     inputs:
@@ -39,7 +39,7 @@ jobs:
 
   deploy:
     needs: called_with_by
-    name: Deploy to AWS
+    name: Deploy to AWS env ${{ github.event.inputs.env }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.env }}
