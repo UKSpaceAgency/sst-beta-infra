@@ -11,6 +11,7 @@ resource "aws_cloudwatch_event_rule" "on_alarm_state_change" {
         { prefix = "RDS" },
         { prefix = "No sending of Notifications" },
         { prefix = "Conjunctions bucket malware" },
+        { prefix = "Data Cache" },
         { prefix = "Re-entries bucket malware" }
       ]
     }
