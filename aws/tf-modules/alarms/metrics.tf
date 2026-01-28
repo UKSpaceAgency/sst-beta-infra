@@ -8,33 +8,21 @@ locals {
   fourteen_hours_in_seconds     = 60 * 60 * 14
   one_day_in_seconds            = 60 * 60 * 24 #24hrs
   twenty_five_hrs_in_seconds    = 60 * 60 * 25
+  twenty_eight_hrs_in_seconds    = 60 * 60 * 28
   twelve_hrs_in_seconds         = 60 * 60 * 12
 }
-
-# module "space_track_no_cdms" {
-#   source                 = "../alarm_metric"
-#   cluster_log_group_name = var.cluster_log_group_name
-#   env_name               = var.env_name
-#   alarm_name             = "No CDMs have been ingested in last 12 hours"
-#   alarm_description      = "No CDMs have been ingested in last 12 hours"
-#   metric_filter_name     = "cdms_iterator_yielding_cdm"
-#   metric_filter_pattern  = "cdms_iterator yielding cdm"
-#   metric_name            = "ingested-cdms"
-#   metric_namespace       = local.space_track_namespace
-#   period_in_seconds      = local.twelve_hrs_in_seconds
-# }
 
 module "esa_discos_ingestion_finished" {
   source                 = "../alarm_metric"
   cluster_log_group_name = var.cluster_log_group_name
   env_name               = var.env_name
-  alarm_name             = "No ingestion of Satellites from ESA-Discos has been completed in last 25 hours"
-  alarm_description      = "No ingestion of Satellites from ESA-Discos has been completed in last 25 hours"
+  alarm_name             = "No ingestion of Satellites from ESA-Discos has been completed in last 28 hours"
+  alarm_description      = "No ingestion of Satellites from ESA-Discos has been completed in last 28 hours"
   metric_filter_name     = "esa-discos-ingestion-finished"
   metric_filter_pattern  = "Finished pulling satellite data from ESA Discos"
   metric_name            = "ingestion-finished"
   metric_namespace       = local.esa_discos_namespace
-  period_in_seconds      = local.twenty_five_hrs_in_seconds
+  period_in_seconds      = local.twenty_eight_hrs_in_seconds
 }
 
 module "notifications_sending_finished" {
@@ -55,13 +43,13 @@ module "space_track_satellites_ingestion_finished" {
   source                 = "../alarm_metric"
   cluster_log_group_name = var.cluster_log_group_name
   env_name               = var.env_name
-  alarm_name             = "No ingestion of Satellites from Space-Track has been completed in last 25 hours"
-  alarm_description      = "No ingestion of Satellites from Space-Track has been completed in last 25 hours"
+  alarm_name             = "No ingestion of Satellites from Space-Track has been completed in last 28 hours"
+  alarm_description      = "No ingestion of Satellites from Space-Track has been completed in last 28 hours"
   metric_filter_name     = "space-track-satellites-ingestion-finished"
   metric_filter_pattern  = "%Finished pulling pack of satellites from SpaceTrack%"
   metric_name            = "satellites-ingestion-finished"
   metric_namespace       = local.space_track_namespace
-  period_in_seconds      = local.twenty_five_hrs_in_seconds
+  period_in_seconds      = local.twenty_eight_hrs_in_seconds
   default_statistic      = "Maximum"
 }
 
