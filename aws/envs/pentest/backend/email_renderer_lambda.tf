@@ -19,6 +19,22 @@ resource "aws_iam_role" "lambda-assume-role-email-renderer" {
   )
 }
 
+resource "aws_iam_role_policy" "ecs_task_invoke_email_renderer" {
+  name = "ecs-task-invoke-email-renderer"
+  role = "ecs-task-role-for-${var.env_name}"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "lambda:InvokeFunction"
+        Resource = module.email_renderer_lambda.public_lambda_arn
+      }
+    ]
+  })
+}
+
 module "email_renderer_lambda" {
   source               = "../../../tf-modules/lambda_in_public"
   env_name             = var.env_name
