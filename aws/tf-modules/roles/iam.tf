@@ -101,6 +101,22 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_dynamo" {
   policy_arn = data.aws_iam_policy.dynamo-full-access.arn
 }
 
+resource "aws_iam_role_policy" "ecs_task_role_lambda_invoke" {
+  name = "ecs-task-lambda-invoke"
+  role = aws_iam_role.ecs-task-role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "lambda:InvokeFunction"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 
 data "aws_iam_policy" "ecs-task-exec" {
   name = "AmazonECSTaskExecutionRolePolicy"
