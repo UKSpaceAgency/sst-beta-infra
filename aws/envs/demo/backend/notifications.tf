@@ -27,6 +27,7 @@ module "notifications_worker" {
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
     { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
     { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
+    { "name" : "APP_EMAIL_RENDERER_LAMBDA_NAME", "value" : module.email_renderer_lambda.public_lambda_name },
   ]
   secret_env_vars = [
     {
