@@ -1026,7 +1026,7 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"objectType\",\r",
+													"    \"object_type\",\r",
 													"    \"count\"\r",
 													"];\r",
 													"\r",
@@ -1682,10 +1682,10 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"commonName\",\r",
+													"    \"common_name\",\r",
 													"    \"norad_id\",\r",
 													"    \"events\",\r",
-													"    \"collision_probabilityRange\",\r",
+													"    \"collision_probability_range\",\r",
 													"    \"organization_name\"\r",
 													"];\r",
 													"\r",
@@ -1821,7 +1821,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"commonName\": \"<string>\",\n    \"norad_id\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"organization_name\": \"<string>\"\n  },\n  {\n    \"commonName\": \"<string>\",\n    \"norad_id\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"organization_name\": \"<string>\"\n  }\n]"
+											"body": "[\n  {\n    \"common_name\": \"<string>\",\n    \"norad_id\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probability_range\": \"<string>\",\n    \"organization_name\": \"<string>\"\n  },\n  {\n    \"common_name\": \"<string>\",\n    \"norad_id\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probability_range\": \"<string>\",\n    \"organization_name\": \"<string>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -1968,7 +1968,7 @@
 													"    \"name\",\r",
 													"    \"id\",\r",
 													"    \"events\",\r",
-													"    \"collision_probabilityRange\"\r",
+													"    \"collision_probability_range\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -2092,7 +2092,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
+											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probability_range\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probability_range\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -2226,7 +2226,7 @@
 													"    \"name\",\r",
 													"    \"id\",\r",
 													"    \"events\",\r",
-													"    \"collision_probabilityRange\"\r",
+													"    \"collision_probability_range\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -2366,7 +2366,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
+											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probability_range\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probability_range\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -2845,7 +2845,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Correct satellite retrieved\", function () {\r",
-													"    pm.expect(resp.commonName).to.equal(pm.environment.get(\"testSatellitePrimaryName\"));\r",
+													"    pm.expect(resp.common_name).to.equal(pm.environment.get(\"testSatellitePrimaryName\"));\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -2918,7 +2918,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"id\": \"<uuid>\",\n  \"isMonitored\": \"<boolean>\",\n  \"commonName\": \"<string>\",\n  \"international_designator\": \"<string>\",\n  \"norad_id\": \"<string>\",\n  \"esaUpdateTime\": \"<dateTime>\",\n  \"esa_discos_id\": \"<string>\",\n  \"objectType\": \"<string>\",\n  \"licenseCountry\": \"<string>\",\n  \"launchDate\": \"<string>\",\n  \"launchSite\": \"<string>\",\n  \"apogee\": \"<string>\",\n  \"perigee\": \"<string>\",\n  \"inclination\": \"<number>\",\n  \"period\": \"<number>\",\n  \"organization_id\": \"<uuid>\",\n  \"mass\": \"<number>\",\n  \"height\": \"<number>\",\n  \"depth\": \"<number>\",\n  \"width\": \"<number>\",\n  \"diameter\": \"<number>\",\n  \"span\": \"<number>\",\n  \"crossSectionMin\": \"<number>\",\n  \"crossSectionAvg\": \"<number>\",\n  \"crossSectionMax\": \"<number>\",\n  \"shape\": \"<string>\",\n  \"objectClass\": \"<string>\"\n}"
+											"body": "{\n  \"id\": \"<uuid>\",\n  \"isMonitored\": \"<boolean>\",\n  \"common_name\": \"<string>\",\n  \"international_designator\": \"<string>\",\n  \"norad_id\": \"<string>\",\n  \"esaUpdateTime\": \"<dateTime>\",\n  \"esa_discos_id\": \"<string>\",\n  \"objectType\": \"<string>\",\n  \"licenseCountry\": \"<string>\",\n  \"launchDate\": \"<string>\",\n  \"launchSite\": \"<string>\",\n  \"apogee\": \"<string>\",\n  \"perigee\": \"<string>\",\n  \"inclination\": \"<number>\",\n  \"period\": \"<number>\",\n  \"organization_id\": \"<uuid>\",\n  \"mass\": \"<number>\",\n  \"height\": \"<number>\",\n  \"depth\": \"<number>\",\n  \"width\": \"<number>\",\n  \"diameter\": \"<number>\",\n  \"span\": \"<number>\",\n  \"crossSectionMin\": \"<number>\",\n  \"crossSectionAvg\": \"<number>\",\n  \"crossSectionMax\": \"<number>\",\n  \"shape\": \"<string>\",\n  \"objectClass\": \"<string>\"\n}"
 										},
 										{
 											"name": "Not found",
@@ -3016,7 +3016,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Primary satellite in list\", () => {\r",
-													"    pm.expect(utils.isKeyValuePairInObjectList(resp, \"commonName\", pm.environment.get(\"testSatellitePrimaryName\"))).to.be.true;\r",
+													"    pm.expect(utils.isKeyValuePairInObjectList(resp, \"common_name\", pm.environment.get(\"testSatellitePrimaryName\"))).to.be.true;\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -3131,7 +3131,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"commonName\": \"<string>\",\n    \"international_designator\": \"<string>\",\n    \"metadata\": {},\n    \"norad_id\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esa_discos_id\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organization_id\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"commonName\": \"<string>\",\n    \"international_designator\": \"<string>\",\n    \"metadata\": {},\n    \"norad_id\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esa_discos_id\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organization_id\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  }\n]"
+											"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"common_name\": \"<string>\",\n    \"international_designator\": \"<string>\",\n    \"metadata\": {},\n    \"norad_id\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esa_discos_id\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organization_id\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"common_name\": \"<string>\",\n    \"international_designator\": \"<string>\",\n    \"metadata\": {},\n    \"norad_id\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esa_discos_id\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organization_id\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -3369,7 +3369,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"norad_id\": \"<string>\",\n    \"commonName\": \"<string>\",\n    \"organization_id\": \"<uuid>\",\n    \"international_designator\": \"<string>\",\n    \"organization_name\": \"<string>\",\n    \"esa_discos_id\": \"<string>\"\n  },\n  {\n    \"norad_id\": \"<string>\",\n    \"commonName\": \"<string>\",\n    \"organization_id\": \"<uuid>\",\n    \"international_designator\": \"<string>\",\n    \"organization_name\": \"<string>\",\n    \"esa_discos_id\": \"<string>\"\n  }\n]"
+											"body": "[\n  {\n    \"norad_id\": \"<string>\",\n    \"common_name\": \"<string>\",\n    \"organization_id\": \"<uuid>\",\n    \"international_designator\": \"<string>\",\n    \"organization_name\": \"<string>\",\n    \"esa_discos_id\": \"<string>\"\n  },\n  {\n    \"norad_id\": \"<string>\",\n    \"common_name\": \"<string>\",\n    \"organization_id\": \"<uuid>\",\n    \"international_designator\": \"<string>\",\n    \"organization_name\": \"<string>\",\n    \"esa_discos_id\": \"<string>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
