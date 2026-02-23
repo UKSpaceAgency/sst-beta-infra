@@ -1004,7 +1004,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"email\": \"<email>\",\n    \"isActive\": \"<boolean>\",\n    \"organizationId\": \"<uuid>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"role\": \"USER\",\n    \"accountDetailsConfirmedAt\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"email\": \"<email>\",\n    \"isActive\": \"<boolean>\",\n    \"organizationId\": \"<uuid>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"role\": \"USER\",\n    \"accountDetailsConfirmedAt\": \"<dateTime>\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"email\": \"<email>\",\n    \"is_active\": \"<boolean>\",\n    \"organization_id\": \"<uuid>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"role\": \"USER\",\n    \"accountDetailsConfirmedAt\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"email\": \"<email>\",\n    \"is_active\": \"<boolean>\",\n    \"organization_id\": \"<uuid>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"role\": \"USER\",\n    \"accountDetailsConfirmedAt\": \"<dateTime>\"\n  }\n]"
 								}
 							]
 						}
@@ -1683,10 +1683,10 @@
 													"\r",
 													"const expected_keys = [\r",
 													"    \"commonName\",\r",
-													"    \"noradId\",\r",
+													"    \"norad_id\",\r",
 													"    \"events\",\r",
-													"    \"collisionProbabilityRange\",\r",
-													"    \"organizationName\"\r",
+													"    \"collision_probabilityRange\",\r",
+													"    \"organization_name\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -1821,7 +1821,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"commonName\": \"<string>\",\n    \"noradId\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collisionProbabilityRange\": \"<string>\",\n    \"organizationName\": \"<string>\"\n  },\n  {\n    \"commonName\": \"<string>\",\n    \"noradId\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collisionProbabilityRange\": \"<string>\",\n    \"organizationName\": \"<string>\"\n  }\n]"
+											"body": "[\n  {\n    \"commonName\": \"<string>\",\n    \"norad_id\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"organization_name\": \"<string>\"\n  },\n  {\n    \"commonName\": \"<string>\",\n    \"norad_id\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"organization_name\": \"<string>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -1968,7 +1968,7 @@
 													"    \"name\",\r",
 													"    \"id\",\r",
 													"    \"events\",\r",
-													"    \"collisionProbabilityRange\"\r",
+													"    \"collision_probabilityRange\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -2092,7 +2092,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collisionProbabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collisionProbabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
+											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -2226,7 +2226,7 @@
 													"    \"name\",\r",
 													"    \"id\",\r",
 													"    \"events\",\r",
-													"    \"collisionProbabilityRange\"\r",
+													"    \"collision_probabilityRange\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -2366,7 +2366,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collisionProbabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collisionProbabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
+											"body": "[\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"events\": \"<integer>\",\n    \"collision_probabilityRange\": \"<string>\",\n    \"id\": \"<uuid>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -2918,7 +2918,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"id\": \"<uuid>\",\n  \"isMonitored\": \"<boolean>\",\n  \"commonName\": \"<string>\",\n  \"internationalDesignator\": \"<string>\",\n  \"noradId\": \"<string>\",\n  \"esaUpdateTime\": \"<dateTime>\",\n  \"esaDiscosId\": \"<string>\",\n  \"objectType\": \"<string>\",\n  \"licenseCountry\": \"<string>\",\n  \"launchDate\": \"<string>\",\n  \"launchSite\": \"<string>\",\n  \"apogee\": \"<string>\",\n  \"perigee\": \"<string>\",\n  \"inclination\": \"<number>\",\n  \"period\": \"<number>\",\n  \"organizationId\": \"<uuid>\",\n  \"mass\": \"<number>\",\n  \"height\": \"<number>\",\n  \"depth\": \"<number>\",\n  \"width\": \"<number>\",\n  \"diameter\": \"<number>\",\n  \"span\": \"<number>\",\n  \"crossSectionMin\": \"<number>\",\n  \"crossSectionAvg\": \"<number>\",\n  \"crossSectionMax\": \"<number>\",\n  \"shape\": \"<string>\",\n  \"objectClass\": \"<string>\"\n}"
+											"body": "{\n  \"id\": \"<uuid>\",\n  \"isMonitored\": \"<boolean>\",\n  \"commonName\": \"<string>\",\n  \"international_designator\": \"<string>\",\n  \"norad_id\": \"<string>\",\n  \"esaUpdateTime\": \"<dateTime>\",\n  \"esa_discos_id\": \"<string>\",\n  \"objectType\": \"<string>\",\n  \"licenseCountry\": \"<string>\",\n  \"launchDate\": \"<string>\",\n  \"launchSite\": \"<string>\",\n  \"apogee\": \"<string>\",\n  \"perigee\": \"<string>\",\n  \"inclination\": \"<number>\",\n  \"period\": \"<number>\",\n  \"organization_id\": \"<uuid>\",\n  \"mass\": \"<number>\",\n  \"height\": \"<number>\",\n  \"depth\": \"<number>\",\n  \"width\": \"<number>\",\n  \"diameter\": \"<number>\",\n  \"span\": \"<number>\",\n  \"crossSectionMin\": \"<number>\",\n  \"crossSectionAvg\": \"<number>\",\n  \"crossSectionMax\": \"<number>\",\n  \"shape\": \"<string>\",\n  \"objectClass\": \"<string>\"\n}"
 										},
 										{
 											"name": "Not found",
@@ -3131,7 +3131,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"commonName\": \"<string>\",\n    \"internationalDesignator\": \"<string>\",\n    \"metadata\": {},\n    \"noradId\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esaDiscosId\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organizationId\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"commonName\": \"<string>\",\n    \"internationalDesignator\": \"<string>\",\n    \"metadata\": {},\n    \"noradId\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esaDiscosId\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organizationId\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  }\n]"
+											"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"commonName\": \"<string>\",\n    \"international_designator\": \"<string>\",\n    \"metadata\": {},\n    \"norad_id\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esa_discos_id\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organization_id\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"isMonitored\": \"<boolean>\",\n    \"commonName\": \"<string>\",\n    \"international_designator\": \"<string>\",\n    \"metadata\": {},\n    \"norad_id\": \"<string>\",\n    \"esaUpdateTime\": \"<dateTime>\",\n    \"esa_discos_id\": \"<string>\",\n    \"objectType\": \"<string>\",\n    \"licenseCountry\": \"<string>\",\n    \"launchDate\": \"<string>\",\n    \"launchSite\": \"<string>\",\n    \"apogee\": \"<string>\",\n    \"perigee\": \"<string>\",\n    \"inclination\": \"<number>\",\n    \"period\": \"<number>\",\n    \"organization_id\": \"<uuid>\",\n    \"mass\": \"<number>\",\n    \"height\": \"<number>\",\n    \"depth\": \"<number>\",\n    \"width\": \"<number>\",\n    \"diameter\": \"<number>\",\n    \"span\": \"<number>\",\n    \"crossSectionMin\": \"<number>\",\n    \"crossSectionAvg\": \"<number>\",\n    \"crossSectionMax\": \"<number>\",\n    \"shape\": \"<string>\",\n    \"objectClass\": \"<string>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -3271,7 +3271,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Primary satellite in list\", () => {\r",
-													"    pm.expect(utils.isKeyValuePairInObjectList(resp, \"noradId\", pm.collectionVariables.get(\"testSatellitePrimaryNorad\"))).to.be.true;\r",
+													"    pm.expect(utils.isKeyValuePairInObjectList(resp, \"norad_id\", pm.collectionVariables.get(\"testSatellitePrimaryNorad\"))).to.be.true;\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -3369,7 +3369,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"noradId\": \"<string>\",\n    \"commonName\": \"<string>\",\n    \"organizationId\": \"<uuid>\",\n    \"internationalDesignator\": \"<string>\",\n    \"organizationName\": \"<string>\",\n    \"esaDiscosId\": \"<string>\"\n  },\n  {\n    \"noradId\": \"<string>\",\n    \"commonName\": \"<string>\",\n    \"organizationId\": \"<uuid>\",\n    \"internationalDesignator\": \"<string>\",\n    \"organizationName\": \"<string>\",\n    \"esaDiscosId\": \"<string>\"\n  }\n]"
+											"body": "[\n  {\n    \"norad_id\": \"<string>\",\n    \"commonName\": \"<string>\",\n    \"organization_id\": \"<uuid>\",\n    \"international_designator\": \"<string>\",\n    \"organization_name\": \"<string>\",\n    \"esa_discos_id\": \"<string>\"\n  },\n  {\n    \"norad_id\": \"<string>\",\n    \"commonName\": \"<string>\",\n    \"organization_id\": \"<uuid>\",\n    \"international_designator\": \"<string>\",\n    \"organization_name\": \"<string>\",\n    \"esa_discos_id\": \"<string>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -3619,8 +3619,8 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"organizationName\",\r",
-													"    \"satellitesCount\"\r",
+													"    \"organization_name\",\r",
+													"    \"satellites_count\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -3728,7 +3728,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"organizationName\": \"<string>\",\n    \"satellitesCount\": \"<integer>\"\n  },\n  {\n    \"organizationName\": \"<string>\",\n    \"satellitesCount\": \"<integer>\"\n  }\n]"
+											"body": "[\n  {\n    \"organization_name\": \"<string>\",\n    \"satellites_count\": \"<integer>\"\n  },\n  {\n    \"organization_name\": \"<string>\",\n    \"satellites_count\": \"<integer>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -3851,13 +3851,13 @@
 											"\r",
 											"const expected_keys = [\r",
 											"    \"id\",\r",
-											"    \"createdAt\",\r",
-											"    \"updatedAt\",\r",
+											"    \"created_at\",\r",
+											"    \"updated_at\",\r",
 											"    \"name\",\r",
-											"    \"emailDomain\",\r",
-											"    \"accountsCount\",\r",
-											"    \"adminAccountsCount\",\r",
-											"    \"satellitesCount\"\r",
+											"    \"email_domain\",\r",
+											"    \"accounts_count\",\r",
+											"    \"admin_accounts_count\",\r",
+											"    \"satellites_count\"\r",
 											"];\r",
 											"\r",
 											"pm.test(\"Status code 200\", function() {\r",
@@ -3867,13 +3867,13 @@
 											"pm.test(\"Organisations returned contain expected fields\", () => {\r",
 											"    resp.forEach(function (organisation) {\r",
 											"            pm.expect(organisation.id).to.be.a(\"string\").that.have.a.lengthOf(36)\r",
-											"            pm.expect(organisation.createdAt).to.be.a(\"string\")\r",
-											"            pm.expect(organisation.updatedAt).to.be.a(\"string\")\r",
+											"            pm.expect(organisation.created_at).to.be.a(\"string\")\r",
+											"            pm.expect(organisation.updated_at).to.be.a(\"string\")\r",
 											"            pm.expect(organisation.name).to.be.a(\"string\")\r",
-											"            pm.expect(organisation.emailDomain).to.be.a(\"string\")\r",
-											"            pm.expect(organisation.accountsCount).to.be.a(\"number\")\r",
-											"            pm.expect(organisation.adminAccountsCount).to.be.a(\"number\")\r",
-											"            pm.expect(organisation.satellitesCount).to.be.a(\"number\")\r",
+											"            pm.expect(organisation.email_domain).to.be.a(\"string\")\r",
+											"            pm.expect(organisation.accounts_count).to.be.a(\"number\")\r",
+											"            pm.expect(organisation.admin_accounts_count).to.be.a(\"number\")\r",
+											"            pm.expect(organisation.satellites_count).to.be.a(\"number\")\r",
 											"        });\r",
 											"});"
 										],
@@ -3937,7 +3937,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"name\": \"<string>\",\n    \"emailDomain\": \"<string>\",\n    \"accountsCount\": \"<integer>\",\n    \"adminAccountsCount\": \"<integer>\",\n    \"satellitesCount\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"emailDomain\": \"<string>\",\n    \"accountsCount\": \"<integer>\",\n    \"adminAccountsCount\": \"<integer>\",\n    \"satellitesCount\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  }\n]"
+									"body": "[\n  {\n    \"name\": \"<string>\",\n    \"email_domain\": \"<string>\",\n    \"accounts_count\": \"<integer>\",\n    \"admin_accounts_count\": \"<integer>\",\n    \"satellites_count\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"email_domain\": \"<string>\",\n    \"accounts_count\": \"<integer>\",\n    \"admin_accounts_count\": \"<integer>\",\n    \"satellites_count\": \"<integer>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -4014,7 +4014,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"eventId\": \"<string>\",\n  \"messageContent\": \"<string>\",\n  \"ccEmail\": \"<string>\"\n}",
+											"raw": "{\n  \"event_id\": \"<string>\",\n  \"message_content\": \"<string>\",\n  \"cc_email\": \"<string>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -4053,7 +4053,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"eventId\": \"<string>\",\n  \"messageContent\": \"<string>\",\n  \"ccEmail\": \"<string>\"\n}",
+													"raw": "{\n  \"event_id\": \"<string>\",\n  \"message_content\": \"<string>\",\n  \"cc_email\": \"<string>\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -4102,7 +4102,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"eventId\": \"<string>\",\n  \"messageContent\": \"<string>\",\n  \"ccEmail\": \"<string>\"\n}",
+													"raw": "{\n  \"event_id\": \"<string>\",\n  \"message_content\": \"<string>\",\n  \"cc_email\": \"<string>\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -4146,7 +4146,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"eventId\": \"<string>\",\n  \"messageContent\": \"<string>\",\n  \"ccEmail\": \"<string>\"\n}",
+													"raw": "{\n  \"event_id\": \"<string>\",\n  \"message_content\": \"<string>\",\n  \"cc_email\": \"<string>\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -4200,10 +4200,10 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"sourceType\",\r",
-													"    \"sourceProvider\",\r",
-													"    \"ingestionSum\",\r",
-													"    \"ingestionDate\"\r",
+													"    \"source_type\",\r",
+													"    \"source_provider\",\r",
+													"    \"ingestion_sum\",\r",
+													"    \"ingestion_date\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -4312,7 +4312,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"sourceType\": \"<string>\",\n    \"sourceProvider\": \"<string>\",\n    \"ingestionDate\": \"<dateTime>\",\n    \"ingestionSum\": \"<integer>\"\n  },\n  {\n    \"sourceType\": \"<string>\",\n    \"sourceProvider\": \"<string>\",\n    \"ingestionDate\": \"<dateTime>\",\n    \"ingestionSum\": \"<integer>\"\n  }\n]"
+											"body": "[\n  {\n    \"source_type\": \"<string>\",\n    \"source_provider\": \"<string>\",\n    \"ingestion_date\": \"<dateTime>\",\n    \"ingestion_sum\": \"<integer>\"\n  },\n  {\n    \"source_type\": \"<string>\",\n    \"source_provider\": \"<string>\",\n    \"ingestion_date\": \"<dateTime>\",\n    \"ingestion_sum\": \"<integer>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -4432,13 +4432,13 @@
 											"\r",
 											"const expected_keys = [\r",
 											"    \"id\",\r",
-											"    \"createdAt\",\r",
-											"    \"updatedAt\",\r",
-											"    \"sourceProvider\",\r",
-											"    \"sourceType\",\r",
-											"    \"ingestionStart\",\r",
-											"    \"ingestionEnd\",\r",
-											"    \"itemsFetched\"\r",
+											"    \"created_at\",\r",
+											"    \"updated_at\",\r",
+											"    \"source_provider\",\r",
+											"    \"source_type\",\r",
+											"    \"ingestion_start\",\r",
+											"    \"ingestion_end\",\r",
+											"    \"items_fetched\"\r",
 											"];\r",
 											"\r",
 											"pm.test(\"Status code 200\", function() {\r",
@@ -4580,7 +4580,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"sourceProvider\": \"ESADiscos\",\n    \"sourceType\": \"CDM\",\n    \"ingestionStart\": \"<dateTime>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"ingestionEnd\": \"<dateTime>\",\n    \"itemsFetched\": \"<integer>\"\n  },\n  {\n    \"sourceProvider\": \"SpaceTrack\",\n    \"sourceType\": \"CDM\",\n    \"ingestionStart\": \"<dateTime>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"ingestionEnd\": \"<dateTime>\",\n    \"itemsFetched\": \"<integer>\"\n  }\n]"
+									"body": "[\n  {\n    \"source_provider\": \"ESADiscos\",\n    \"source_type\": \"CDM\",\n    \"ingestion_start\": \"<dateTime>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"ingestion_end\": \"<dateTime>\",\n    \"items_fetched\": \"<integer>\"\n  },\n  {\n    \"source_provider\": \"SpaceTrack\",\n    \"source_type\": \"CDM\",\n    \"ingestion_start\": \"<dateTime>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"ingestion_end\": \"<dateTime>\",\n    \"items_fetched\": \"<integer>\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -4741,7 +4741,7 @@
 															"\r",
 															"pm.test(\"Filter by Event Short ID returns only events with that ID\", function () {\r",
 															"    resp.forEach((event) => {\r",
-															"        pm.expect(event.shortId).to.be.eql(pm.variables.get(\"testEventShortId\"))\r",
+															"        pm.expect(event.short_id).to.be.eql(pm.variables.get(\"testEventShortId\"))\r",
 															"    })\r",
 															"});"
 														],
@@ -4845,7 +4845,7 @@
 														}
 													],
 													"cookie": [],
-													"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"shortId\": \"<string>\",\n    \"updateTime\": \"<dateTime>\",\n    \"cdmExternalId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"UKSA Analysis\",\n    \"missDistance\": \"<number>\",\n    \"cdmId\": \"<uuid>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"primaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"secondaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"primaryObjectCdmType\": \"Owner/operator ephemeris\",\n    \"secondaryObjectCdmType\": \"Owner/operator ephemeris\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"primaryObjectSize\": \"<number>\",\n    \"secondaryObjectSize\": \"<number>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"shortId\": \"<string>\",\n    \"updateTime\": \"<dateTime>\",\n    \"cdmExternalId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"Space-Track CDM\",\n    \"missDistance\": \"<number>\",\n    \"cdmId\": \"<uuid>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"primaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"secondaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"primaryObjectCdmType\": \"NASA/CARA\",\n    \"secondaryObjectCdmType\": \"SSN observations\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"primaryObjectSize\": \"<number>\",\n    \"secondaryObjectSize\": \"<number>\"\n  }\n]"
+													"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"short_id\": \"<string>\",\n    \"update_time\": \"<dateTime>\",\n    \"cdm_external_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"UKSA Analysis\",\n    \"miss_distance\": \"<number>\",\n    \"cdm_id\": \"<uuid>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"primary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"secondary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"primary_object_cdm_type\": \"Owner/operator ephemeris\",\n    \"secondary_object_cdm_type\": \"Owner/operator ephemeris\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"primary_object_size\": \"<number>\",\n    \"secondary_object_size\": \"<number>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"short_id\": \"<string>\",\n    \"update_time\": \"<dateTime>\",\n    \"cdm_external_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"Space-Track CDM\",\n    \"miss_distance\": \"<number>\",\n    \"cdm_id\": \"<uuid>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"primary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"secondary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"primary_object_cdm_type\": \"NASA/CARA\",\n    \"secondary_object_cdm_type\": \"SSN observations\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"primary_object_size\": \"<number>\",\n    \"secondary_object_size\": \"<number>\"\n  }\n]"
 												},
 												{
 													"name": "Not found",
@@ -4973,8 +4973,8 @@
 															"});\r",
 															"\r",
 															"pm.test(\"Contains both Space Track CDM and UKSA Analysis\", function() {\r",
-															"    pm.expect(resp.spaceTrackCdm[0].dataSource).to.equal(\"Space-Track CDM\");\r",
-															"    pm.expect(resp.uksaAnalysis[0].dataSource).to.equal(\"UKSA Analysis\");\r",
+															"    pm.expect(resp.space_track_cdm[0].data_source).to.equal(\"Space-Track CDM\");\r",
+															"    pm.expect(resp.uksa_analysis[0].data_source).to.equal(\"UKSA Analysis\");\r",
 															"});"
 														],
 														"type": "text/javascript"
@@ -5064,7 +5064,7 @@
 														}
 													],
 													"cookie": [],
-													"body": "{\n  \"spaceTrackCdm\": [\n    {\n      \"noradId\": \"<string>\",\n      \"dataSource\": \"UKSA Analysis\",\n      \"dataReceived\": \"<dateTime>\",\n      \"observationsNumber\": \"<integer>\",\n      \"observationsTimespan\": \"<number>\",\n      \"ephemerisName\": \"<string>\"\n    },\n    {\n      \"noradId\": \"<string>\",\n      \"dataSource\": \"Space-Track CDM\",\n      \"dataReceived\": \"<dateTime>\",\n      \"observationsNumber\": \"<integer>\",\n      \"observationsTimespan\": \"<number>\",\n      \"ephemerisName\": \"<string>\"\n    }\n  ],\n  \"uksaAnalysis\": [\n    {\n      \"noradId\": \"<string>\",\n      \"dataSource\": \"Space-Track CDM\",\n      \"dataReceived\": \"<dateTime>\",\n      \"observationsNumber\": \"<integer>\",\n      \"observationsTimespan\": \"<number>\",\n      \"ephemerisName\": \"<string>\"\n    },\n    {\n      \"noradId\": \"<string>\",\n      \"dataSource\": \"Space-Track CDM\",\n      \"dataReceived\": \"<dateTime>\",\n      \"observationsNumber\": \"<integer>\",\n      \"observationsTimespan\": \"<number>\",\n      \"ephemerisName\": \"<string>\"\n    }\n  ]\n}"
+													"body": "{\n  \"space_track_cdm\": [\n    {\n      \"norad_id\": \"<string>\",\n      \"data_source\": \"UKSA Analysis\",\n      \"data_received\": \"<dateTime>\",\n      \"observations_number\": \"<integer>\",\n      \"observations_timespan\": \"<number>\",\n      \"ephemeris_name\": \"<string>\"\n    },\n    {\n      \"norad_id\": \"<string>\",\n      \"data_source\": \"Space-Track CDM\",\n      \"data_received\": \"<dateTime>\",\n      \"observations_number\": \"<integer>\",\n      \"observations_timespan\": \"<number>\",\n      \"ephemeris_name\": \"<string>\"\n    }\n  ],\n  \"uksa_analysis\": [\n    {\n      \"norad_id\": \"<string>\",\n      \"data_source\": \"Space-Track CDM\",\n      \"data_received\": \"<dateTime>\",\n      \"observations_number\": \"<integer>\",\n      \"observations_timespan\": \"<number>\",\n      \"ephemeris_name\": \"<string>\"\n    },\n    {\n      \"norad_id\": \"<string>\",\n      \"data_source\": \"Space-Track CDM\",\n      \"data_received\": \"<dateTime>\",\n      \"observations_number\": \"<integer>\",\n      \"observations_timespan\": \"<number>\",\n      \"ephemeris_name\": \"<string>\"\n    }\n  ]\n}"
 												},
 												{
 													"name": "Not found",
@@ -5181,7 +5181,7 @@
 													"\r",
 													"pm.test(\"Filter by CDM External ID returns only events with that ID\", function () {\r",
 													"    resp.forEach((event) => {\r",
-													"        pm.expect(event.shortId).to.be.eql(pm.variables.get(\"testEventShortId\"))\r",
+													"        pm.expect(event.short_id).to.be.eql(pm.variables.get(\"testEventShortId\"))\r",
 													"    })\r",
 													"});"
 												],
@@ -5293,7 +5293,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "[\n  {\n    \"shortId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"UKSA Analysis\",\n    \"missDistance\": \"<number>\",\n    \"cdmExternalId\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"primaryObjectCommonName\": \"<string>\",\n    \"secondaryObjectCommonName\": \"<string>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"cdmCreationDate\": \"<dateTime>\"\n  },\n  {\n    \"shortId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"Space-Track CDM\",\n    \"missDistance\": \"<number>\",\n    \"cdmExternalId\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"primaryObjectCommonName\": \"<string>\",\n    \"secondaryObjectCommonName\": \"<string>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"cdmCreationDate\": \"<dateTime>\"\n  }\n]"
+											"body": "[\n  {\n    \"short_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"UKSA Analysis\",\n    \"miss_distance\": \"<number>\",\n    \"cdm_external_id\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"primary_object_common_name\": \"<string>\",\n    \"secondary_object_common_name\": \"<string>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"cdm_creation_date\": \"<dateTime>\"\n  },\n  {\n    \"short_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"Space-Track CDM\",\n    \"miss_distance\": \"<number>\",\n    \"cdm_external_id\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"primary_object_common_name\": \"<string>\",\n    \"secondary_object_common_name\": \"<string>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"cdm_creation_date\": \"<dateTime>\"\n  }\n]"
 										},
 										{
 											"name": "Not found",
@@ -5425,7 +5425,7 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"shortId\",\r",
+													"    \"short_id\",\r",
 													"    \"cdmCount\",\r",
 													"    \"analysesCount\"\r",
 													"];\r",
@@ -5750,9 +5750,9 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Search works with NORAD and Short ID filter\", function () {\r",
-											"    pm.expect(resp[0].shortId).to.eql(pm.variables.get(\"testEventShortId\"));\r",
-											"    pm.expect(resp[0].primaryObjectNoradId).to.eql(pm.variables.get(\"testSatellitePrimaryNorad\"));\r",
-											"    pm.expect(resp[0].secondaryObjectNoradId).to.eql(pm.variables.get(\"testSatelliteSecondaryNorad\"));\r",
+											"    pm.expect(resp[0].short_id).to.eql(pm.variables.get(\"testEventShortId\"));\r",
+											"    pm.expect(resp[0].primary_object_norad_id).to.eql(pm.variables.get(\"testSatellitePrimaryNorad\"));\r",
+											"    pm.expect(resp[0].secondary_object_norad_id).to.eql(pm.variables.get(\"testSatelliteSecondaryNorad\"));\r",
 											"})"
 										],
 										"type": "text/javascript",
@@ -5792,7 +5792,7 @@
 										},
 										{
 											"key": "search_like",
-											"value": "{{testEventShortId}}",
+											"value": "{{test_event_short_id}}",
 											"description": "Pattern search value, ie: 'ONE-'"
 										},
 										{
@@ -5887,7 +5887,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"shortId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"Space-Track CDM\",\n    \"missDistance\": \"<number>\",\n    \"userInterest\": \"Medium\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"primaryObjectCommonName\": \"<string>\",\n    \"secondaryObjectCommonName\": \"<string>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"cdmCreationDate\": \"<dateTime>\",\n    \"cdmExternalId\": \"<string>\"\n  },\n  {\n    \"shortId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"Space-Track CDM\",\n    \"missDistance\": \"<number>\",\n    \"userInterest\": \"Low\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"primaryObjectCommonName\": \"<string>\",\n    \"secondaryObjectCommonName\": \"<string>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"cdmCreationDate\": \"<dateTime>\",\n    \"cdmExternalId\": \"<string>\"\n  }\n]"
+									"body": "[\n  {\n    \"short_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"Space-Track CDM\",\n    \"miss_distance\": \"<number>\",\n    \"userInterest\": \"Medium\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"primary_object_common_name\": \"<string>\",\n    \"secondary_object_common_name\": \"<string>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"cdm_creation_date\": \"<dateTime>\",\n    \"cdm_external_id\": \"<string>\"\n  },\n  {\n    \"short_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"Space-Track CDM\",\n    \"miss_distance\": \"<number>\",\n    \"userInterest\": \"Low\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"primary_object_common_name\": \"<string>\",\n    \"secondary_object_common_name\": \"<string>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"cdm_creation_date\": \"<date_time>\",\n    \"cdm_external_id\": \"<string>\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -6271,26 +6271,26 @@
 											"\r",
 											"const expected_keys = [\r",
 											"        \"id\",\r",
-											"        \"createdAt\",\r",
-											"        \"updatedAt\",\r",
-											"        \"isActive\",\r",
-											"        \"creationDate\",\r",
+											"        \"created_at\",\r",
+											"        \"updated_at\",\r",
+											"        \"is_active\",\r",
+											"        \"creation_date\",\r",
 											"        \"originator\",\r",
-											"        \"objectName\",\r",
-											"        \"internationalDesignator\",\r",
-											"        \"refFrame\",\r",
-											"        \"timeSystem\",\r",
-											"        \"startTime\",\r",
-											"        \"stopTime\",\r",
-											"        \"centerName\",\r",
-											"        \"fileName\",\r",
+											"        \"object_name\",\r",
+											"        \"international_designator\",\r",
+											"        \"ref_frame\",\r",
+											"        \"time_system\",\r",
+											"        \"start_time\",\r",
+											"        \"stop_time\",\r",
+											"        \"center_name\",\r",
+											"        \"file_name\",\r",
 											"        \"satellite\",\r",
 											"        \"uploader\",\r",
-											"        \"uploaderOrganization\",\r",
-											"        \"deletedById\",\r",
-											"        \"restoredById\",\r",
-											"        \"uploadedByEmail\",\r",
-											"        \"uploadedByOrganizationName\"\r",
+											"        \"uploader_organization\",\r",
+											"        \"deleted_by_id\",\r",
+											"        \"restored_by_id\",\r",
+											"        \"uploaded_by_email\",\r",
+											"        \"uploaded_by_organization_name\"\r",
 											"];\r",
 											"\r",
 											"pm.test(\"Status code 200\", function() {\r",
@@ -6308,7 +6308,7 @@
 											"pm.test(\"Ephemeris returned contains our upload\", () => {\r",
 											"    var found = false;\r",
 											"    resp.forEach((ephemeris) => {\r",
-											"        found = found || (ephemeris.fileName === targetFileName);\r",
+											"        found = found || (ephemeris.file_name === targetFileName);\r",
 											"    })\r",
 											"    pm.expect(found).to.be.true;\r",
 											"})\r",
@@ -7222,10 +7222,10 @@
 													"\r",
 													"const expected_keys = [\r",
 													"    \"id\",\r",
-													"    \"createdAt\",\r",
-													"    \"updatedAt\",\r",
-													"    \"externalId\",\r",
-													"    \"eventId\"\r",
+													"    \"created_at\",\r",
+													"    \"updated_at\",\r",
+													"    \"external_id\",\r",
+													"    \"event_id\"\r",
 													"];\r",
 													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
@@ -7294,7 +7294,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"eventId\": \"<uuid>\",\n  \"id\": \"<uuid>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"externalId\": \"<string>\"\n}"
+											"body": "{\n  \"event_id\": \"<uuid>\",\n  \"id\": \"<uuid>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\"\n}"
 										},
 										{
 											"name": "Not found",
@@ -7372,7 +7372,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"content\": \"This banner will be deleted shortly! Please ignore it.\",\n  \"title\": \"E2E API Integration Tests in Postman - please ignore\",\n  \"severity\": \"High\",\n  \"isActive\": true\n}",
+									"raw": "{\n  \"content\": \"This banner will be deleted shortly! Please ignore it.\",\n  \"title\": \"E2E API Integration Tests in Postman - please ignore\",\n  \"severity\": \"High\",\n  \"is_active\": true\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -7411,7 +7411,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"content\": \"<string>\",\n  \"title\": \"<string>\",\n  \"severity\": \"Low\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"content\": \"<string>\",\n  \"title\": \"<string>\",\n  \"severity\": \"Low\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -7460,7 +7460,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"content\": \"<string>\",\n  \"title\": \"<string>\",\n  \"severity\": \"Low\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"content\": \"<string>\",\n  \"title\": \"<string>\",\n  \"severity\": \"Low\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -7504,7 +7504,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"content\": \"<string>\",\n  \"title\": \"<string>\",\n  \"severity\": \"Low\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"content\": \"<string>\",\n  \"title\": \"<string>\",\n  \"severity\": \"Low\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -7663,7 +7663,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"isActive\": \"<boolean>\",\n    \"createdById\": \"<uuid>\",\n    \"email\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"severity\": \"High\"\n  },\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"isActive\": \"<boolean>\",\n    \"createdById\": \"<uuid>\",\n    \"email\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"severity\": \"High\"\n  }\n]"
+									"body": "[\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"is_active\": \"<boolean>\",\n    \"created_by_id\": \"<uuid>\",\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"severity\": \"High\"\n  },\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"is_active\": \"<boolean>\",\n    \"created_by_id\": \"<uuid>\",\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"severity\": \"High\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -7805,7 +7805,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"messageId\": \"{{testBannerId}}\",\n  \"content\": \"Ignore this banner - it is part of Postman E2E integration tests for the API\",\n  \"severity\": \"Low\",\n  \"title\": \"Integration test - changed the content of the banner\",\n  \"isActive\": true\n}",
+									"raw": "{\n  \"message_id\": \"{{testBannerId}}\",\n  \"content\": \"Ignore this banner - it is part of Postman E2E integration tests for the API\",\n  \"severity\": \"Low\",\n  \"title\": \"Integration test - changed the content of the banner\",\n  \"is_active\": true\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -7844,7 +7844,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"messageId\": \"<uuid>\",\n  \"content\": \"<string>\",\n  \"severity\": \"Low\",\n  \"title\": \"<string>\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"message_id\": \"<uuid>\",\n  \"content\": \"<string>\",\n  \"severity\": \"Low\",\n  \"title\": \"<string>\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -7893,7 +7893,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"messageId\": \"<uuid>\",\n  \"content\": \"<string>\",\n  \"severity\": \"Low\",\n  \"title\": \"<string>\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"message_id\": \"<uuid>\",\n  \"content\": \"<string>\",\n  \"severity\": \"Low\",\n  \"title\": \"<string>\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -7937,7 +7937,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"messageId\": \"<uuid>\",\n  \"content\": \"<string>\",\n  \"severity\": \"Low\",\n  \"title\": \"<string>\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"message_id\": \"<uuid>\",\n  \"content\": \"<string>\",\n  \"severity\": \"Low\",\n  \"title\": \"<string>\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -8017,7 +8017,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"broadcastStart\": \"{{testBannerScheduleStart}}\",\n  \"broadcastEnd\": \"{{testBannerScheduleEnd}}\",\n  \"messageId\": \"{{testBannerId}}\",\n  \"isActive\": true\n}",
+									"raw": "{\n  \"broadcast_start\": \"{{testBannerScheduleStart}}\",\n  \"broadcast_end\": \"{{testBannerScheduleEnd}}\",\n  \"message_id\": \"{{testBannerId}}\",\n  \"is_active\": true\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -8056,7 +8056,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"broadcastStart\": \"<dateTime>\",\n  \"broadcastEnd\": \"<dateTime>\",\n  \"messageId\": \"<uuid>\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"broadcast_start\": \"<dateTime>\",\n  \"broadcast_end\": \"<dateTime>\",\n  \"message_id\": \"<uuid>\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -8105,7 +8105,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"broadcastStart\": \"<dateTime>\",\n  \"broadcastEnd\": \"<dateTime>\",\n  \"messageId\": \"<uuid>\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"broadcast_start\": \"<dateTime>\",\n  \"broadcast_end\": \"<dateTime>\",\n  \"message_id\": \"<uuid>\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -8149,7 +8149,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"broadcastStart\": \"<dateTime>\",\n  \"broadcastEnd\": \"<dateTime>\",\n  \"messageId\": \"<uuid>\",\n  \"isActive\": true\n}",
+											"raw": "{\n  \"broadcast_start\": \"<dateTime>\",\n  \"broadcast_end\": \"<dateTime>\",\n  \"message_id\": \"<uuid>\",\n  \"is_active\": true\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -8296,7 +8296,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"isActive\": \"<boolean>\",\n    \"createdById\": \"<uuid>\",\n    \"broadcastStart\": \"<dateTime>\",\n    \"broadcastEnd\": \"<dateTime>\",\n    \"messageId\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"severity\": \"Medium\"\n  },\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"isActive\": \"<boolean>\",\n    \"createdById\": \"<uuid>\",\n    \"broadcastStart\": \"<dateTime>\",\n    \"broadcastEnd\": \"<dateTime>\",\n    \"messageId\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"severity\": \"High\"\n  }\n]"
+									"body": "[\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"is_active\": \"<boolean>\",\n    \"created_by_id\": \"<uuid>\",\n    \"broadcast_start\": \"<dateTime>\",\n    \"broadcast_end\": \"<dateTime>\",\n    \"message_id\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"severity\": \"Medium\"\n  },\n  {\n    \"content\": \"<string>\",\n    \"title\": \"<string>\",\n    \"is_active\": \"<boolean>\",\n    \"created_by_id\": \"<uuid>\",\n    \"broadcast_start\": \"<dateTime>\",\n    \"broadcast_end\": \"<dateTime>\",\n    \"message_id\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"severity\": \"High\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -8527,7 +8527,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"broadcastStart\": \"<dateTime>\",\n    \"broadcastEnd\": \"<dateTime>\",\n    \"isActive\": \"<boolean>\",\n    \"messageId\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"title\": \"<string>\",\n    \"content\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  {\n    \"broadcastStart\": \"<dateTime>\",\n    \"broadcastEnd\": \"<dateTime>\",\n    \"isActive\": \"<boolean>\",\n    \"messageId\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"title\": \"<string>\",\n    \"content\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  }\n]"
+									"body": "[\n  {\n    \"broadcast_start\": \"<dateTime>\",\n    \"broadcast_end\": \"<dateTime>\",\n    \"is_active\": \"<boolean>\",\n    \"message_id\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"title\": \"<string>\",\n    \"content\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\"\n  },\n  {\n    \"broadcast_start\": \"<dateTime>\",\n    \"broadcast_end\": \"<dateTime>\",\n    \"is_active\": \"<boolean>\",\n    \"message_id\": \"<uuid>\",\n    \"setById\": \"<uuid>\",\n    \"title\": \"<string>\",\n    \"content\": \"<string>\",\n    \"id\": \"<uuid>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -9316,7 +9316,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"shortId\": \"<string>\",\n    \"updateTime\": \"<dateTime>\",\n    \"cdmExternalId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"UKSA Analysis\",\n    \"missDistance\": \"<number>\",\n    \"cdmId\": \"<uuid>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"primaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"secondaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"primaryObjectCdmType\": \"Owner/operator ephemeris\",\n    \"secondaryObjectCdmType\": \"Owner/operator ephemeris\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"primaryObjectSize\": \"<number>\",\n    \"secondaryObjectSize\": \"<number>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"shortId\": \"<string>\",\n    \"updateTime\": \"<dateTime>\",\n    \"cdmExternalId\": \"<string>\",\n    \"primaryObjectNoradId\": \"<string>\",\n    \"secondaryObjectNoradId\": \"<string>\",\n    \"tcaTime\": \"<dateTime>\",\n    \"dataSource\": \"Space-Track CDM\",\n    \"missDistance\": \"<number>\",\n    \"cdmId\": \"<uuid>\",\n    \"collisionProbability\": \"<number>\",\n    \"collisionProbabilityMethod\": \"<string>\",\n    \"radialMissDistance\": \"<number>\",\n    \"intrackMissDistance\": \"<number>\",\n    \"crosstrackMissDistance\": \"<number>\",\n    \"primaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"secondaryObjectUncertainties\": {\n      \"radialMissDistanceUncertainty\": \"<number>\",\n      \"intrackMissDistanceUncertainty\": \"<number>\",\n      \"crosstrackMissDistanceUncertainty\": \"<number>\"\n    },\n    \"primaryObjectCdmType\": \"NASA/CARA\",\n    \"secondaryObjectCdmType\": \"SSN observations\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relativeVelocity\": \"<number>\",\n    \"combinedMass\": \"<number>\",\n    \"possibleFragments\": \"<number>\",\n    \"primaryObjectSize\": \"<number>\",\n    \"secondaryObjectSize\": \"<number>\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"short_id\": \"<string>\",\n    \"update_time\": \"<dateTime>\",\n    \"cdm_external_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"UKSA Analysis\",\n    \"miss_distance\": \"<number>\",\n    \"cdm_id\": \"<uuid>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"primary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"secondary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"primary_object_cdm_type\": \"Owner/operator ephemeris\",\n    \"secondary_object_cdm_type\": \"Owner/operator ephemeris\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"primary_object_size\": \"<number>\",\n    \"secondary_object_size\": \"<number>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"short_id\": \"<string>\",\n    \"update_time\": \"<dateTime>\",\n    \"cdm_external_id\": \"<string>\",\n    \"primary_object_norad_id\": \"<string>\",\n    \"secondary_object_norad_id\": \"<string>\",\n    \"tca_time\": \"<dateTime>\",\n    \"data_source\": \"Space-Track CDM\",\n    \"miss_distance\": \"<number>\",\n    \"cdm_id\": \"<uuid>\",\n    \"collision_probability\": \"<number>\",\n    \"collision_probability_method\": \"<string>\",\n    \"radial_miss_distance\": \"<number>\",\n    \"intrack_miss_distance\": \"<number>\",\n    \"crosstrack_miss_distance\": \"<number>\",\n    \"primary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"secondary_object_uncertainties\": {\n      \"radial_miss_distance_uncertainty\": \"<number>\",\n      \"intrack_miss_distance_uncertainty\": \"<number>\",\n      \"crosstrack_miss_distance_uncertainty\": \"<number>\"\n    },\n    \"primary_object_cdm_type\": \"NASA/CARA\",\n    \"secondary_object_cdm_type\": \"SSN observations\",\n    \"altitude\": \"<number>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\",\n    \"relative_velocity\": \"<number>\",\n    \"combined_mass\": \"<number>\",\n    \"possible_fragments\": \"<number>\",\n    \"primary_object_size\": \"<number>\",\n    \"secondary_object_size\": \"<number>\"\n  }\n]"
 								},
 								{
 									"name": "Not found",
@@ -9436,37 +9436,37 @@
 											"\r",
 											"const expected_keys = [\r",
 											"        \"id\",\r",
-											"        \"createdAt\",\r",
-											"        \"updatedAt\",\r",
-											"        \"tcaTime\",\r",
-											"        \"collisionProbability\",\r",
-											"        \"collisionProbabilityMethod\",\r",
-											"        \"updateTime\",\r",
-											"        \"cdmExternalId\",\r",
-											"        \"isActive\",\r",
-											"        \"missDistance\",\r",
-											"        \"radialMissDistance\",\r",
-											"        \"intrackMissDistance\",\r",
-											"        \"crosstrackMissDistance\",\r",
-											"        \"missDistanceUncertainty\",\r",
+											"        \"created_at\",\r",
+											"        \"updated_at\",\r",
+											"        \"tca_time\",\r",
+											"        \"collision_probability\",\r",
+											"        \"collision_probability_method\",\r",
+											"        \"update_time\",\r",
+											"        \"cdm_external_id\",\r",
+											"        \"is_active\",\r",
+											"        \"miss_distance\",\r",
+											"        \"radial_miss_distance\",\r",
+											"        \"intrack_miss_distance\",\r",
+											"        \"crosstrack_miss_distance\",\r",
+											"        \"miss_distanceUncertainty\",\r",
 											"        \"altitude\",\r",
 											"        \"latitude\",\r",
 											"        \"longitude\",\r",
-											"        \"relativeVelocity\",\r",
-											"        \"combinedMass\",\r",
-											"        \"possibleFragments\",\r",
-											"        \"primaryObjectNoradId\",\r",
-											"        \"secondaryObjectNoradId\",\r",
-											"        \"primaryObjectObservationsData\",\r",
-											"        \"secondaryObjectObservationsData\",\r",
-											"        \"eventId\",\r",
-											"        \"eventShortId\",\r",
-											"        \"uploadedById\",\r",
-											"        \"deletedById\",\r",
-											"        \"restoredById\",\r",
-											"        \"uploadedByEmail\",\r",
-											"        \"deletedByEmail\",\r",
-											"        \"restoredByEmail\"\r",
+											"        \"relative_velocity\",\r",
+											"        \"combined_mass\",\r",
+											"        \"possible_fragments\",\r",
+											"        \"primary_object_norad_id\",\r",
+											"        \"secondary_object_norad_id\",\r",
+											"        \"primary_object_observations_data\",\r",
+											"        \"secondary_object_observations_data\",\r",
+											"        \"event_id\",\r",
+											"        \"event_short_id\",\r",
+											"        \"uploaded_by_id\",\r",
+											"        \"deleted_by_id\",\r",
+											"        \"restored_by_id\",\r",
+											"        \"uploaded_by_email\",\r",
+											"        \"deleted_by_email\",\r",
+											"        \"restored_by_email\"\r",
 											"];\r",
 											"\r",
 											"pm.test(\"Status code 200\", function() {\r",
