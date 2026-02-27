@@ -1412,7 +1412,7 @@
 													"const resp = pm.response.json();\r",
 													"\r",
 													"const expected_keys = [\r",
-													"    \"eventType\",\r",
+													"    \"event_type\",\r",
 													"    \"count\"\r",
 													"];\r",
 													"\r",
@@ -5792,7 +5792,7 @@
 										},
 										{
 											"key": "search_like",
-											"value": "{{test_event_short_id}}",
+											"value": "{{testEventShortId}}",
 											"description": "Pattern search value, ie: 'ONE-'"
 										},
 										{
@@ -9448,7 +9448,7 @@
 											"        \"radial_miss_distance\",\r",
 											"        \"intrack_miss_distance\",\r",
 											"        \"crosstrack_miss_distance\",\r",
-											"        \"miss_distanceUncertainty\",\r",
+											"        \"miss_distance_uncertainty\",\r",
 											"        \"altitude\",\r",
 											"        \"latitude\",\r",
 											"        \"longitude\",\r",
