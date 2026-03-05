@@ -1,4 +1,8 @@
 
+data "aws_secretsmanager_secret_version" "backend_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.by-name.id
+}
+
 resource "aws_iam_role" "lambda-assume-role-email-renderer" {
   name = "iam-role-for-email-renderer-lambda"
 
@@ -47,6 +51,10 @@ module "email_renderer_lambda" {
   s3_key               = "email-renderer-${var.image_tag}.zip"
   runtime              = "nodejs20.x"
   lambda_memory_size   = 256
+  timeout              = 300
 
-  env_vars = {}
+  env_vars = {
+    SENTRY_DSN         = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["appSentryDSN"]
+    SENTRY_ENVIRONMENT = var.env_name
+  }
 }
