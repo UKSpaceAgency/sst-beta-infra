@@ -16,3 +16,22 @@ resource "aws_cloudwatch_metric_alarm" "data_cache_oldest_age_24h" {
   }
 
 }
+
+resource "aws_cloudwatch_metric_alarm" "sqs_not_visible_spike" {
+  alarm_name          = "sqs-not-visible-messages-spike"
+  alarm_description   = "Alarm when ApproximateNumberOfMessagesNotVisible > 100 (potential processing backlog spike)"
+
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesNotVisible"
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 100
+  comparison_operator = "GreaterThanThreshold"
+
+  dimensions = {
+    QueueName = local.target_sqs_name
+  }
+
+  treat_missing_data = "notBreaching"
+}
