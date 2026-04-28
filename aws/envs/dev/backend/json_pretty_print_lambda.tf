@@ -1,6 +1,3 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-
 locals {
   reports_supporting_ap_name = "reports-supporting-${var.env_name}"
   reports_olap_name          = "reports-pretty-${var.env_name}"
