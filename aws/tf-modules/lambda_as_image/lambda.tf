@@ -14,8 +14,8 @@ resource "aws_lambda_function" "public_lambda_as_docker_image" {
   role          = var.lambda_role_arn
   package_type  = "Image"
   image_uri     = var.ecr_image
-  timeout       = 300 //seconds
-  memory_size   = 2048 //megs
+  timeout       = 900 //seconds
+  memory_size   = 4096 //megs
 
   environment {
     variables = var.env_vars
