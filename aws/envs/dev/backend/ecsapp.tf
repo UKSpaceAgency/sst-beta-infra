@@ -21,6 +21,7 @@ module "backend" {
     { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
+    { "name" : "APP_BACKEND_URL", "value" : "https://${var.app_name}.${local.local_r53_domain}" },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
     { "name" : "S3_REENTRY_EVENT_REPORTS_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id },
@@ -97,6 +98,10 @@ module "backend" {
     {
       "name" : "APP_SES_SMTP_PASSWORD",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
+    },
+    {
+      "name" : "APP_DOWNLOAD_TOKEN_SECRET",
+      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:downloadTokenSecret::"
     }
   ]
   healthcheck_subpath = "/"
