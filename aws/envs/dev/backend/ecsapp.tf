@@ -101,7 +101,7 @@ module "backend" {
     },
     {
       "name" : "APP_DOWNLOAD_TOKEN_SECRET",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:downloadTokenSecret::"
+      "valueFrom" : aws_secretsmanager_secret_version.download_token.arn
     }
   ]
   healthcheck_subpath = "/"
