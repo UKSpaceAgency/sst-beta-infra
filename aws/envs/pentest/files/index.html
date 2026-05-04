@@ -62,31 +62,30 @@
           // Sort files based on 'last-modified' date
           files.sort((a, b) => b.lastModified - a.lastModified);
 
-          let html = '';
-          let currentMonth = '';
-          let count = 0;
-
-          files.forEach((file, index) => {
-              let lines = file.content.split('\n');
+          let filesByMonth = files.reduce((groups, file) => {
               let month = file.lastModified.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-              if (month !== currentMonth) {
-                  if (index !== 0) {
-                      html += '</table>';
-                  }
-
-                  currentMonth = month;
-                  count = 1;
-                  html += `<h3 class="govuk-heading-m">${currentMonth} (Deployments: ${count})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
-              } else {
-                  count++;
-                  html = html.replace(`(Deployments: ${count - 1})`, `(Deployments: ${count})`);
+              if (!groups.has(month)) {
+                  groups.set(month, []);
               }
 
-              html += '<tr class="govuk-table__row"><td class="govuk-table__cell">' + lines[0] + '</td><td class="govuk-table__cell">' + lines[1] + '</td><td class="govuk-table__cell">' + lines[2] + '</td></tr>';
+              groups.get(month).push(file);
+              return groups;
+          }, new Map());
+
+          let html = '';
+
+          filesByMonth.forEach((monthFiles, month) => {
+              html += `<h3 class="govuk-heading-m">${month} (Deployments: ${monthFiles.length})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
+
+              monthFiles.forEach(file => {
+                  let lines = file.content.split('\n');
+                  html += '<tr class="govuk-table__row"><td class="govuk-table__cell">' + lines[0] + '</td><td class="govuk-table__cell">' + lines[1] + '</td><td class="govuk-table__cell">' + lines[2] + '</td></tr>';
+              });
+
+              html += '</table>';
           });
 
-          html += '</table>';
           document.getElementById('content').innerHTML = html;
       })
       .catch((error) => {
