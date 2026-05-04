@@ -99,14 +99,48 @@ jobs:
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: History entry to S3
+        shell: bash
+        env:
+          DEPLOYMENT_HISTORY_BUCKET: ${{ vars.deployment_history_bucket }}
+          IMAGE_TAG: ${{ github.event.inputs.image-tag }}
+          DEPLOY_ENV: ${{ github.event.inputs.env }}
+          INVOKER: ${{ github.event.inputs.invoker }}
         run: |
-          LOCAL_D_FILE=${EPOCHSECONDS}.txt
-          echo $LOCAL_D_FILE
-          echo "$(date +'%Y-%m-%d %H:%M:%S %Z')" > $LOCAL_D_FILE
-          echo ${{ github.event.inputs.image-tag }} >> $LOCAL_D_FILE
-          echo ${{ github.event.inputs.env }}-${{ github.event.inputs.invoker }} >> $LOCAL_D_FILE
-          cat $LOCAL_D_FILE
-          aws s3 cp ./$LOCAL_D_FILE s3://${{ vars.deployment_history_bucket }} --profile uksa-mys-dev-env
+          set -euo pipefail
+
+          YEAR="$(date -u +'%Y')"
+          MANIFEST_FILE="manifest-${YEAR}.json"
+          LOCAL_D_FILE="$(date -u +'%s').txt"
+          DEPLOYED_AT="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          DISPLAY_DEPLOYED_AT="$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          ENVIRONMENT_NAME="${DEPLOY_ENV}-${INVOKER}"
+
+          printf '%s\n%s\n%s\n' "$DISPLAY_DEPLOYED_AT" "$IMAGE_TAG" "$ENVIRONMENT_NAME" > "$LOCAL_D_FILE"
+          cat "$LOCAL_D_FILE"
+
+          aws s3 cp "./$LOCAL_D_FILE" "s3://${DEPLOYMENT_HISTORY_BUCKET}/$LOCAL_D_FILE" --profile uksa-mys-dev-env
+
+          if ! aws s3 cp "s3://${DEPLOYMENT_HISTORY_BUCKET}/${MANIFEST_FILE}" "$MANIFEST_FILE" --profile uksa-mys-dev-env; then
+            printf '[]\n' > "$MANIFEST_FILE"
+          fi
+
+          jq \
+            --arg key "$LOCAL_D_FILE" \
+            --arg deployedAt "$DEPLOYED_AT" \
+            --arg commitId "$IMAGE_TAG" \
+            --arg environmentName "$ENVIRONMENT_NAME" \
+            '[{
+              key: $key,
+              deployedAt: $deployedAt,
+              commitId: $commitId,
+              environmentName: $environmentName
+            }] + . | unique_by(.key) | sort_by(.deployedAt) | reverse' \
+            "$MANIFEST_FILE" > manifest.new.json
+
+          aws s3 cp manifest.new.json "s3://${DEPLOYMENT_HISTORY_BUCKET}/${MANIFEST_FILE}" \
+            --content-type "application/json" \
+            --cache-control "max-age=60, must-revalidate" \
+            --profile uksa-mys-dev-env
 
   execute-e2e:
     needs: deploy
@@ -150,4 +184,3 @@ jobs:
         with:
           files: |
             **/newman-run-*.xml
-
