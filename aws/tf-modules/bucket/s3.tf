@@ -120,18 +120,6 @@ resource "aws_s3_bucket_logging" "deployment_history_logging" {
   target_prefix = "deployment_history/"
 }
 
-resource "aws_s3_bucket_cors_configuration" "cost_for_bucket" {
-  bucket = aws_s3_bucket.deployment_history.id
-
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET", "HEAD"]
-    allowed_origins = ["https://${aws_s3_bucket.deployment_history.bucket_regional_domain_name}"]
-    expose_headers  = ["Last-Modified"]
-    max_age_seconds = 3000
-  }
-}
-
 resource "aws_s3_bucket_ownership_controls" "own_ctrl" {
   bucket = aws_s3_bucket.deployment_history.id
   rule {
@@ -142,61 +130,57 @@ resource "aws_s3_bucket_ownership_controls" "own_ctrl" {
 resource "aws_s3_bucket_public_access_block" "public_enabled" {
   bucket = aws_s3_bucket.deployment_history.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
+#
+# resource "aws_s3_bucket_acl" "bucket_acl" {
+#   depends_on = [
+#     aws_s3_bucket_ownership_controls.own_ctrl,
+#     aws_s3_bucket_public_access_block.public_enabled,
+#   ]
+#
+#   bucket = aws_s3_bucket.deployment_history.id
+#   acl    = "public-read"
+# }
 
-resource "aws_s3_bucket_acl" "bucket_acl" {
-  depends_on = [
-    aws_s3_bucket_ownership_controls.own_ctrl,
-    aws_s3_bucket_public_access_block.public_enabled,
-  ]
-
-  bucket = aws_s3_bucket.deployment_history.id
-  acl    = "public-read"
-}
-
-resource "aws_s3_bucket_policy" "allow_listing" {
-  bucket = aws_s3_bucket.deployment_history.id
-  policy = data.aws_iam_policy_document.allow_listing_policy_doc.json
-}
-
-data "aws_iam_policy_document" "allow_listing_policy_doc" {
+data "aws_iam_policy_document" "public_frontend_policy" {
+  policy_id = "PolicyPublicFrontend11155MYS2MSH"
   statement {
-
+    sid    = "AllowCloudFrontServicePrincipalReadOnly"
+    effect = "Allow"
     principals {
-      type        = "AWS"
-      identifiers = ["*"]
+      identifiers = ["cloudfront.amazonaws.com"]
+      type        = "Service"
     }
-
     actions = [
-      "s3:GetObject",
-      "s3:ListBucket",
+      "s3:GetObject"
     ]
-
     resources = [
-      aws_s3_bucket.deployment_history.arn,
-      "${aws_s3_bucket.deployment_history.arn}/*",
+      "arn:aws:s3:::${aws_s3_bucket.deployment_history.bucket}/*"
     ]
     condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values = [
-        "true"
-      ]
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [var.cloudfront_deployments_arn]
     }
   }
 }
 
+resource "aws_s3_bucket_policy" "allow_cloudfront" {
+  bucket = aws_s3_bucket.deployment_history.id
+  policy = data.aws_iam_policy_document.public_frontend_policy.json
+}
+
 resource "aws_s3_object" "index_html" {
   bucket       = aws_s3_bucket.deployment_history.id
-  key          = "index.html"
-  source       = "files/index.html"
+  key          = "index_manifest.html"
+  source       = "files/index_manifest.html"
   content_type = "text/html"
 
-  etag = filemd5("files/index.html")
+  etag = filemd5("files/index_manifest.html")
 }
 
 resource "aws_s3_object" "config_js" {
