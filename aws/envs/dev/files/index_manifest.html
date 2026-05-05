@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+  <head>
+    <title>Monitor Space Hazards Development Deployment History</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <link rel="manifest" href="/assets/manifest.json" />
+    <link rel="stylesheet" href="/stylesheets/govuk-frontend-5.0.0.min.css" />
+  </head>
+  <body class="govuk-template__body">
+    <script>
+      document.body.className +=
+        " js-enabled" +
+        ("noModule" in HTMLScriptElement.prototype
+          ? " govuk-frontend-supported"
+          : "");
+    </script>
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper govuk-main-wrapper--l">
+        <h2 class="govuk-heading-l govuk-!-text-align-centre">Monitor Space Hazards</h2>
+        <h3 class="govuk-heading-m govuk-!-text-align-centre">Development Deployment History</h3>
+        <div id="content" class="container"></div>
+      </main>
+    </div>
+
+    <script type="module">
+      const currentYear = new Date().getUTCFullYear();
+      const manifestUrl = new URL(`manifest-${currentYear}.json`, window.location.href);
+      const content = document.getElementById('content');
+
+      const escapeHtml = value => String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+
+      const formatDate = date => {
+        const pad = value => String(value).padStart(2, '0');
+
+        return [
+          date.getUTCFullYear(),
+          pad(date.getUTCMonth() + 1),
+          pad(date.getUTCDate())
+        ].join('-') + ' ' + [
+          pad(date.getUTCHours()),
+          pad(date.getUTCMinutes()),
+          pad(date.getUTCSeconds())
+        ].join(':') + ' UTC';
+      };
+
+      const monthName = date => date.toLocaleString('default', {
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC'
+      });
+
+      const showMessage = message => {
+        content.innerHTML = `<p class="govuk-body">${escapeHtml(message)}</p>`;
+      };
+
+      fetch(manifestUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Could not load ${manifestUrl.pathname}`);
+          }
+
+          return response.json();
+        })
+        .then(deployments => {
+          if (!Array.isArray(deployments) || deployments.length === 0) {
+            showMessage(`No deployment history entries found for ${currentYear}.`);
+            return;
+          }
+
+          const files = deployments
+            .map(deployment => ({
+              deployedAt: new Date(deployment.deployedAt),
+              commitId: deployment.commitId,
+              environmentName: deployment.environmentName
+            }))
+            .filter(deployment => !Number.isNaN(deployment.deployedAt.getTime()))
+            .sort((a, b) => b.deployedAt - a.deployedAt);
+
+          if (files.length === 0) {
+            showMessage(`No valid deployment history entries found for ${currentYear}.`);
+            return;
+          }
+
+          const filesByMonth = files.reduce((groups, file) => {
+            const month = monthName(file.deployedAt);
+
+            if (!groups.has(month)) {
+              groups.set(month, []);
+            }
+
+            groups.get(month).push(file);
+            return groups;
+          }, new Map());
+
+          let html = '';
+
+          filesByMonth.forEach((monthFiles, month) => {
+            html += `<h3 class="govuk-heading-m">${escapeHtml(month)} (Deployments: ${monthFiles.length})</h3><table class="govuk-table"><tr class="govuk-table__row"><th class="govuk-table__header">Date</th><th class="govuk-table__header">Commit ID</th><th class="govuk-table__header">Environment Name</th></tr>`;
+
+            monthFiles.forEach(file => {
+              html += '<tr class="govuk-table__row"><td class="govuk-table__cell">' + escapeHtml(formatDate(file.deployedAt)) + '</td><td class="govuk-table__cell">' + escapeHtml(file.commitId) + '</td><td class="govuk-table__cell">' + escapeHtml(file.environmentName) + '</td></tr>';
+            });
+
+            html += '</table>';
+          });
+
+          content.innerHTML = html;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showMessage(`Unable to load deployment history for ${currentYear}.`);
+        });
+    </script>
+    <script
+      type="module"
+      src="/javascripts/govuk-frontend-5.0.0.min.js"
+    ></script>
+    <script type="module">
+      import { initAll } from "/javascripts/govuk-frontend-5.0.0.min.js";
+      initAll();
+    </script>
+  </body>
+</html>
