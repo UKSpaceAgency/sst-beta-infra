@@ -19,6 +19,22 @@ resource "aws_iam_role" "lambda-assume-role-notifications-sender" {
   )
 }
 
+resource "aws_iam_role_policy" "notifications_sender_ses_send" {
+  name = "notifications-sender-ses-send"
+  role = aws_iam_role.lambda-assume-role-notifications-sender.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["ses:SendEmail", "ses:SendRawEmail"]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 module "notifications_sender_lambda" {
   source               = "../../../tf-modules/lambda_in_public"
   env_name             = var.env_name
@@ -32,8 +48,7 @@ module "notifications_sender_lambda" {
 
   env_vars = {
     "ENVIRONMENT_NAME"         = upper(var.env_name)
-    "NOTIFY_API_KEY"           = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["notifyApiKey"]
-    "NOTIFY_TEMPLATE_ID"       = "31ad772f-8483-4eed-bb79-73c8233a8f92"
+    "SES_SENDER_EMAIL"         = var.ses_email_from
     "EMAIL_RECIPIENT"          = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["nspocAlertEmail"]
     "SHARED_SLACK_WEBHOOK_URL" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["sharedSlackWebhookUrl"]
   }
