@@ -31,7 +31,7 @@ module "notifications_sender_lambda" {
   s3_key               = "notifications-sender-${var.image_tag}.zip"
 
   env_vars = {
-    "ENVIRONMENT_NAME"  = upper(var.env_name)
-    "SLACK_WEBHOOK_URL" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["internalSlackWebhookUrl"]
+    "ENVIRONMENT_NAME"   = upper(var.env_name)
+    "SLACK_WEBHOOK_URLS" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["internalSlackWebhookUrls"]
   }
 }

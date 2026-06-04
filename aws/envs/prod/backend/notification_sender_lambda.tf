@@ -47,10 +47,12 @@ module "notifications_sender_lambda" {
   s3_key               = "notifications-sender-${var.image_tag}.zip"
 
   env_vars = {
-    "ENVIRONMENT_NAME"         = upper(var.env_name)
-    "SLACK_WEBHOOK_URL"        = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["internalSlackWebhookUrl"]
-    "SES_SENDER_EMAIL"         = var.ses_email_from
-    "EMAIL_RECIPIENT"          = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["nspocAlertEmail"]
-    "SHARED_SLACK_WEBHOOK_URL" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["sharedSlackWebhookUrl"]
+    "ENVIRONMENT_NAME"       = upper(var.env_name)
+    "SES_SENDER_EMAIL"       = var.ses_email_from
+    "SLACK_WEBHOOK_URLS"     = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["internalSlackWebhookUrls"]
+    "CDM_SLACK_WEBHOOK_URLS" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["cdmSlackWebhookUrls"]
+    "CDM_EMAILS"             = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["cdmEmails"]
+    "TIP_SLACK_WEBHOOK_URLS" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["tipSlackWebhookUrls"]
+    "TIP_EMAILS"             = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["tipEmails"]
   }
 }
