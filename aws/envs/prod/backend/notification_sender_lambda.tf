@@ -48,6 +48,7 @@ module "notifications_sender_lambda" {
 
   env_vars = {
     "ENVIRONMENT_NAME"         = upper(var.env_name)
+    "SLACK_WEBHOOK_URL"        = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["internalSlackWebhookUrl"]
     "SES_SENDER_EMAIL"         = var.ses_email_from
     "EMAIL_RECIPIENT"          = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["nspocAlertEmail"]
     "SHARED_SLACK_WEBHOOK_URL" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["sharedSlackWebhookUrl"]
