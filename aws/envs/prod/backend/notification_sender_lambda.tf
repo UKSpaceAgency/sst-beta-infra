@@ -31,6 +31,10 @@ module "notifications_sender_lambda" {
   s3_key               = "notifications-sender-${var.image_tag}.zip"
 
   env_vars = {
-    "ENVIRONMENT_NAME" = upper(var.env_name)
+    "ENVIRONMENT_NAME"         = upper(var.env_name)
+    "NOTIFY_API_KEY"           = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["notifyApiKey"]
+    "NOTIFY_TEMPLATE_ID"       = "31ad772f-8483-4eed-bb79-73c8233a8f92"
+    "EMAIL_RECIPIENT"          = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["nspocAlertEmail"]
+    "SHARED_SLACK_WEBHOOK_URL" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["sharedSlackWebhookUrl"]
   }
 }
