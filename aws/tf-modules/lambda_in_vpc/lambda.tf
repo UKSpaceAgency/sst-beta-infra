@@ -16,8 +16,7 @@ resource "aws_lambda_function" "vpc_lambda" {
   s3_bucket     = var.s3_bucket
   s3_key        = var.s3_key
   runtime       = "python3.11"
-  timeout       = 30 //seconds
-
+  timeout       = var.default_timeout
   environment {
     variables = var.env_vars
   }

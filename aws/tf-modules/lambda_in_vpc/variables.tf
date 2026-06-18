@@ -19,3 +19,8 @@ variable "env_vars" {
 
 variable "s3_bucket" { type = string }
 variable "s3_key" { type = string }
+
+variable "default_timeout" {
+  type = number
+  default = 30
+}
