@@ -19,6 +19,22 @@ resource "aws_iam_role" "lambda-assume-role-notifications-sender" {
   )
 }
 
+resource "aws_iam_role_policy" "notifications_sender_ses_send" {
+  name = "notifications-sender-ses-send"
+  role = aws_iam_role.lambda-assume-role-notifications-sender.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["ses:SendEmail", "ses:SendRawEmail"]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 module "notifications_sender_lambda" {
   source               = "../../../tf-modules/lambda_in_public"
   env_name             = var.env_name
@@ -31,6 +47,12 @@ module "notifications_sender_lambda" {
   s3_key               = "notifications-sender-${var.image_tag}.zip"
 
   env_vars = {
-    "ENVIRONMENT_NAME" = upper(var.env_name)
+    "ENVIRONMENT_NAME"       = upper(var.env_name)
+    "SES_SENDER_EMAIL"       = var.ses_email_from
+    "SLACK_WEBHOOK_URLS"     = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["internalSlackWebhookUrls"]
+    "CDM_SLACK_WEBHOOK_URLS" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["cdmSlackWebhookUrls"]
+    "CDM_EMAILS"             = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["cdmEmails"]
+    "TIP_SLACK_WEBHOOK_URLS" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["tipSlackWebhookUrls"]
+    "TIP_EMAILS"             = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["tipEmails"]
   }
 }
