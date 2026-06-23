@@ -32,5 +32,8 @@ module "notifications_sender_lambda" {
 
   env_vars = {
     "ENVIRONMENT_NAME" = upper(var.env_name)
+    "SES_SENDER_EMAIL" = var.ses_email_from
+    "CDM_EMAILS"       = "ukspaceagency.support@thepsc.co.uk"
+    "TIP_EMAILS"       = "ukspaceagency.support@thepsc.co.uk"
   }
 }
