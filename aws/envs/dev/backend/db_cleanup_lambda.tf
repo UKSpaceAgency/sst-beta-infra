@@ -108,6 +108,12 @@ resource "aws_cloudwatch_event_target" "db_cleanup_lambda" {
         "retention_days": 365
       },
       {
+        "table_name": "ephemeris",
+        "batch_size": 50000,
+        "delay_seconds": 1,
+        "retention_days": 180
+      }
+      {
         "table_name": "notifications",
         "batch_size": 50000,
         "delay_seconds": 1,
