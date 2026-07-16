@@ -6,3 +6,7 @@ module "ecr" {
 resource "aws_ecr_repository" "frontend2" {
   name = "frontend2"
 }
+
+resource "aws_ecr_repository" "notification_engine" {
+  name = "notification-engine"
+}

@@ -1,22 +1,22 @@
 module "backend" {
-  source                 = "../../../tf-modules/ecsapp"
-  env_name               = var.env_name
-  alb_name               = data.terraform_remote_state.stack.outputs.alb_name
-  app_alb_priority       = 10
-  app_cpu                = 512
-  app_instances_num      = 1
-  app_mem                = 1024
-  app_name               = var.app_name
-  ecr_app_name           = "backend"
-  app_port_num           = 8080
+  source                    = "../../../tf-modules/ecsapp"
+  env_name                  = var.env_name
+  alb_name                  = data.terraform_remote_state.stack.outputs.alb_name
+  app_alb_priority          = 10
+  app_cpu                   = 512
+  app_instances_num         = 1
+  app_mem                   = 1024
+  app_name                  = var.app_name
+  ecr_app_name              = "backend"
+  app_port_num              = 8080
   default_capacity_provider = "FARGATE"
-  awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
-  custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
-  default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id
-  ecs_cluster_arn        = data.terraform_remote_state.stack.outputs.cluster_arn
-  ecs_execution_role_arn = data.terraform_remote_state.stack.outputs.ecs_execution_role_arn
-  ecs_task_role_arn      = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
-  public_subnet_ids      = data.terraform_remote_state.stack.outputs.public_subnet_ids
+  awslogs_group             = data.terraform_remote_state.stack.outputs.cluster_log_group_name
+  custom_vpc_id             = data.terraform_remote_state.stack.outputs.custom_vpc_id
+  default_sg_id             = data.terraform_remote_state.stack.outputs.default_sg_id
+  ecs_cluster_arn           = data.terraform_remote_state.stack.outputs.cluster_arn
+  ecs_execution_role_arn    = data.terraform_remote_state.stack.outputs.ecs_execution_role_arn
+  ecs_task_role_arn         = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
+  public_subnet_ids         = data.terraform_remote_state.stack.outputs.public_subnet_ids
   env_vars = [
     { "name" : "APP_NAME", "value" : "API Backend (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
@@ -29,6 +29,8 @@ module "backend" {
     { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
     { "name" : "APP_FF_ENABLE_SES_SENDER", "value" : "True" },
     { "name" : "APP_EMAIL_RENDERER_LAMBDA_NAME", "value" : module.email_renderer_lambda.public_lambda_name },
+    { "name" : "NOTIFICATION_ENGINE_ENABLED", "value" : "True" },
+    { "name" : "NOTIFICATION_ENGINE_EVENTS_QUEUE_URL", "value" : aws_sqs_queue.notification_engine_events.url },
   ]
   secret_env_vars = [
     {
