@@ -1,6 +1,6 @@
 locals {
   prefix_name     = "ephemeris/"
-  expiration_days = 30
+  expiration_days = 90
 }
 
 resource "aws_iam_role" "lambda-assume-role-eph-cleanup" {
