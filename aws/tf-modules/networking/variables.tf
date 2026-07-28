@@ -17,3 +17,8 @@ variable "private_subnet_bits" {
   type    = number
   default = 8
 }
+
+variable "interface_endpoint_services" {
+  type    = list(string)
+  default = []
+}
