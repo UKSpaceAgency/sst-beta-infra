@@ -68,6 +68,8 @@ locals {
     "NOTIFICATION_ENGINE_DELIVERY_QUEUE_URL" = aws_sqs_queue.notification_engine_delivery.url
     "APP_EMAIL_RENDERER_LAMBDA_NAME"         = module.email_renderer_lambda.public_lambda_name
     "APP_ENVIRONMENT"                        = var.env_name
+    "DATABASE_POOL_MIN_SIZE"                 = "1"
+    "DATABASE_POOL_MAX_SIZE"                 = "1"
   }
 }
 
@@ -130,6 +132,11 @@ resource "aws_lambda_event_source_mapping" "notification_engine_events" {
   function_name           = module.notification_engine_evaluator_lambda.public_lambda_arn
   batch_size              = 10
   function_response_types = ["ReportBatchItemFailures"]
+
+  # Bounds concurrent lambda pools so the shared RDS connection limit survives an event burst.
+  scaling_config {
+    maximum_concurrency = 5
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "notification_engine_delivery" {
@@ -137,6 +144,11 @@ resource "aws_lambda_event_source_mapping" "notification_engine_delivery" {
   function_name           = module.notification_engine_sender_lambda.public_lambda_arn
   batch_size              = 10
   function_response_types = ["ReportBatchItemFailures"]
+
+  # Also throttles outbound email rate to the shared test inbox.
+  scaling_config {
+    maximum_concurrency = 2
+  }
 }
 
 resource "aws_cloudwatch_event_rule" "notification_engine_flusher" {
