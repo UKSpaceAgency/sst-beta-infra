@@ -22,6 +22,8 @@ module "data_cache_client" {
     { "name" : "APP_NAME", "value" : "Data Cache Client (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "S3_SQS_QUEUE_ARN", "value" : var.data_cache_sqs_arn },
+    { "name" : "NOTIFICATION_ENGINE_ENABLED", "value" : "True" },
+    { "name" : "NOTIFICATION_ENGINE_EVENTS_QUEUE_URL", "value" : aws_sqs_queue.notification_engine_events.url },
   ]
   secret_env_vars = [
     {
