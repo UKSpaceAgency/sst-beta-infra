@@ -211,3 +211,23 @@ resource "aws_vpc_endpoint" "secrets_manager_endpoint" {
 #    Name = "LambdaVpcEndpoint"
 #  }
 #}
+
+##----- VPC endpoints needed by the notification engine lambdas (SQS publish,
+##----- email-renderer invoke, SES SMTP): private subnets have no NAT route.
+resource "aws_vpc_endpoint" "interface_endpoints" {
+  for_each          = toset(var.interface_endpoint_services)
+  vpc_id            = aws_vpc.custom_vpc.id
+  service_name      = "com.amazonaws.${data.aws_region.current.id}.${each.value}"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+  aws_security_group.allow_ssh.id, data.aws_security_group.default.id]
+
+  subnet_ids = aws_subnet.private.*.id
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "${each.value}VpcEndpoint"
+  }
+}
