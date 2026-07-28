@@ -14,13 +14,27 @@ resource "aws_lambda_function" "public_lambda_as_docker_image" {
   role          = var.lambda_role_arn
   package_type  = "Image"
   image_uri     = var.ecr_image
-  timeout       = 900 //seconds
-  memory_size   = 4096 //megs
+  timeout       = var.default_timeout
+  memory_size   = var.memory_size
 
   environment {
     variables = var.env_vars
   }
 
+  dynamic "image_config" {
+    for_each = var.image_command == null ? [] : [1]
+    content {
+      command = var.image_command
+    }
+  }
+
+  dynamic "vpc_config" {
+    for_each = var.vpc_security_group_ids == null ? [] : [1]
+    content {
+      security_group_ids = var.vpc_security_group_ids
+      subnet_ids         = var.private_subnet_ids
+    }
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.lambda_policy_attachment,
