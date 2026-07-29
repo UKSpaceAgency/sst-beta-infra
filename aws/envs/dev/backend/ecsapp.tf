@@ -27,6 +27,9 @@ module "backend" {
     { "name" : "S3_REENTRY_EVENT_REPORTS_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id },
     { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
     { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
+    { "name" : "APP_SES_SMTP_HOST", "value" : "${aws_service_discovery_service.mailpit.name}.${aws_service_discovery_private_dns_namespace.internal.name}" },
+    { "name" : "APP_SES_SMTP_PORT", "value" : "1025" },
+    { "name" : "APP_SES_SMTP_USE_SSL", "value" : "False" },
     { "name" : "APP_FF_ENABLE_SES_SENDER", "value" : "True" },
     { "name" : "APP_EMAIL_RENDERER_LAMBDA_NAME", "value" : module.email_renderer_lambda.public_lambda_name },
     { "name" : "NOTIFICATION_ENGINE_ENABLED", "value" : "True" },
@@ -92,14 +95,6 @@ module "backend" {
     {
       "name" : "NOTIFY_API_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
-    },
-    {
-      "name" : "APP_SES_SMTP_USERNAME",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpUsername::"
-    },
-    {
-      "name" : "APP_SES_SMTP_PASSWORD",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
     },
     {
       "name" : "APP_DOWNLOAD_TOKEN_SECRET",
