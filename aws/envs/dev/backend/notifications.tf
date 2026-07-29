@@ -1,25 +1,25 @@
 module "notifications_worker" {
-  source                 = "../../../tf-modules/workerapp"
-  env_name               = var.env_name
-  app_cpu                = 512
-  app_instances_num      = 1
-  app_mem                = 1024
-  app_name               = "notifications"
-  ecr_app_name           = "backend"
+  source                    = "../../../tf-modules/workerapp"
+  env_name                  = var.env_name
+  app_cpu                   = 512
+  app_instances_num         = 1
+  app_mem                   = 1024
+  app_name                  = "notifications"
+  ecr_app_name              = "backend"
   default_capacity_provider = "FARGATE_SPOT"
-  cron_expression        = lookup(local.ingestion_schedule, lower("notifications"), "0 0 31 2 *")
-  awslogs_group          = data.terraform_remote_state.stack.outputs.cluster_log_group_name
-  custom_vpc_id          = data.terraform_remote_state.stack.outputs.custom_vpc_id
-  default_sg_id          = data.terraform_remote_state.stack.outputs.default_sg_id
-  ecs_cluster_arn        = data.terraform_remote_state.stack.outputs.cluster_arn
-  ecs_execution_role_arn = data.terraform_remote_state.stack.outputs.ecs_execution_role_arn
-  ecs_task_role_arn      = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
-  ecs_events_role_arn    = data.terraform_remote_state.stack.outputs.ecs_events_role_arn
-  ecs_events_role_id     = data.terraform_remote_state.stack.outputs.ecs_events_role_id
-  public_subnet_ids      = data.terraform_remote_state.stack.outputs.public_subnet_ids
-  image_tag              = var.image_tag
-  enable_ecs_execute     = true
-  worker_command         = ["uv", "run", "python", "-m", "app.periodics.notifications_worker", "--cron"]
+  cron_expression           = lookup(local.ingestion_schedule, lower("notifications"), "0 0 31 2 *")
+  awslogs_group             = data.terraform_remote_state.stack.outputs.cluster_log_group_name
+  custom_vpc_id             = data.terraform_remote_state.stack.outputs.custom_vpc_id
+  default_sg_id             = data.terraform_remote_state.stack.outputs.default_sg_id
+  ecs_cluster_arn           = data.terraform_remote_state.stack.outputs.cluster_arn
+  ecs_execution_role_arn    = data.terraform_remote_state.stack.outputs.ecs_execution_role_arn
+  ecs_task_role_arn         = data.terraform_remote_state.stack.outputs.ecs_task_role_arn
+  ecs_events_role_arn       = data.terraform_remote_state.stack.outputs.ecs_events_role_arn
+  ecs_events_role_id        = data.terraform_remote_state.stack.outputs.ecs_events_role_id
+  public_subnet_ids         = data.terraform_remote_state.stack.outputs.public_subnet_ids
+  image_tag                 = var.image_tag
+  enable_ecs_execute        = true
+  worker_command            = ["uv", "run", "python", "-m", "app.periodics.notifications_worker", "--cron"]
   env_vars = [
     { "name" : "APP_NAME", "value" : "Notifications worker (${var.image_tag})" },
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
@@ -27,6 +27,9 @@ module "notifications_worker" {
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
     { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
     { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
+    { "name" : "APP_SES_SMTP_HOST", "value" : "${aws_service_discovery_service.mailpit.name}.${aws_service_discovery_private_dns_namespace.internal.name}" },
+    { "name" : "APP_SES_SMTP_PORT", "value" : "1025" },
+    { "name" : "APP_SES_SMTP_USE_SSL", "value" : "False" },
     { "name" : "APP_EMAIL_RENDERER_LAMBDA_NAME", "value" : module.email_renderer_lambda.public_lambda_name },
   ]
   secret_env_vars = [
@@ -53,14 +56,6 @@ module "notifications_worker" {
     {
       "name" : "NOTIFY_API_KEY",
       "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:notifyApiKey::"
-    },
-    {
-      "name" : "APP_SES_SMTP_USERNAME",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpUsername::"
-    },
-    {
-      "name" : "APP_SES_SMTP_PASSWORD",
-      "valueFrom" : "${data.aws_secretsmanager_secret.by-name.arn}:sesSmtpPassword::"
     }
   ]
 

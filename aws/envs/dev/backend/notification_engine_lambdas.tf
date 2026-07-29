@@ -70,6 +70,9 @@ locals {
     "APP_ENVIRONMENT"                        = var.env_name
     "DATABASE_POOL_MIN_SIZE"                 = "1"
     "DATABASE_POOL_MAX_SIZE"                 = "1"
+    "APP_SES_SMTP_HOST"                      = "${aws_service_discovery_service.mailpit.name}.${aws_service_discovery_private_dns_namespace.internal.name}"
+    "APP_SES_SMTP_PORT"                      = "1025"
+    "APP_SES_SMTP_USE_SSL"                   = "False"
   }
 }
 
