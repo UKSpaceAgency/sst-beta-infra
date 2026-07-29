@@ -148,10 +148,6 @@ resource "aws_lambda_event_source_mapping" "notification_engine_delivery" {
   batch_size              = 10
   function_response_types = ["ReportBatchItemFailures"]
 
-  # Paused: dev SMTP creds draw on the prod account's shared SES daily quota.
-  # Re-enable once dev sends to the in-VPC mail catcher.
-  enabled = false
-
   # Also throttles outbound email rate to the shared test inbox.
   scaling_config {
     maximum_concurrency = 2
