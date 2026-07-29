@@ -148,9 +148,10 @@ resource "aws_lambda_event_source_mapping" "notification_engine_delivery" {
   batch_size              = 10
   function_response_types = ["ReportBatchItemFailures"]
 
-  # Also throttles outbound email rate to the shared test inbox.
+  # Sized against the RDS connection budget (1 conn per invocation); email goes
+  # to the in-VPC mail catcher, so send rate no longer needs throttling.
   scaling_config {
-    maximum_concurrency = 2
+    maximum_concurrency = 10
   }
 }
 
