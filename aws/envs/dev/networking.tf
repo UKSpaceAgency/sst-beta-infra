@@ -4,4 +4,5 @@ module "network" {
   cidr_block = "172.21.0.0/16"
 
   interface_endpoint_services = ["sqs", "lambda", "email-smtp"]
+  interface_endpoint_az_count = 1
 }

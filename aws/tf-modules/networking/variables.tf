@@ -22,3 +22,9 @@ variable "interface_endpoint_services" {
   type    = list(string)
   default = []
 }
+
+variable "interface_endpoint_az_count" {
+  type        = number
+  default     = 0
+  description = "Limit interface endpoints to the first N private subnets; 0 = all"
+}

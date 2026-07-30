@@ -144,10 +144,10 @@ resource "aws_ecs_service" "mailpit" {
   cluster         = data.terraform_remote_state.stack.outputs.cluster_arn
   task_definition = aws_ecs_task_definition.mailpit.arn
 
-  # On-demand rather than FARGATE_SPOT: the mailbox is in-container and a spot
-  # interruption would wipe it.
+  # Spot interruption wipes the in-container mailbox; acceptable, it self-refills
+  # and the rolling 5k cap makes it ephemeral anyway.
   capacity_provider_strategy {
-    capacity_provider = "FARGATE"
+    capacity_provider = "FARGATE_SPOT"
     weight            = 1
   }
 
