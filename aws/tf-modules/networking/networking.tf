@@ -186,7 +186,9 @@ resource "aws_vpc_endpoint" "secrets_manager_endpoint" {
   security_group_ids = [
   aws_security_group.allow_ssh.id, data.aws_security_group.default.id]
 
-  subnet_ids = aws_subnet.private.*.id
+  subnet_ids = slice(
+    aws_subnet.private.*.id, 0,
+  var.interface_endpoint_az_count > 0 ? var.interface_endpoint_az_count : length(aws_subnet.private.*.id))
 
   private_dns_enabled = true
 
