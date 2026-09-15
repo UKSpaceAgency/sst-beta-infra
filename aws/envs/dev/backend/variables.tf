@@ -31,28 +31,27 @@ variable "data_cache_sqs_arn" {
 # Who gets a copy of dev mail caught by Mailpit. This list IS the blast radius: copies go
 # to these addresses and nowhere else, whatever the message was addressed to, and each copy
 # still carries the original recipients in its To/Cc headers and the original body.
-# This repo is public, so real addresses do not belong in this default. The deploy workflow
-# passes them in from the MAILPIT_FORWARD_RECIPIENTS environment secret.
+# This repo is public and its Actions logs are world readable, so real addresses do not belong
+# here. The deploy workflow passes them in from the MAILPIT_FORWARD_RECIPIENTS secret.
 # Empty means forwarding is off and mail stays in the VPC. Emptying it takes a redeploy,
 # so treat it as a between-runs switch rather than an incident-time one.
 variable "mailpit_forward_recipients" {
   type    = list(string)
   default = []
 
-  # These are real people's addresses and Actions logs on a public repo are world readable.
-  # Unmarked, the deploy step's plan output prints them in clear text. This redacts the whole
-  # mailpit container_definitions with them, which costs little: the rest of that blob is
-  # built from literals in mailpit.tf, so git already shows what it contains.
+  # Unmarked, the deploy step's plan output prints these in clear text. Marking it redacts the
+  # whole mailpit container_definitions, which costs little: the rest of that blob is built from
+  # literals in mailpit.tf, so git already shows what it contains.
   sensitive = true
 
   # Mailpit exits at startup on an address it cannot parse rather than skipping that one
   # recipient, and the container is essential, so a typo here takes the catcher down and
   # hangs the deploy on wait_for_steady_state. Mailpit splits MP_SMTP_FORWARD_TO on commas
-  # and runs every entry through Go's mail.ParseAddress, so this is the unquoted dot-atom
-  # subset of what that accepts: no comma, which would otherwise smuggle a second bogus
-  # recipient in through the join, and no leading, trailing or doubled dot. Checked against
-  # mail.ParseAddress over 300k fuzzed inputs with nothing accepted here rejected there.
-  # Display names and quoted local parts are refused although Mailpit would take them.
+  # and runs each entry through Go's mail.ParseAddress; every character class below is a
+  # strict subset of that parser's isAtext, so nothing this accepts can be rejected there.
+  # No comma, which would otherwise smuggle a second bogus recipient in through the join.
+  # Deliberately narrower than Mailpit, which would accept display names, quoted local parts
+  # and non-ASCII (RFC 6532) addresses. Those fail the plan rather than reaching the container.
   validation {
     condition     = alltrue([for r in var.mailpit_forward_recipients : can(regex("^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$", r))])
     error_message = "Each entry must be a bare email address, for example name@example.com."
