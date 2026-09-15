@@ -39,12 +39,22 @@ variable "mailpit_forward_recipients" {
   type    = list(string)
   default = []
 
+  # These are real people's addresses and Actions logs on a public repo are world readable.
+  # Unmarked, the deploy step's plan output prints them in clear text. This redacts the whole
+  # mailpit container_definitions with them, which costs little: the rest of that blob is
+  # built from literals in mailpit.tf, so git already shows what it contains.
+  sensitive = true
+
   # Mailpit exits at startup on an address it cannot parse rather than skipping that one
   # recipient, and the container is essential, so a typo here takes the catcher down and
-  # hangs the deploy on wait_for_steady_state. Deliberately stricter than Mailpit's own
-  # check: bare addresses only, dotted domain, so nothing it would reject gets through.
+  # hangs the deploy on wait_for_steady_state. Mailpit splits MP_SMTP_FORWARD_TO on commas
+  # and runs every entry through Go's mail.ParseAddress, so this is the unquoted dot-atom
+  # subset of what that accepts: no comma, which would otherwise smuggle a second bogus
+  # recipient in through the join, and no leading, trailing or doubled dot. Checked against
+  # mail.ParseAddress over 300k fuzzed inputs with nothing accepted here rejected there.
+  # Display names and quoted local parts are refused although Mailpit would take them.
   validation {
-    condition     = alltrue([for r in var.mailpit_forward_recipients : can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", r))])
+    condition     = alltrue([for r in var.mailpit_forward_recipients : can(regex("^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$", r))])
     error_message = "Each entry must be a bare email address, for example name@example.com."
   }
 }

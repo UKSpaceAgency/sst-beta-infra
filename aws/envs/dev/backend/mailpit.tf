@@ -68,7 +68,9 @@ locals {
   # Setting the host without a To list is a startup error, so the two move together.
   # Forwarding happens inside the SMTP transaction and before the message is stored,
   # over a dial with no timeout, so an unreachable SES endpoint stalls each inbound
-  # session until the OS gives up and those messages never reach the UI at all.
+  # session for the OS TCP timeout. The message is still stored afterwards: Mailpit
+  # abandons it only when MP_SMTP_FORWARD_FWD_SMTP_ERRORS is set, and it is not. The
+  # catcher holding every message depends on that staying unset.
   mailpit_forward_env = length(var.mailpit_forward_recipients) == 0 ? [] : [
     { name = "MP_SMTP_FORWARD_TO", value = join(",", var.mailpit_forward_recipients) },
     { name = "MP_SMTP_FORWARD_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
