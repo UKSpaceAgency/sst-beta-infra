@@ -24,6 +24,15 @@ variable "ses_email_reply_to" {
 }
 
 variable "data_cache_sqs_arn" {
-  type = string
+  type    = string
   default = "arn:aws:sqs:eu-west-2:915338536460:data-cache-client-dev"
+}
+
+# Everyone who receives a copy of dev mail caught by Mailpit. This list IS the blast
+# radius: forwarded copies go here and nowhere else, whatever the original message was
+# addressed to. Empty means forwarding is off and mail stays in the VPC; set it to []
+# before a dev load test.
+variable "mailpit_forward_recipients" {
+  type    = list(string)
+  default = []
 }

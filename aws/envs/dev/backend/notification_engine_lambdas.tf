@@ -148,8 +148,10 @@ resource "aws_lambda_event_source_mapping" "notification_engine_delivery" {
   batch_size              = 10
   function_response_types = ["ReportBatchItemFailures"]
 
-  # Sized against the RDS connection budget (1 conn per invocation); email goes
-  # to the in-VPC mail catcher, so send rate no longer needs throttling.
+  # Sized against the RDS connection budget (1 conn per invocation). Mail now leaves
+  # the catcher again, but only re-addressed to var.mailpit_forward_recipients and only
+  # on this account's SES quota, so this number is not what holds outbound volume down
+  # and lowering it would just slow dev. Empty that list to stop egress outright.
   scaling_config {
     maximum_concurrency = 10
   }
