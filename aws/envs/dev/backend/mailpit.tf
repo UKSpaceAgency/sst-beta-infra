@@ -4,7 +4,7 @@
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
 # When var.mailpit_forward_recipients is non-empty, a copy of each message also goes to
-# those addresses and only those, via this account's own SES. See the block below.
+# those addresses and only those, via this account's own SES.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -21,11 +21,10 @@ resource "aws_secretsmanager_secret_version" "mailpit_ui_auth" {
   secret_string = "mailpit:${random_password.mailpit_ui.result}"
 }
 
-# Forwarding a copy of caught mail out to var.mailpit_forward_recipients. Two properties
-# keep the catcher's guarantee intact: the copy is re-addressed to that list, so the
-# original recipients are never reachable, and it is sent by this (dev) account's own SES
-# identity, so the prod quota the 2026-07-28 flood exhausted is out of reach from here.
-# Mailpit keeps the untouched original either way, so the UI stays the source of truth.
+# A dedicated SES identity for the forwarder, issued in this (dev) account, so forwarded
+# mail can never draw on the prod quota the 2026-07-28 flood exhausted.
+# Only the envelope is re-addressed: recipients of a copy still see the real end user's
+# address in To/Cc and the full notification body.
 resource "aws_iam_user" "mailpit_forward" {
   name = "${var.env_name}-mailpit-forward-smtp"
 }
@@ -67,6 +66,9 @@ locals {
   # An empty recipient list leaves MP_SMTP_FORWARD_HOST unset, which is how Mailpit
   # decides forwarding is off (validateForwardConfig returns early on an empty host).
   # Setting the host without a To list is a startup error, so the two move together.
+  # Forwarding happens inside the SMTP transaction and before the message is stored,
+  # over a dial with no timeout, so an unreachable SES endpoint stalls each inbound
+  # session until the OS gives up and those messages never reach the UI at all.
   mailpit_forward_env = length(var.mailpit_forward_recipients) == 0 ? [] : [
     { name = "MP_SMTP_FORWARD_TO", value = join(",", var.mailpit_forward_recipients) },
     { name = "MP_SMTP_FORWARD_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
@@ -77,7 +79,6 @@ locals {
     # var.ses_email_from sits on the prod-account domain. The stored copy keeps the
     # original From, so only the forwarded copy is rewritten.
     { name = "MP_SMTP_FORWARD_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
-    { name = "MP_SMTP_FORWARD_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
   ]
 
   mailpit_forward_secrets = length(var.mailpit_forward_recipients) == 0 ? [] : [
