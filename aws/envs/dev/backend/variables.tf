@@ -48,11 +48,12 @@ variable "mailpit_forward_recipients" {
   # recipient, and the container is essential, so a typo here takes the catcher down and
   # hangs the deploy on wait_for_steady_state. Mailpit splits MP_SMTP_FORWARD_TO on commas
   # and runs each entry through Go's mail.ParseAddress, which needs two things this pattern
-  # gives it: characters inside its isAtext, and dots only ever between non-empty runs, since
-  # it rejects a leading, trailing or doubled dot. Moving the dot into the character class
-  # would keep the first and lose the second. No comma either, which would otherwise smuggle
-  # a second bogus recipient in through the join. Narrower than Mailpit on purpose: it would
-  # accept display names, quoted local parts and non-ASCII (RFC 6532) addresses.
+  # gives it: every character class below sits inside its isAtext, and dots only ever fall
+  # between non-empty runs, since it rejects a leading, trailing or doubled dot. Moving the
+  # dot into the character class would keep the first and lose the second. No comma either,
+  # which would otherwise smuggle a second bogus recipient in through the join. Deliberately
+  # narrower than Mailpit, which would accept display names, quoted local parts and non-ASCII
+  # (RFC 6532) addresses.
   validation {
     condition     = alltrue([for r in var.mailpit_forward_recipients : can(regex("^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$", r))])
     error_message = "Each entry must be a bare email address, for example name@example.com."
