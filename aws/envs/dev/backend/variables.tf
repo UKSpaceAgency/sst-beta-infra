@@ -32,7 +32,7 @@ variable "data_cache_sqs_arn" {
 # to these addresses and nowhere else, whatever the message was addressed to, and each copy
 # still carries the original recipients in its To/Cc headers and the original body.
 # This repo is public and its Actions logs are world readable, so real addresses do not belong
-# here. The deploy workflow passes them in from the MAILPIT_FORWARD_RECIPIENTS secret.
+# here. The deploy workflow passes them in from the MAILPIT_FORWARD_RECIPIENTS environment secret.
 # Empty means forwarding is off and mail stays in the VPC. Emptying it takes a redeploy,
 # so treat it as a between-runs switch rather than an incident-time one.
 variable "mailpit_forward_recipients" {
@@ -47,11 +47,12 @@ variable "mailpit_forward_recipients" {
   # Mailpit exits at startup on an address it cannot parse rather than skipping that one
   # recipient, and the container is essential, so a typo here takes the catcher down and
   # hangs the deploy on wait_for_steady_state. Mailpit splits MP_SMTP_FORWARD_TO on commas
-  # and runs each entry through Go's mail.ParseAddress; every character class below is a
-  # strict subset of that parser's isAtext, so nothing this accepts can be rejected there.
-  # No comma, which would otherwise smuggle a second bogus recipient in through the join.
-  # Deliberately narrower than Mailpit, which would accept display names, quoted local parts
-  # and non-ASCII (RFC 6532) addresses. Those fail the plan rather than reaching the container.
+  # and runs each entry through Go's mail.ParseAddress, which needs two things this pattern
+  # gives it: characters inside its isAtext, and dots only ever between non-empty runs, since
+  # it rejects a leading, trailing or doubled dot. Moving the dot into the character class
+  # would keep the first and lose the second. No comma either, which would otherwise smuggle
+  # a second bogus recipient in through the join. Narrower than Mailpit on purpose: it would
+  # accept display names, quoted local parts and non-ASCII (RFC 6532) addresses.
   validation {
     condition     = alltrue([for r in var.mailpit_forward_recipients : can(regex("^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$", r))])
     error_message = "Each entry must be a bare email address, for example name@example.com."
