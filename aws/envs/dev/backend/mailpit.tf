@@ -3,8 +3,7 @@
 # on prod's shared SES daily quota (exhausted by the 2026-07-28 flood).
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
-# When var.mailpit_release_allowed_recipients is non-empty, the UI grows a Release button that
-# sends one open message, on a human's click, to addresses they type and that list allows.
+# Release: a human can send one caught message onward from the UI, to allowed addresses only.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -22,7 +21,7 @@ resource "aws_secretsmanager_secret_version" "mailpit_ui_auth" {
 }
 
 # A dedicated SES identity for releasing, issued in this (dev) account, so released
-# mail can never draw on the prod quota the 2026-07-28 flood exhausted.
+# mail can never draw on prod's shared SES quota.
 # Only the sender is rewritten: recipients of a released message still see the real end
 # user's address in To/Cc and the full notification body.
 resource "aws_iam_user" "mailpit_relay" {
@@ -63,23 +62,29 @@ resource "aws_secretsmanager_secret_version" "mailpit_relay_smtp" {
 }
 
 locals {
+  # Nothing releases unless this is true, and it is the ONLY condition either list below tests.
+  # A second, separately written condition is how a relay host ends up configured with no allowlist
+  # in force, which is release to any address on earth: an allowlist binds only when it is non-empty.
+  mailpit_release_enabled = length(var.mailpit_release_allowed_recipients) > 0
+
   # Mailpit checks this allowlist with MatchString, which matches anywhere in the address, so the
   # anchors are what stop `alice@example.com` from also authorising `alice@example.com.evil.net`.
   # The replace escapes every regex metacharacter, so a dot stays a dot and a plus addressed
   # recipient survives; it also means an entry cannot contribute regex structure of its own.
-  mailpit_release_allowlist = "^(${join("|", [for r in var.mailpit_release_allowed_recipients : replace(r, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}")])})$"
+  # (?i) because nothing on either side lowercases anything: without it an entry written
+  # `Alice@Example.com` never matches a human typing `alice@example.com`, nor the reverse, and it
+  # fails closed and silently. It widens the list only to case variants of addresses already on it.
+  mailpit_release_allowlist = "(?i)^(${join("|", [for r in var.mailpit_release_allowed_recipients : replace(r, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}")])})$"
 
   # An empty recipient list leaves MP_SMTP_RELAY_HOST unset, which is how Mailpit decides relaying
   # is off (validateRelayConfig returns early on an empty host and never sets ReleaseEnabled), so
-  # the UI offers no Release button at all. The two move together on purpose: an allowlist is only
-  # enforced when it is non-empty, so configuring the host WITHOUT one would permit release to any
-  # address on earth, and the Mailpit UI is on the public ALB behind a single basic-auth password.
+  # the UI offers no Release button at all.
   #
   # MP_SMTP_RELAY_ALL and MP_SMTP_RELAY_MATCHING must never be set here. They are the two settings
   # that make autoRelayMessage send caught mail onward to its ORIGINAL recipients without anyone
   # asking, which is the hole this catcher exists to close. Nothing else in this file mentions
   # them, so their absence is silent, which is why it is written down.
-  mailpit_relay_env = length(var.mailpit_release_allowed_recipients) == 0 ? [] : [
+  mailpit_relay_env = local.mailpit_release_enabled ? [
     { name = "MP_SMTP_RELAY_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
     { name = "MP_SMTP_RELAY_PORT", value = "587" },
     { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
@@ -90,12 +95,20 @@ locals {
     # smtpd.Relay, which the release handler calls, so it rewrites the From header and the
     # envelope sender together. The stored message keeps the original From.
     { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
-  ]
+  ] : []
 
-  mailpit_relay_secrets = length(var.mailpit_release_allowed_recipients) == 0 ? [] : [
+  mailpit_relay_secrets = local.mailpit_release_enabled ? [
     { name = "MP_SMTP_RELAY_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:username::" },
     { name = "MP_SMTP_RELAY_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:password::" },
-  ]
+  ] : []
+}
+
+# The only signal in the deploy log that the environment secret actually reached Terraform. A
+# secret bound to the wrong environment name resolves to empty, which in the log is identical to
+# nobody having set one: both just leave Release switched off. A count is safe to print where the
+# addresses are not, so this says how many without saying who.
+output "mailpit_release_recipient_count" {
+  value = nonsensitive(length(var.mailpit_release_allowed_recipients))
 }
 
 resource "aws_service_discovery_private_dns_namespace" "internal" {

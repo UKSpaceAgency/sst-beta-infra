@@ -33,9 +33,8 @@ variable "data_cache_sqs_arn" {
 # an open relay through our SES identity. Nothing leaves on its own: a message sits in Mailpit until
 # somebody opens it and clicks Release, so a dev load test still sends nothing outbound.
 # Each released copy carries the original recipients in its To/Cc headers and the original body.
-# This repo is public and its Actions logs are world readable, so real addresses do not belong
-# here. The deploy workflow passes them in from the MAILPIT_RELEASE_RECIPIENTS environment secret.
-# Empty means no relay host, so Mailpit does not offer Release at all and mail stays in the VPC.
+# This repo is public and its Actions logs are world readable, so real addresses do not belong here:
+# the deploy workflow passes them in from the MAILPIT_RELEASE_RECIPIENTS environment secret.
 variable "mailpit_release_allowed_recipients" {
   type    = list(string)
   default = []
