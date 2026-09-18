@@ -79,9 +79,11 @@ jobs:
           # How many people can be released to, without printing who. The plan redacts the count
           # itself, since the variable is sensitive, so a wrong or unset secret is otherwise
           # invisible: 0 means the Release button is off, "unparseable" means the secret is not
-          # the JSON array the fallback above describes.
-          recipients_count=$(printf '%s' "$TF_VAR_mailpit_release_allowed_recipients" | jq 'length' 2>/dev/null || echo "unparseable")
-          echo "Mailpit release recipients configured: $recipients_count"
+          # the JSON array the fallback above describes. The type guard is the point, since a bare
+          # `jq length` answers for a JSON scalar too, reporting a string's character count or a
+          # number's absolute value as if it were a headcount.
+          recipients_count=$(printf '%s' "$TF_VAR_mailpit_release_allowed_recipients" | jq -r 'if type == "array" then length else "unparseable" end' 2>/dev/null || true)
+          echo "Mailpit release recipients configured: ${recipients_count:-unparseable}"
           terraform init
           echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
           echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars

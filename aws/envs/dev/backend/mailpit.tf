@@ -65,8 +65,8 @@ locals {
   # Nothing releases unless this is true, and it is the ONLY condition either list below tests.
   # A second, separately written condition is how a relay host ends up configured with no allowlist
   # in force, which is release to any address on earth: an allowlist binds only when it is non-empty.
-  # The exposure that makes that worth guarding: the Mailpit UI is published on the PUBLIC ALB behind
-  # one shared basic-auth password, unlike the SMTP port above, which is reachable only in the VPC.
+  # The allowlist is the control here, not defence in depth: the UI named in the header is internet
+  # facing on the shared ALB, and its basic auth is one password the whole team holds.
   mailpit_release_enabled = length(var.mailpit_release_allowed_recipients) > 0
 
   # Mailpit checks this allowlist with MatchString, which matches anywhere in the address, so the
@@ -80,9 +80,10 @@ locals {
   #
   # This is deliberately NOT the `(?i)` flag, which looks equivalent and is not. Go applies UNICODE
   # simple case folding under `(?i)`, so `(?i)k` also matches U+212A KELVIN SIGN and `(?i)s` also
-  # matches U+017F LONG S. The Release handler parses whatever a human types with mail.ParseAddress,
-  # which accepts non-ASCII, so `(?i)` would admit byte sequences that are not the address anyone put
-  # on the list. These classes admit ASCII case variants and nothing else.
+  # matches U+017F LONG S, and the Release handler parses what a human types with mail.ParseAddress,
+  # which accepts both. These classes admit ASCII case variants and nothing else. Checking that in
+  # `terraform console` will mislead you: HCL normalises U+212A to ASCII `K` before any regex sees
+  # it, so the console matches both spellings. It was verified in Go, against the emitted pattern.
   mailpit_release_allowlist = "^(${join("|", [for r in var.mailpit_release_allowed_recipients : join("", [for c in split("", r) : lower(c) == upper(c) ? replace(c, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}") : "[${lower(c)}${upper(c)}]"])])})$"
 
   # An empty recipient list leaves MP_SMTP_RELAY_HOST unset, which is how Mailpit decides relaying
