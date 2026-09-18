@@ -3,7 +3,7 @@
 # on prod's shared SES daily quota (exhausted by the 2026-07-28 flood).
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
-# Release: a human can send one caught message onward from the UI, to allowed addresses only.
+# Release: a human can send one caught message onward to addresses they type in the UI.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -20,10 +20,7 @@ resource "aws_secretsmanager_secret_version" "mailpit_ui_auth" {
   secret_string = "mailpit:${random_password.mailpit_ui.result}"
 }
 
-# A dedicated SES identity for releasing, issued in this (dev) account, so released
-# mail can never draw on prod's shared SES quota.
-# Only the sender is rewritten: recipients of a released message still see the real end
-# user's address in To/Cc and the full notification body.
+# Issued in this (dev) account: dev's normal SMTP credentials are prod's and draw on prod's quota.
 resource "aws_iam_user" "mailpit_relay" {
   name = "${var.env_name}-mailpit-relay-smtp"
 }
@@ -59,58 +56,6 @@ resource "aws_secretsmanager_secret_version" "mailpit_relay_smtp" {
     username = aws_iam_access_key.mailpit_relay.id
     password = aws_iam_access_key.mailpit_relay.ses_smtp_password_v4
   })
-}
-
-locals {
-  # Nothing releases unless this is true, and it is the ONLY condition either list below tests.
-  # A second, separately written condition is how a relay host ends up configured with no allowlist
-  # in force, which is release to any address on earth: an allowlist binds only when it is non-empty.
-  # The allowlist is the control here, not defence in depth: the UI named in the header is internet
-  # facing on the shared ALB, and its basic auth is one password the whole team holds.
-  mailpit_release_enabled = length(var.mailpit_release_allowed_recipients) > 0
-
-  # Mailpit checks this allowlist with MatchString, which matches anywhere in the address, so the
-  # anchors are what stop `alice@example.com` from also authorising `alice@example.com.evil.net`.
-  # Every metacharacter is escaped, so a dot stays a dot and a plus addressed recipient survives;
-  # it also means an entry cannot contribute regex structure of its own.
-  #
-  # Each letter becomes a two-character class, `k` to `[kK]`, because nothing on either side
-  # lowercases anything: an entry written `Alice@Example.com` would otherwise never match a human
-  # typing `alice@example.com`, nor the reverse, and it would fail closed and silently.
-  #
-  # This is deliberately NOT the `(?i)` flag, which looks equivalent and is not. Go applies UNICODE
-  # simple case folding under `(?i)`, so `(?i)k` also matches U+212A KELVIN SIGN and `(?i)s` also
-  # matches U+017F LONG S, and the Release handler parses what a human types with mail.ParseAddress,
-  # which accepts both. These classes admit ASCII case variants and nothing else. Checking that in
-  # `terraform console` will mislead you: HCL normalises U+212A to ASCII `K` before any regex sees
-  # it, so the console matches both spellings. It was verified in Go, against the emitted pattern.
-  mailpit_release_allowlist = "^(${join("|", [for r in var.mailpit_release_allowed_recipients : join("", [for c in split("", r) : lower(c) == upper(c) ? replace(c, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}") : "[${lower(c)}${upper(c)}]"])])})$"
-
-  # An empty recipient list leaves MP_SMTP_RELAY_HOST unset, which is how Mailpit decides relaying
-  # is off (validateRelayConfig returns early on an empty host and never sets ReleaseEnabled), so
-  # the UI offers no Release button at all.
-  #
-  # MP_SMTP_RELAY_ALL and MP_SMTP_RELAY_MATCHING must never be set here. They are the two settings
-  # that make autoRelayMessage send caught mail onward to its ORIGINAL recipients without anyone
-  # asking, which is the hole this catcher exists to close. Nothing else in this file mentions
-  # them, so their absence is silent, which is why it is written down.
-  mailpit_relay_env = local.mailpit_release_enabled ? [
-    { name = "MP_SMTP_RELAY_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
-    { name = "MP_SMTP_RELAY_PORT", value = "587" },
-    { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
-    { name = "MP_SMTP_RELAY_AUTH", value = "plain" },
-    { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = local.mailpit_release_allowlist },
-    # SES rejects a send whose From, Sender or Return-Path is not a verified identity of the
-    # sending account, and var.ses_email_from sits on the prod-account domain. Applied by
-    # smtpd.Relay, which the release handler calls, so it rewrites the From header and the
-    # envelope sender together. The stored message keeps the original From.
-    { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
-  ] : []
-
-  mailpit_relay_secrets = local.mailpit_release_enabled ? [
-    { name = "MP_SMTP_RELAY_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:username::" },
-    { name = "MP_SMTP_RELAY_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:password::" },
-  ] : []
 }
 
 resource "aws_service_discovery_private_dns_namespace" "internal" {
@@ -165,13 +110,23 @@ resource "aws_ecs_task_definition" "mailpit" {
         }
       ]
 
-      environment = concat([
-        { name = "MP_MAX_MESSAGES", value = "5000" }
-      ], local.mailpit_relay_env)
+      # Never set MP_SMTP_RELAY_ALL or MP_SMTP_RELAY_MATCHING: they relay caught mail onward to its
+      # original recipients unasked.
+      environment = [
+        { name = "MP_MAX_MESSAGES", value = "5000" },
+        { name = "MP_SMTP_RELAY_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
+        { name = "MP_SMTP_RELAY_PORT", value = "587" },
+        { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
+        { name = "MP_SMTP_RELAY_AUTH", value = "plain" },
+        # SES rejects a From that is not a verified identity here; var.ses_email_from is prod's.
+        { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
+      ]
 
-      secrets = concat([
-        { name = "MP_UI_AUTH", valueFrom = aws_secretsmanager_secret.mailpit_ui_auth.arn }
-      ], local.mailpit_relay_secrets)
+      secrets = [
+        { name = "MP_UI_AUTH", valueFrom = aws_secretsmanager_secret.mailpit_ui_auth.arn },
+        { name = "MP_SMTP_RELAY_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:username::" },
+        { name = "MP_SMTP_RELAY_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:password::" },
+      ]
 
       logConfiguration = {
         "logDriver" : "awslogs",
