@@ -65,16 +65,25 @@ locals {
   # Nothing releases unless this is true, and it is the ONLY condition either list below tests.
   # A second, separately written condition is how a relay host ends up configured with no allowlist
   # in force, which is release to any address on earth: an allowlist binds only when it is non-empty.
+  # The exposure that makes that worth guarding: the Mailpit UI is published on the PUBLIC ALB behind
+  # one shared basic-auth password, unlike the SMTP port above, which is reachable only in the VPC.
   mailpit_release_enabled = length(var.mailpit_release_allowed_recipients) > 0
 
   # Mailpit checks this allowlist with MatchString, which matches anywhere in the address, so the
   # anchors are what stop `alice@example.com` from also authorising `alice@example.com.evil.net`.
-  # The replace escapes every regex metacharacter, so a dot stays a dot and a plus addressed
-  # recipient survives; it also means an entry cannot contribute regex structure of its own.
-  # (?i) because nothing on either side lowercases anything: without it an entry written
-  # `Alice@Example.com` never matches a human typing `alice@example.com`, nor the reverse, and it
-  # fails closed and silently. It widens the list only to case variants of addresses already on it.
-  mailpit_release_allowlist = "(?i)^(${join("|", [for r in var.mailpit_release_allowed_recipients : replace(r, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}")])})$"
+  # Every metacharacter is escaped, so a dot stays a dot and a plus addressed recipient survives;
+  # it also means an entry cannot contribute regex structure of its own.
+  #
+  # Each letter becomes a two-character class, `k` to `[kK]`, because nothing on either side
+  # lowercases anything: an entry written `Alice@Example.com` would otherwise never match a human
+  # typing `alice@example.com`, nor the reverse, and it would fail closed and silently.
+  #
+  # This is deliberately NOT the `(?i)` flag, which looks equivalent and is not. Go applies UNICODE
+  # simple case folding under `(?i)`, so `(?i)k` also matches U+212A KELVIN SIGN and `(?i)s` also
+  # matches U+017F LONG S. The Release handler parses whatever a human types with mail.ParseAddress,
+  # which accepts non-ASCII, so `(?i)` would admit byte sequences that are not the address anyone put
+  # on the list. These classes admit ASCII case variants and nothing else.
+  mailpit_release_allowlist = "^(${join("|", [for r in var.mailpit_release_allowed_recipients : join("", [for c in split("", r) : lower(c) == upper(c) ? replace(c, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}") : "[${lower(c)}${upper(c)}]"])])})$"
 
   # An empty recipient list leaves MP_SMTP_RELAY_HOST unset, which is how Mailpit decides relaying
   # is off (validateRelayConfig returns early on an empty host and never sets ReleaseEnabled), so
@@ -101,14 +110,6 @@ locals {
     { name = "MP_SMTP_RELAY_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:username::" },
     { name = "MP_SMTP_RELAY_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:password::" },
   ] : []
-}
-
-# The only signal in the deploy log that the environment secret actually reached Terraform. A
-# secret bound to the wrong environment name resolves to empty, which in the log is identical to
-# nobody having set one: both just leave Release switched off. A count is safe to print where the
-# addresses are not, so this says how many without saying who.
-output "mailpit_release_recipient_count" {
-  value = nonsensitive(length(var.mailpit_release_allowed_recipients))
 }
 
 resource "aws_service_discovery_private_dns_namespace" "internal" {
