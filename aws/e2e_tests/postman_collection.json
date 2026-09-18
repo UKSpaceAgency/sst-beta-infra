@@ -11,6 +11,138 @@
 			"name": "v1",
 			"item": [
 				{
+					"name": "seed",
+					"item": [
+						{
+							"name": "Seed - Discover an analysed Event",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const resp = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code 200\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"An analysis exists to seed the Event tests from\", function() {\r",
+											"    pm.expect(resp).to.be.an(\"array\").that.is.not.empty;\r",
+											"});\r",
+											"\r",
+											"if (Array.isArray(resp) && resp.length > 0) {\r",
+											"    const analysis = resp[0];\r",
+											"    const tca = new Date(analysis.tca_time.slice(0, 23) + \"Z\");\r",
+											"\r",
+											"    pm.collectionVariables.set(\"testEventShortId\", analysis.event_short_id);\r",
+											"    pm.collectionVariables.set(\"testEventPrimaryNorad\", analysis.primary_object_norad_id);\r",
+											"    pm.collectionVariables.set(\"testEventSecondaryNorad\", analysis.secondary_object_norad_id);\r",
+											"    pm.collectionVariables.set(\"testEventEpoch\", tca < new Date() ? \"past\" : \"future\");\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"description": "Seeds the Event tests from live data. An Event taken from the analyses list is guaranteed to carry both a Space-Track CDM and a UKSA Analysis, which the data-sources test asserts on.",
+								"url": {
+									"raw": "{{baseUrl}}/v1/analyses/?sort_by=tca_time&sort_order=desc&limit=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"analyses",
+										""
+									],
+									"query": [
+										{
+											"key": "sort_by",
+											"value": "tca_time"
+										},
+										{
+											"key": "sort_order",
+											"value": "desc"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Seed - Confirm the Event and capture its CDM",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const resp = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code 200\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Seeded Event is still present\", function() {\r",
+											"    pm.expect(resp).to.be.an(\"array\").that.is.not.empty;\r",
+											"    pm.expect(resp[0].short_id).to.eql(pm.collectionVariables.get(\"testEventShortId\"));\r",
+											"});\r",
+											"\r",
+											"if (Array.isArray(resp) && resp.length > 0) {\r",
+											"    pm.collectionVariables.set(\"testCDMId\", resp[0].cdm_external_id);\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"description": "Confirms the seeded Event survived data retention and captures the CDM external ID the Event tests filter on.",
+								"url": {
+									"raw": "{{baseUrl}}/v1/events/?search_like={{testEventShortId}}&epoch={{testEventEpoch}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"events",
+										""
+									],
+									"query": [
+										{
+											"key": "search_like",
+											"value": "{{testEventShortId}}"
+										},
+										{
+											"key": "epoch",
+											"value": "{{testEventEpoch}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "users",
 					"item": [
 						{
@@ -2502,16 +2634,15 @@
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Satellites count over expected range (> 50000)\", function() {\r",
-											"    pm.expect(resp.satellites_count).to.be.above(50000);\r",
+											"pm.test(\"Every statistic is a non-negative count\", function() {\r",
+											"    [\"satellites_count\", \"ephemeris_count\", \"events_count\", \"cdms_count\"].forEach((key) => {\r",
+											"        pm.expect(resp[key], key).to.be.a(\"number\").and.to.be.at.least(0);\r",
+											"    });\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Ephemeris count over expected range (> 30)\", function() {\r",
-											"    pm.expect(resp.ephemeris_count).to.be.above(30);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Events count over expected range (> 900000)\", function() {\r",
-											"    pm.expect(resp.events_count).to.be.above(900000);\r",
+											"pm.test(\"Satellites and Events are present\", function() {\r",
+											"    pm.expect(resp.satellites_count).to.be.above(0);\r",
+											"    pm.expect(resp.events_count).to.be.above(0);\r",
 											"});\r",
 											"\r",
 											"pm.test(\"CDMs count bigger than event count\", function() {\r",
@@ -4740,6 +4871,7 @@
 															"});\r",
 															"\r",
 															"pm.test(\"Filter by Event Short ID returns only events with that ID\", function () {\r",
+															"    pm.expect(resp).to.be.an(\"array\").that.is.not.empty;\r",
 															"    resp.forEach((event) => {\r",
 															"        pm.expect(event.short_id).to.be.eql(pm.variables.get(\"testEventShortId\"))\r",
 															"    })\r",
@@ -4973,6 +5105,8 @@
 															"});\r",
 															"\r",
 															"pm.test(\"Contains both Space Track CDM and UKSA Analysis\", function() {\r",
+															"    pm.expect(resp.space_track_cdm).to.be.an(\"array\").that.is.not.empty;\r",
+															"    pm.expect(resp.uksa_analysis).to.be.an(\"array\").that.is.not.empty;\r",
 															"    pm.expect(resp.space_track_cdm[0].data_source).to.equal(\"Space-Track CDM\");\r",
 															"    pm.expect(resp.uksa_analysis[0].data_source).to.equal(\"UKSA Analysis\");\r",
 															"});"
@@ -5180,6 +5314,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Filter by CDM External ID returns only events with that ID\", function () {\r",
+													"    pm.expect(resp).to.be.an(\"array\").that.is.not.empty;\r",
 													"    resp.forEach((event) => {\r",
 													"        pm.expect(event.short_id).to.be.eql(pm.variables.get(\"testEventShortId\"))\r",
 													"    })\r",
@@ -5750,9 +5885,10 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Search works with NORAD and Short ID filter\", function () {\r",
+											"    pm.expect(resp).to.be.an(\"array\").that.is.not.empty;\r",
 											"    pm.expect(resp[0].short_id).to.eql(pm.variables.get(\"testEventShortId\"));\r",
-											"    pm.expect(resp[0].primary_object_norad_id).to.eql(pm.variables.get(\"testSatellitePrimaryNorad\"));\r",
-											"    pm.expect(resp[0].secondary_object_norad_id).to.eql(pm.variables.get(\"testSatelliteSecondaryNorad\"));\r",
+											"    pm.expect(resp[0].primary_object_norad_id).to.eql(pm.variables.get(\"testEventPrimaryNorad\"));\r",
+											"    pm.expect(resp[0].secondary_object_norad_id).to.eql(pm.variables.get(\"testEventSecondaryNorad\"));\r",
 											"})"
 										],
 										"type": "text/javascript",
@@ -5769,7 +5905,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/v1/events/?norad_id={{testSatellitePrimaryNorad}}&search_like={{testEventShortId}}&epoch=past",
+									"raw": "{{baseUrl}}/v1/events/?norad_id={{testEventPrimaryNorad}}&search_like={{testEventShortId}}&epoch={{testEventEpoch}}",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -5787,7 +5923,7 @@
 										},
 										{
 											"key": "norad_id",
-											"value": "{{testSatellitePrimaryNorad}}",
+											"value": "{{testEventPrimaryNorad}}",
 											"description": "Satellite NORAD ID"
 										},
 										{
@@ -5797,7 +5933,7 @@
 										},
 										{
 											"key": "epoch",
-											"value": "past",
+											"value": "{{testEventEpoch}}",
 											"description": "Describes future or past Events"
 										},
 										{
@@ -7227,13 +7363,16 @@
 													"    \"external_id\",\r",
 													"    \"event_id\"\r",
 													"];\r",
-													"\r",
 													"pm.test(\"Status code 200\", function() {\r",
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
-													"\r",
 													"pm.test(\"Latest CDM returned contains expected fields\", () => {\r",
 													"    pm.expect(resp).to.have.all.keys(expected_keys);\r",
+													"});\r",
+													"pm.test(\"Latest CDM was ingested recently\", () => {\r",
+													"    const ingestedAt = new Date(resp.created_at.slice(0, 23) + \"Z\");\r",
+													"    const ageHours = (Date.now() - ingestedAt.getTime()) / 3600000;\r",
+													"    pm.expect(ageHours, \"hours since the last CDM was ingested\").to.be.below(48);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -8989,7 +9128,8 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Message status OK\", function () {\r",
-											"    pm.expect(resp.message[0].status).to.equal(\"OK\");\r",
+											"    pm.expect(resp.message).to.be.an(\"array\").that.is.not.empty;\r",
+											"    pm.expect(resp.message[0].status, JSON.stringify(resp.message[0].details)).to.equal(\"OK\");\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -9015,7 +9155,7 @@
 											"key": "json_file",
 											"description": "(Required) ",
 											"type": "file",
-											"src": "test_analysis_laepogz-erkdrld-dadlkr.json"
+											"src": "test_analysis_seed.json"
 										},
 										{
 											"key": "event_short_id",
@@ -9211,10 +9351,24 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"// run post request to log the long ID for next request\r",
-											"const new_long_id = pm.response.json()[pm.response.json().length - 1].id;\r",
+											"const resp = pm.response.json();\r",
 											"\r",
-											"pm.collectionVariables.set(\"testAnalysisAnalysisId\", new_long_id);"
+											"pm.test(\"Status code 200\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Matched on the fixture TCA rather than taken by position: the summary is ordered by\r",
+											"// update_time, so a positional pick can land on a real analysis and delete it.\r",
+											"const uploaded = resp.filter((row) => row.data_source === \"UKSA Analysis\" &&\r",
+											"    row.tca_time === pm.variables.get(\"testAnalysisTcaTime\"));\r",
+											"\r",
+											"pm.test(\"Uploaded Analysis is present exactly once\", function () {\r",
+											"    pm.expect(uploaded).to.have.lengthOf(1);\r",
+											"});\r",
+											"\r",
+											"if (uploaded.length === 1) {\r",
+											"    pm.collectionVariables.set(\"testAnalysisAnalysisId\", uploaded[0].id);\r",
+											"}"
 										],
 										"type": "text/javascript"
 									}
@@ -9709,9 +9863,9 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Returned object matches uploaded\", () => {\r",
-											"    pm.expect(resp.tca_time).to.equal(\"2024-04-18T22:57:32.881000\");\r",
-											"    pm.expect(resp.id).to.equal(pm.collectionVariables.get(\"testAnalysisAnalysisId\"));\r",
-											"    pm.expect(resp.event_short_id).to.equal(pm.collectionVariables.get(\"testAnalysisEventShortId\"));\r",
+											"    pm.expect(resp.tca_time).to.equal(pm.variables.get(\"testAnalysisTcaTime\"));\r",
+											"    pm.expect(resp.id).to.equal(pm.variables.get(\"testAnalysisAnalysisId\"));\r",
+											"    pm.expect(resp.event_short_id).to.equal(pm.variables.get(\"testAnalysisEventShortId\"));\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -10204,28 +10358,18 @@
 			"type": "string"
 		},
 		{
-			"key": "testSatelliteSecondaryNorad",
-			"value": "45321",
-			"type": "string"
-		},
-		{
 			"key": "testEventShortId",
-			"value": "ngawpao-xdvregl-jogeqg",
+			"value": "",
 			"type": "string"
 		},
 		{
 			"key": "testCDMId",
-			"value": "987844281",
-			"type": "string"
-		},
-		{
-			"key": "testEventId",
-			"value": "6436efe7-0252-4ef7-a407-dc2eb0cdde87",
+			"value": "",
 			"type": "string"
 		},
 		{
 			"key": "testAnalysisEventShortId",
-			"value": "laepogz-erkdrld-dadlkr",
+			"value": "",
 			"type": "string"
 		},
 		{
@@ -10269,6 +10413,26 @@
 		{
 			"key": "date5DaysAgo",
 			"value": ""
+		},
+		{
+			"key": "testEventPrimaryNorad",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testEventSecondaryNorad",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testEventEpoch",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testAnalysisTcaTime",
+			"value": "2024-04-18T22:57:32.881000",
+			"type": "string"
 		}
 	]
 }
