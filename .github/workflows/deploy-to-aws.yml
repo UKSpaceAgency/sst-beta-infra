@@ -67,13 +67,13 @@ jobs:
       - name: Terraform Back-End (or Data Cache) init and apply
         if: ${{ github.event.inputs.invoker == 'backend' || github.event.inputs.invoker == 'data-cache'  }}
         env:
-          # Who dev Mailpit forwards caught mail to. Passed as TF_VAR rather than written to
+          # Who a human may release dev Mailpit mail to. Passed as TF_VAR rather than written to
           # terraform.tfvars because this repo is public and the step below prints that file.
           # The secret holds a JSON array, ["a@x.com","b@y.com"], not a comma separated list:
           # Terraform parses a TF_VAR_ value for a list type as JSON and fails the plan on
           # anything else. An unset secret must still produce valid HCL, hence the literal
           # fallback: an empty string fails to parse as a list and would break every deploy.
-          TF_VAR_mailpit_forward_recipients: ${{ secrets.MAILPIT_FORWARD_RECIPIENTS || '[]' }}
+          TF_VAR_mailpit_release_allowed_recipients: ${{ secrets.MAILPIT_RELEASE_RECIPIENTS || '[]' }}
         run: |
           cd aws/envs/${{ github.event.inputs.env }}/${{ github.event.inputs.invoker }}
           terraform init

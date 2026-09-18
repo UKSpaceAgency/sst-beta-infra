@@ -148,11 +148,8 @@ resource "aws_lambda_event_source_mapping" "notification_engine_delivery" {
   batch_size              = 10
   function_response_types = ["ReportBatchItemFailures"]
 
-  # Sized against the RDS connection budget (1 conn per invocation), but with
-  # var.mailpit_forward_recipients set this is also the only backpressure on forwarding:
-  # Mailpit forwards synchronously inside the SMTP transaction, so concurrent senders map
-  # to concurrent SES sends, and this account allows 14/sec. Raising it risks throttling,
-  # which is silently dropped (the copy is lost, the stored message is not).
+  # Sized against the RDS connection budget (1 conn per invocation); email goes
+  # to the in-VPC mail catcher, so send rate no longer needs throttling.
   scaling_config {
     maximum_concurrency = 10
   }

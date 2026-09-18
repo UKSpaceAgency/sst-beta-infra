@@ -3,8 +3,8 @@
 # on prod's shared SES daily quota (exhausted by the 2026-07-28 flood).
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
-# When var.mailpit_forward_recipients is non-empty, a copy of each message also goes to
-# those addresses and only those, via this account's own SES.
+# When var.mailpit_release_allowed_recipients is non-empty, the UI grows a Release button that
+# sends one open message, on a human's click, to addresses they type and that list allows.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -21,17 +21,17 @@ resource "aws_secretsmanager_secret_version" "mailpit_ui_auth" {
   secret_string = "mailpit:${random_password.mailpit_ui.result}"
 }
 
-# A dedicated SES identity for the forwarder, issued in this (dev) account, so forwarded
+# A dedicated SES identity for releasing, issued in this (dev) account, so released
 # mail can never draw on the prod quota the 2026-07-28 flood exhausted.
-# Only the envelope is re-addressed: recipients of a copy still see the real end user's
-# address in To/Cc and the full notification body.
-resource "aws_iam_user" "mailpit_forward" {
-  name = "${var.env_name}-mailpit-forward-smtp"
+# Only the sender is rewritten: recipients of a released message still see the real end
+# user's address in To/Cc and the full notification body.
+resource "aws_iam_user" "mailpit_relay" {
+  name = "${var.env_name}-mailpit-relay-smtp"
 }
 
-resource "aws_iam_user_policy" "mailpit_forward" {
-  name = "${var.env_name}-mailpit-forward-smtp"
-  user = aws_iam_user.mailpit_forward.name
+resource "aws_iam_user_policy" "mailpit_relay" {
+  name = "${var.env_name}-mailpit-relay-smtp"
+  user = aws_iam_user.mailpit_relay.name
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -45,47 +45,56 @@ resource "aws_iam_user_policy" "mailpit_forward" {
   })
 }
 
-resource "aws_iam_access_key" "mailpit_forward" {
-  user = aws_iam_user.mailpit_forward.name
+resource "aws_iam_access_key" "mailpit_relay" {
+  user = aws_iam_user.mailpit_relay.name
 }
 
-resource "aws_secretsmanager_secret" "mailpit_forward_smtp" {
-  name        = "${var.env_name}-mailpit-forward-smtp"
-  description = "SES SMTP credentials for the Mailpit forwarder, issued in this account"
+resource "aws_secretsmanager_secret" "mailpit_relay_smtp" {
+  name        = "${var.env_name}-mailpit-relay-smtp"
+  description = "SES SMTP credentials for releasing Mailpit messages, issued in this account"
 }
 
-resource "aws_secretsmanager_secret_version" "mailpit_forward_smtp" {
-  secret_id = aws_secretsmanager_secret.mailpit_forward_smtp.id
+resource "aws_secretsmanager_secret_version" "mailpit_relay_smtp" {
+  secret_id = aws_secretsmanager_secret.mailpit_relay_smtp.id
   secret_string = jsonencode({
-    username = aws_iam_access_key.mailpit_forward.id
-    password = aws_iam_access_key.mailpit_forward.ses_smtp_password_v4
+    username = aws_iam_access_key.mailpit_relay.id
+    password = aws_iam_access_key.mailpit_relay.ses_smtp_password_v4
   })
 }
 
 locals {
-  # An empty recipient list leaves MP_SMTP_FORWARD_HOST unset, which is how Mailpit
-  # decides forwarding is off (validateForwardConfig returns early on an empty host).
-  # Setting the host without a To list is a startup error, so the two move together.
-  # Forwarding happens inside the SMTP transaction and before the message is stored,
-  # over a dial with no timeout, so an unreachable SES endpoint stalls each inbound
-  # session for the OS TCP timeout. The message is still stored afterwards: Mailpit
-  # abandons it only when MP_SMTP_FORWARD_FWD_SMTP_ERRORS is set, and it is not. The
-  # catcher holding every message depends on that staying unset.
-  mailpit_forward_env = length(var.mailpit_forward_recipients) == 0 ? [] : [
-    { name = "MP_SMTP_FORWARD_TO", value = join(",", var.mailpit_forward_recipients) },
-    { name = "MP_SMTP_FORWARD_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
-    { name = "MP_SMTP_FORWARD_PORT", value = "587" },
-    { name = "MP_SMTP_FORWARD_STARTTLS", value = "true" },
-    { name = "MP_SMTP_FORWARD_AUTH", value = "plain" },
-    # SES only accepts a From on a verified identity of the sending account, and
-    # var.ses_email_from sits on the prod-account domain. The stored copy keeps the
-    # original From, so only the forwarded copy is rewritten.
-    { name = "MP_SMTP_FORWARD_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
+  # Mailpit checks this allowlist with MatchString, which matches anywhere in the address, so the
+  # anchors are what stop `alice@example.com` from also authorising `alice@example.com.evil.net`.
+  # The replace escapes every regex metacharacter, so a dot stays a dot and a plus addressed
+  # recipient survives; it also means an entry cannot contribute regex structure of its own.
+  mailpit_release_allowlist = "^(${join("|", [for r in var.mailpit_release_allowed_recipients : replace(r, "/[.+*?()\\[\\]{}^$|\\\\]/", "\\$${0}")])})$"
+
+  # An empty recipient list leaves MP_SMTP_RELAY_HOST unset, which is how Mailpit decides relaying
+  # is off (validateRelayConfig returns early on an empty host and never sets ReleaseEnabled), so
+  # the UI offers no Release button at all. The two move together on purpose: an allowlist is only
+  # enforced when it is non-empty, so configuring the host WITHOUT one would permit release to any
+  # address on earth, and the Mailpit UI is on the public ALB behind a single basic-auth password.
+  #
+  # MP_SMTP_RELAY_ALL and MP_SMTP_RELAY_MATCHING must never be set here. They are the two settings
+  # that make autoRelayMessage send caught mail onward to its ORIGINAL recipients without anyone
+  # asking, which is the hole this catcher exists to close. Nothing else in this file mentions
+  # them, so their absence is silent, which is why it is written down.
+  mailpit_relay_env = length(var.mailpit_release_allowed_recipients) == 0 ? [] : [
+    { name = "MP_SMTP_RELAY_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
+    { name = "MP_SMTP_RELAY_PORT", value = "587" },
+    { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
+    { name = "MP_SMTP_RELAY_AUTH", value = "plain" },
+    { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = local.mailpit_release_allowlist },
+    # SES rejects a send whose From, Sender or Return-Path is not a verified identity of the
+    # sending account, and var.ses_email_from sits on the prod-account domain. Applied by
+    # smtpd.Relay, which the release handler calls, so it rewrites the From header and the
+    # envelope sender together. The stored message keeps the original From.
+    { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
   ]
 
-  mailpit_forward_secrets = length(var.mailpit_forward_recipients) == 0 ? [] : [
-    { name = "MP_SMTP_FORWARD_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_forward_smtp.arn}:username::" },
-    { name = "MP_SMTP_FORWARD_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_forward_smtp.arn}:password::" },
+  mailpit_relay_secrets = length(var.mailpit_release_allowed_recipients) == 0 ? [] : [
+    { name = "MP_SMTP_RELAY_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:username::" },
+    { name = "MP_SMTP_RELAY_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:password::" },
   ]
 }
 
@@ -143,11 +152,11 @@ resource "aws_ecs_task_definition" "mailpit" {
 
       environment = concat([
         { name = "MP_MAX_MESSAGES", value = "5000" }
-      ], local.mailpit_forward_env)
+      ], local.mailpit_relay_env)
 
       secrets = concat([
         { name = "MP_UI_AUTH", valueFrom = aws_secretsmanager_secret.mailpit_ui_auth.arn }
-      ], local.mailpit_forward_secrets)
+      ], local.mailpit_relay_secrets)
 
       logConfiguration = {
         "logDriver" : "awslogs",
