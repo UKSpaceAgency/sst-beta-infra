@@ -1,8 +1,9 @@
-# Mail catcher for dev: captures all SMTP email instead of delivering it.
+# Mail catcher for dev: captures all SMTP email instead of delivering it as addressed.
 # Dev SMTP creds belong to the prod AWS account, so any real dev send draws
 # on prod's shared SES daily quota (exhausted by the 2026-07-28 flood).
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
+# Release: a human can send one caught message onward to addresses they type in the UI.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -17,6 +18,44 @@ resource "aws_secretsmanager_secret" "mailpit_ui_auth" {
 resource "aws_secretsmanager_secret_version" "mailpit_ui_auth" {
   secret_id     = aws_secretsmanager_secret.mailpit_ui_auth.id
   secret_string = "mailpit:${random_password.mailpit_ui.result}"
+}
+
+# Issued in this (dev) account: dev's normal SMTP credentials are prod's and draw on prod's quota.
+resource "aws_iam_user" "mailpit_relay" {
+  name = "${var.env_name}-mailpit-relay-smtp"
+}
+
+resource "aws_iam_user_policy" "mailpit_relay" {
+  name = "${var.env_name}-mailpit-relay-smtp"
+  user = aws_iam_user.mailpit_relay.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action   = ["ses:SendRawEmail"],
+        Effect   = "Allow",
+        Resource = ["arn:aws:ses:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:identity/${local.local_r53_domain}"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_access_key" "mailpit_relay" {
+  user = aws_iam_user.mailpit_relay.name
+}
+
+resource "aws_secretsmanager_secret" "mailpit_relay_smtp" {
+  name        = "${var.env_name}-mailpit-relay-smtp"
+  description = "SES SMTP credentials for releasing Mailpit messages, issued in this account"
+}
+
+resource "aws_secretsmanager_secret_version" "mailpit_relay_smtp" {
+  secret_id = aws_secretsmanager_secret.mailpit_relay_smtp.id
+  secret_string = jsonencode({
+    username = aws_iam_access_key.mailpit_relay.id
+    password = aws_iam_access_key.mailpit_relay.ses_smtp_password_v4
+  })
 }
 
 resource "aws_service_discovery_private_dns_namespace" "internal" {
@@ -71,12 +110,22 @@ resource "aws_ecs_task_definition" "mailpit" {
         }
       ]
 
+      # Never set MP_SMTP_RELAY_ALL or MP_SMTP_RELAY_MATCHING: they relay caught mail onward to its
+      # original recipients unasked.
       environment = [
-        { name = "MP_MAX_MESSAGES", value = "5000" }
+        { name = "MP_MAX_MESSAGES", value = "5000" },
+        { name = "MP_SMTP_RELAY_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
+        { name = "MP_SMTP_RELAY_PORT", value = "587" },
+        { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
+        { name = "MP_SMTP_RELAY_AUTH", value = "plain" },
+        # SES rejects a From that is not a verified identity here; var.ses_email_from is prod's.
+        { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
       ]
 
       secrets = [
-        { name = "MP_UI_AUTH", valueFrom = aws_secretsmanager_secret.mailpit_ui_auth.arn }
+        { name = "MP_UI_AUTH", valueFrom = aws_secretsmanager_secret.mailpit_ui_auth.arn },
+        { name = "MP_SMTP_RELAY_USERNAME", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:username::" },
+        { name = "MP_SMTP_RELAY_PASSWORD", valueFrom = "${aws_secretsmanager_secret.mailpit_relay_smtp.arn}:password::" },
       ]
 
       logConfiguration = {
