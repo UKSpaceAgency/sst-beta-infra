@@ -168,6 +168,45 @@ jobs:
           profile: uksa-mys-dev-env
           aws-region: eu-west-2
 
+      - name: Seed the analysis fixture from live data
+        id: seed_analysis
+        if: ${{ github.event.inputs.invoker == 'backend' }}
+        working-directory: aws/e2e_tests
+        env:
+          CLIENT_ID: ${{ secrets.e2e_client_id }}
+          CLIENT_SECRET: ${{ secrets.e2e_client_secret }}
+          AUTH_BASE_URL: ${{ vars.e2e_auth0_base_url }}
+          AUTH_AUDIENCE: ${{ secrets.e2e_auth0_audience }}
+          BASE_URL: ${{ vars.e2e_base_url }}
+        run: |
+          set -euo pipefail
+
+          # The upload is rejected unless the fixture's event_id matches an Event that still
+          # exists, and a Postman script cannot write a file, so the seeding happens here.
+          token=$(curl -sS --fail --max-time 30 -X POST "$AUTH_BASE_URL/oauth/token" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode "client_id=$CLIENT_ID" \
+            --data-urlencode "client_secret=$CLIENT_SECRET" \
+            --data-urlencode "audience=$AUTH_AUDIENCE" \
+            --data-urlencode 'grant_type=client_credentials' | jq -r '.access_token')
+
+          short_id=$(curl -sS --fail --max-time 60 \
+            -H "Authorization: Bearer $token" \
+            "$BASE_URL/v1/analyses/?sort_by=tca_time&sort_order=desc&limit=1" \
+            | jq -r '.[0].event_short_id // empty')
+
+          if [ -z "$short_id" ]; then
+            echo "No analysis available to seed the upload fixture from" >&2
+            exit 1
+          fi
+
+          jq --arg short_id "$short_id" '.event_id = $short_id' test_analysis_seed.json \
+            > test_analysis_seed.tmp
+          mv test_analysis_seed.tmp test_analysis_seed.json
+
+          echo "event_short_id=$short_id" >> "$GITHUB_OUTPUT"
+          echo "Seeded the analysis fixture with Event $short_id"
+
       - name: Execute Backend E2E API tests
         uses: matt-ball/newman-action@master
         if: ${{ github.event.inputs.invoker == 'backend' }}
@@ -176,7 +215,7 @@ jobs:
           collection: aws/e2e_tests/postman_collection.json
           environment: aws/e2e_tests/postman_environment.json
           reporters: '["cli","junit"]'
-          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "testSatellitePrimaryName", "value": "${{ vars.e2e_satellite_name }}" }, { "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
+          envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "testSatellitePrimaryName", "value": "${{ vars.e2e_satellite_name }}" }, { "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }, { "key": "testAnalysisEventShortId", "value": "${{ steps.seed_analysis.outputs.event_short_id }}" }]'
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
