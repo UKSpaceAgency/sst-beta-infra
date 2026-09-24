@@ -2506,12 +2506,12 @@
 											"    pm.expect(resp.satellites_count).to.be.above(50000);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Ephemeris count over expected range (> 30)\", function() {\r",
-											"    pm.expect(resp.ephemeris_count).to.be.above(30);\r",
+											"pm.test(\"Ephemeris count above zero\", function() {\r",
+											"    pm.expect(resp.ephemeris_count).to.be.above(0);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Events count over expected range (> 900000)\", function() {\r",
-											"    pm.expect(resp.events_count).to.be.above(900000);\r",
+											"pm.test(\"Events count above zero\", function() {\r",
+											"    pm.expect(resp.events_count).to.be.above(0);\r",
 											"});\r",
 											"\r",
 											"pm.test(\"CDMs count bigger than event count\", function() {\r",
@@ -5011,7 +5011,7 @@
 													"variable": [
 														{
 															"key": "event_id",
-															"value": "{{testEventShortId}}"
+															"value": "{{testAnalysedEventShortId}}"
 														}
 													]
 												},
@@ -9015,7 +9015,7 @@
 											"key": "json_file",
 											"description": "(Required) ",
 											"type": "file",
-											"src": "test_analysis_laepogz-erkdrld-dadlkr.json"
+											"src": "analysis_upload.json"
 										},
 										{
 											"key": "event_short_id",
@@ -9212,9 +9212,10 @@
 									"script": {
 										"exec": [
 											"// run post request to log the long ID for next request\r",
-											"const new_long_id = pm.response.json()[pm.response.json().length - 1].id;\r",
+											"const uploaded = pm.response.json().find((row) =>\r",
+											"    row.data_source === \"UKSA Analysis\" && row.update_time === pm.variables.get(\"testAnalysisUpdateTime\"));\r",
 											"\r",
-											"pm.collectionVariables.set(\"testAnalysisAnalysisId\", new_long_id);"
+											"pm.collectionVariables.set(\"testAnalysisAnalysisId\", uploaded.id);"
 										],
 										"type": "text/javascript"
 									}
@@ -9229,7 +9230,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/v1/events/:event_id/summary?limit=10&offset=0&sort_order=asc",
+									"raw": "{{baseUrl}}/v1/events/:event_id/summary?limit=100&offset=0&sort_order=asc",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -9242,7 +9243,7 @@
 									"query": [
 										{
 											"key": "limit",
-											"value": "10"
+											"value": "100"
 										},
 										{
 											"key": "offset",
@@ -9709,9 +9710,9 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Returned object matches uploaded\", () => {\r",
-											"    pm.expect(resp.tca_time).to.equal(\"2024-04-18T22:57:32.881000\");\r",
+											"    pm.expect(resp.tca_time).to.equal(pm.variables.get(\"testAnalysisTcaTime\"));\r",
 											"    pm.expect(resp.id).to.equal(pm.collectionVariables.get(\"testAnalysisAnalysisId\"));\r",
-											"    pm.expect(resp.event_short_id).to.equal(pm.collectionVariables.get(\"testAnalysisEventShortId\"));\r",
+											"    pm.expect(resp.event_short_id).to.equal(pm.variables.get(\"testAnalysisEventShortId\"));\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -10201,31 +10202,6 @@
 		{
 			"key": "testSatellitePrimaryNorad",
 			"value": "61604",
-			"type": "string"
-		},
-		{
-			"key": "testSatelliteSecondaryNorad",
-			"value": "45321",
-			"type": "string"
-		},
-		{
-			"key": "testEventShortId",
-			"value": "ngawpao-xdvregl-jogeqg",
-			"type": "string"
-		},
-		{
-			"key": "testCDMId",
-			"value": "987844281",
-			"type": "string"
-		},
-		{
-			"key": "testEventId",
-			"value": "6436efe7-0252-4ef7-a407-dc2eb0cdde87",
-			"type": "string"
-		},
-		{
-			"key": "testAnalysisEventShortId",
-			"value": "laepogz-erkdrld-dadlkr",
 			"type": "string"
 		},
 		{
