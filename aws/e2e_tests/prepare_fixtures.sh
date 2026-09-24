@@ -21,29 +21,32 @@ event=$(jq -e '.[0]' <<<"$events") || fail "no past event for NORAD $norad on de
 cdm_id=$(jq -er .cdm_external_id <<<"$event") || fail "event $(jq -r .short_id <<<"$event") has no CDM id"
 
 now=$(date -u +%Y-%m-%dT%H:%M:%S)
-past='[]'
+candidates='[]'
 for page in $(seq 0 19); do
   batch=$(api "/v1/analyses/?sort_by=tca_time&sort_order=desc&limit=200&offset=$((page * 200))")
   [[ $(jq length <<<"$batch") -gt 0 ]] || break
-  past=$(jq -c --arg now "$now" 'map(select(.tca_time < $now))' <<<"$batch")
-  [[ $(jq length <<<"$past") -gt 0 ]] && break
+  candidates=$(printf '%s\n%s\n' "$candidates" "$batch" | jq -sc --arg now "$now" '
+    .[0] + (.[1] | map(select(.tca_time < $now)))
+    | reduce .[] as $a ([]; if any(.[]; .event_short_id == $a.event_short_id) then . else . + [$a] end)')
+  [[ $(jq length <<<"$candidates") -ge 5 ]] && break
 done
-[[ $(jq length <<<"$past") -gt 0 ]] || fail "no active analysis with a past TCA in the newest 4000 on dev"
+[[ $(jq length <<<"$candidates") -gt 0 ]] || fail "no active analysis with a past TCA in the newest 4000 on dev"
 
 # A copy of a past-TCA analysis, carrying its event's stored UKSA probability, changes nothing on that event.
 stored_uksa=""
 for i in 0 1 2 3 4; do
-  analysis=$(jq -e ".[$i]" <<<"$past") || break
+  analysis=$(jq -e ".[$i]" <<<"$candidates") || break
   analysed_short_id=$(jq -r .event_short_id <<<"$analysis")
   analysed_events=$(api "/v1/conjunction-events/list?search_like=$analysed_short_id&epoch=past")
   stored_uksa=$(jq -e --arg short_id "$analysed_short_id" \
     'map(select(.short_id == $short_id)) | .[0].collision_probability_uksa // empty' <<<"$analysed_events") && break
-  stored_uksa=""
 done
 [[ -n $stored_uksa ]] || fail "none of the newest 5 past-TCA analysed events has a stored UKSA probability"
 
-jq --argjson analysis "$analysis" --argjson uksa "$stored_uksa" --arg update_time "$now" '
-  def observations($data): {
+# CDM id 0 matches no real CDM, so the events-list join and the analyst-queue delete both skip the copy.
+jq -n --argjson analysis "$analysis" --argjson uksa "$stored_uksa" --arg update_time "$now" '
+  def observations($data; $norad_id): {
+    norad_id: $norad_id,
     data_received: $data.data_received,
     data_source: $data.data_source,
     HBR: $data.hbr,
@@ -52,27 +55,32 @@ jq --argjson analysis "$analysis" --argjson uksa "$stored_uksa" --arg update_tim
     observations_timespan: $data.observations_timespan,
     OD_Quality: $data.od_quality
   };
-  .event_id = $analysis.event_short_id
-  | .cdm_id = $analysis.cdm_external_id
-  | .collision_probability = $uksa
-  | .collision_probability_method = $analysis.collision_probability_method
-  | .tca = $analysis.tca_time + "Z"
-  | .update_time = $update_time + ".000Z"
-  | .miss_distance.total_value = $analysis.miss_distance
-  | .miss_distance.mean_radial_value = $analysis.radial_miss_distance
-  | .miss_distance.in_track_value = $analysis.intrack_miss_distance
-  | .miss_distance.cross_track_value = $analysis.crosstrack_miss_distance
-  | .altitude = $analysis.altitude
-  | .latitude = $analysis.latitude
-  | .longitude = $analysis.longitude
-  | .relative_velocity = $analysis.relative_velocity
-  | .estimated_combined_mass = $analysis.combined_mass
-  | .estimated_fragments = $analysis.possible_fragments
-  | .primary_object = observations($analysis.primary_object_observations_data)
-      + {norad_id: $analysis.primary_object_norad_id}
-  | .secondary_object = observations($analysis.secondary_object_observations_data)
-      + {norad_id: $analysis.secondary_object_norad_id}
-' analysis_template.json >analysis_upload.json
+  {
+    event_id: $analysis.event_short_id,
+    cdm_id: "0",
+    collision_probability: $uksa,
+    collision_probability_method: $analysis.collision_probability_method,
+    tca: ($analysis.tca_time + "Z"),
+    update_time: ($update_time + ".000Z"),
+    miss_distance: {
+      total_value: $analysis.miss_distance,
+      total_uncertainty: $analysis.miss_distance_uncertainty.total_uncertainty,
+      mean_radial_value: $analysis.radial_miss_distance,
+      mean_radial_uncertainty: $analysis.miss_distance_uncertainty.mean_radial_uncertainty,
+      in_track_value: $analysis.intrack_miss_distance,
+      in_track_uncertainty: $analysis.miss_distance_uncertainty.in_track_uncertainty,
+      cross_track_value: $analysis.crosstrack_miss_distance,
+      cross_track_uncertainty: $analysis.miss_distance_uncertainty.cross_track_uncertainty
+    },
+    altitude: $analysis.altitude,
+    latitude: $analysis.latitude,
+    longitude: $analysis.longitude,
+    relative_velocity: $analysis.relative_velocity,
+    estimated_combined_mass: $analysis.combined_mass,
+    estimated_fragments: $analysis.possible_fragments,
+    primary_object: observations($analysis.primary_object_observations_data; $analysis.primary_object_norad_id),
+    secondary_object: observations($analysis.secondary_object_observations_data; $analysis.secondary_object_norad_id)
+  }' >analysis_upload.json
 
 jq --argjson event "$event" --arg cdm_id "$cdm_id" --argjson analysis "$analysis" --arg update_time "$now" '
   .values += [
@@ -86,4 +94,4 @@ jq --argjson event "$event" --arg cdm_id "$cdm_id" --argjson analysis "$analysis
   ]
 ' postman_environment.json >run.postman_environment.json
 
-echo "event $(jq -r .short_id <<<"$event") (CDM $cdm_id), analysis upload onto $analysed_short_id (CDM $(jq -r .cdm_external_id <<<"$analysis"), TCA $(jq -r .tca_time <<<"$analysis"))"
+echo "event $(jq -r .short_id <<<"$event") (CDM $cdm_id), analysis copy onto $analysed_short_id (TCA $(jq -r .tca_time <<<"$analysis"))"
