@@ -8,16 +8,22 @@ resource "aws_cloudwatch_log_group" "lambda_lg" {
   retention_in_days = 14
 }
 
+data "aws_s3_object" "package" {
+  bucket = var.s3_bucket
+  key    = var.s3_key
+}
+
 resource "aws_lambda_function" "public_lambda" {
-  function_name = var.lambda_function_name
-  architectures = ["x86_64"]
-  role          = var.lambda_role_arn
-  handler       = var.lambda_handler_name
-  s3_bucket     = var.s3_bucket
-  s3_key        = var.s3_key
-  runtime       = var.runtime
-  timeout       = var.timeout
-  memory_size   = var.lambda_memory_size
+  function_name     = var.lambda_function_name
+  architectures     = ["x86_64"]
+  role              = var.lambda_role_arn
+  handler           = var.lambda_handler_name
+  s3_bucket         = var.s3_bucket
+  s3_key            = var.s3_key
+  s3_object_version = data.aws_s3_object.package.version_id
+  runtime           = var.runtime
+  timeout           = var.timeout
+  memory_size       = var.lambda_memory_size
 
   environment {
     variables = var.env_vars

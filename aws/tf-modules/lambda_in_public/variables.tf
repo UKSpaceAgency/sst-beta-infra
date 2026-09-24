@@ -15,16 +15,16 @@ variable "s3_key" { type = string }
 
 
 variable "lambda_memory_size" {
-  type = number
+  type    = number
   default = 128
 }
 
 variable "runtime" {
-  type = string
+  type    = string
   default = "python3.11"
 }
 
 variable "timeout" {
-  type = number
+  type    = number
   default = 30
 }

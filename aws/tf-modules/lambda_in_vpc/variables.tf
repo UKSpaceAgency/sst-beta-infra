@@ -21,6 +21,6 @@ variable "s3_bucket" { type = string }
 variable "s3_key" { type = string }
 
 variable "default_timeout" {
-  type = number
+  type    = number
   default = 30
 }
