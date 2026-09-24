@@ -20,20 +20,38 @@ events=$(api "/v1/events/?norad_id=$norad&epoch=past&sort_by=tca_time&sort_order
 event=$(jq -e '.[0]' <<<"$events") || fail "no past event for NORAD $norad on dev"
 cdm_id=$(jq -er .cdm_external_id <<<"$event") || fail "event $(jq -r .short_id <<<"$event") has no CDM id"
 
-# Uploading a copy of a real analysis onto its own event, with the event's stored UKSA probability, leaves
-# that event, its CDM's analyst-queue entry and its collision_probability_uksa as they were. Analysts
-# only upload before TCA, so a past-TCA event cannot receive a real upload that this run would overwrite.
 now=$(date -u +%Y-%m-%dT%H:%M:%S)
-analyses=$(api "/v1/analyses/?sort_by=tca_time&sort_order=desc&limit=1000")
-analysis=$(jq -e --arg now "$now" 'map(select(.tca_time < $now)) | .[0]' <<<"$analyses") ||
-  fail "no active analysis with a past TCA on dev"
-analysed_short_id=$(jq -r .event_short_id <<<"$analysis")
-analysed_events=$(api "/v1/conjunction-events/list?search_like=$analysed_short_id&epoch=past")
-stored_uksa=$(jq -e --arg short_id "$analysed_short_id" \
-  'map(select(.short_id == $short_id)) | .[0].collision_probability_uksa // empty' <<<"$analysed_events") ||
-  fail "analysed event $analysed_short_id has no stored UKSA probability"
+past='[]'
+for page in $(seq 0 19); do
+  batch=$(api "/v1/analyses/?sort_by=tca_time&sort_order=desc&limit=200&offset=$((page * 200))")
+  [[ $(jq length <<<"$batch") -gt 0 ]] || break
+  past=$(jq -c --arg now "$now" 'map(select(.tca_time < $now))' <<<"$batch")
+  [[ $(jq length <<<"$past") -gt 0 ]] && break
+done
+[[ $(jq length <<<"$past") -gt 0 ]] || fail "no active analysis with a past TCA in the newest 4000 on dev"
+
+# A copy of a past-TCA analysis, carrying its event's stored UKSA probability, changes nothing on that event.
+stored_uksa=""
+for i in 0 1 2 3 4; do
+  analysis=$(jq -e ".[$i]" <<<"$past") || break
+  analysed_short_id=$(jq -r .event_short_id <<<"$analysis")
+  analysed_events=$(api "/v1/conjunction-events/list?search_like=$analysed_short_id&epoch=past")
+  stored_uksa=$(jq -e --arg short_id "$analysed_short_id" \
+    'map(select(.short_id == $short_id)) | .[0].collision_probability_uksa // empty' <<<"$analysed_events") && break
+  stored_uksa=""
+done
+[[ -n $stored_uksa ]] || fail "none of the newest 5 past-TCA analysed events has a stored UKSA probability"
 
 jq --argjson analysis "$analysis" --argjson uksa "$stored_uksa" --arg update_time "$now" '
+  def observations($data): {
+    data_received: $data.data_received,
+    data_source: $data.data_source,
+    HBR: $data.hbr,
+    observations_number: $data.observations_number,
+    observations_available: $data.observations_available,
+    observations_timespan: $data.observations_timespan,
+    OD_Quality: $data.od_quality
+  };
   .event_id = $analysis.event_short_id
   | .cdm_id = $analysis.cdm_external_id
   | .collision_probability = $uksa
@@ -50,8 +68,10 @@ jq --argjson analysis "$analysis" --argjson uksa "$stored_uksa" --arg update_tim
   | .relative_velocity = $analysis.relative_velocity
   | .estimated_combined_mass = $analysis.combined_mass
   | .estimated_fragments = $analysis.possible_fragments
-  | .primary_object.norad_id = $analysis.primary_object_norad_id
-  | .secondary_object.norad_id = $analysis.secondary_object_norad_id
+  | .primary_object = observations($analysis.primary_object_observations_data)
+      + {norad_id: $analysis.primary_object_norad_id}
+  | .secondary_object = observations($analysis.secondary_object_observations_data)
+      + {norad_id: $analysis.secondary_object_norad_id}
 ' analysis_template.json >analysis_upload.json
 
 jq --argjson event "$event" --arg cdm_id "$cdm_id" --argjson analysis "$analysis" --arg update_time "$now" '
@@ -60,6 +80,7 @@ jq --argjson event "$event" --arg cdm_id "$cdm_id" --argjson analysis "$analysis
     {key: "testCDMId", value: $cdm_id},
     {key: "testSatelliteSecondaryNorad", value: $event.secondary_object_norad_id},
     {key: "testAnalysisEventShortId", value: $analysis.event_short_id},
+    {key: "testAnalysisCDMId", value: $analysis.cdm_external_id},
     {key: "testAnalysisTcaTime", value: $analysis.tca_time},
     {key: "testAnalysisUpdateTime", value: $update_time}
   ]

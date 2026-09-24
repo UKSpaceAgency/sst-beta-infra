@@ -5003,7 +5003,7 @@
 													"query": [
 														{
 															"key": "cdm_external_id",
-															"value": "{{testCDMId}}",
+															"value": "{{testAnalysisCDMId}}",
 															"description": "SpaceTrack CDM ID",
 															"disabled": true
 														}
