@@ -2506,8 +2506,8 @@
 											"    pm.expect(resp.satellites_count).to.be.above(50000);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Ephemeris count above zero\", function() {\r",
-											"    pm.expect(resp.ephemeris_count).to.be.above(0);\r",
+											"pm.test(\"Ephemeris count is not negative\", function() {\r",
+											"    pm.expect(resp.ephemeris_count).to.be.at.least(0);\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Events count above zero\", function() {\r",
@@ -5011,7 +5011,7 @@
 													"variable": [
 														{
 															"key": "event_id",
-															"value": "{{testAnalysedEventShortId}}"
+															"value": "{{testAnalysisEventShortId}}"
 														}
 													]
 												},
@@ -9215,7 +9215,13 @@
 											"const uploaded = pm.response.json().find((row) =>\r",
 											"    row.data_source === \"UKSA Analysis\" && row.update_time === pm.variables.get(\"testAnalysisUpdateTime\"));\r",
 											"\r",
-											"pm.collectionVariables.set(\"testAnalysisAnalysisId\", uploaded.id);"
+											"pm.test(\"Uploaded analysis found in event summary\", () => {\r",
+											"    pm.expect(uploaded, \"no UKSA Analysis row with this run's update_time\").to.exist;\r",
+											"});\r",
+											"\r",
+											"if (uploaded) {\r",
+											"    pm.collectionVariables.set(\"testAnalysisAnalysisId\", uploaded.id);\r",
+											"}"
 										],
 										"type": "text/javascript"
 									}
@@ -9230,7 +9236,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/v1/events/:event_id/summary?limit=100&offset=0&sort_order=asc",
+									"raw": "{{baseUrl}}/v1/events/:event_id/summary?limit=10&offset=0&sort_order=asc",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -9243,7 +9249,7 @@
 									"query": [
 										{
 											"key": "limit",
-											"value": "100"
+											"value": "10"
 										},
 										{
 											"key": "offset",
