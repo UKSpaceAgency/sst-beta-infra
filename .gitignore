@@ -10,4 +10,3 @@ credentials.tfvars
 .DS_Store
 /aws/e2e_tests/analysis_upload.json
 __pycache__/
-.pytest_cache/
