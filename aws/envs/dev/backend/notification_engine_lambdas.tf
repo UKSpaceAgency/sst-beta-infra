@@ -60,7 +60,6 @@ resource "aws_iam_role_policy_attachment" "notification_engine_lambda_vpc" {
 }
 
 locals {
-  notification_engine_image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/notification-engine:${var.image_tag}"
   notification_engine_env = {
     "SECRET_NAME"                            = "${var.env_name}-backend"
     "NOTIFICATION_ENGINE_ENABLED"            = "True"
@@ -83,7 +82,8 @@ module "notification_engine_evaluator_lambda" {
   lambda_policy_arn      = aws_iam_policy.notification_engine_lambda.arn
   lambda_role_arn        = aws_iam_role.notification_engine_lambda.arn
   lambda_role_name       = aws_iam_role.notification_engine_lambda.name
-  ecr_image              = local.notification_engine_image
+  ecr_app_name           = "notification-engine"
+  image_tag              = var.image_tag
   image_command          = ["app.notification_engine.handlers.evaluator_handler"]
   vpc_security_group_ids = [data.terraform_remote_state.stack.outputs.default_sg_id]
   private_subnet_ids     = data.terraform_remote_state.stack.outputs.private_subnet_ids
@@ -101,7 +101,8 @@ module "notification_engine_sender_lambda" {
   lambda_policy_arn      = aws_iam_policy.notification_engine_lambda.arn
   lambda_role_arn        = aws_iam_role.notification_engine_lambda.arn
   lambda_role_name       = aws_iam_role.notification_engine_lambda.name
-  ecr_image              = local.notification_engine_image
+  ecr_app_name           = "notification-engine"
+  image_tag              = var.image_tag
   image_command          = ["app.notification_engine.handlers.sender_handler"]
   vpc_security_group_ids = [data.terraform_remote_state.stack.outputs.default_sg_id]
   private_subnet_ids     = data.terraform_remote_state.stack.outputs.private_subnet_ids
@@ -119,7 +120,8 @@ module "notification_engine_flusher_lambda" {
   lambda_policy_arn      = aws_iam_policy.notification_engine_lambda.arn
   lambda_role_arn        = aws_iam_role.notification_engine_lambda.arn
   lambda_role_name       = aws_iam_role.notification_engine_lambda.name
-  ecr_image              = local.notification_engine_image
+  ecr_app_name           = "notification-engine"
+  image_tag              = var.image_tag
   image_command          = ["app.notification_engine.handlers.flusher_handler"]
   vpc_security_group_ids = [data.terraform_remote_state.stack.outputs.default_sg_id]
   private_subnet_ids     = data.terraform_remote_state.stack.outputs.private_subnet_ids
