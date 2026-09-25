@@ -24,6 +24,15 @@ variable "ses_email_reply_to" {
 }
 
 variable "data_cache_sqs_arn" {
-  type = string
+  type    = string
   default = "arn:aws:sqs:eu-west-2:915338536460:data-cache-client-dev"
+}
+
+variable "email_renderer_s3_key" {
+  type = string
+
+  validation {
+    condition     = length(var.email_renderer_s3_key) > 0
+    error_message = "email_renderer_s3_key must name the email-renderer bundle in the lambdas bucket; pass the backend run's email-renderer-key output."
+  }
 }

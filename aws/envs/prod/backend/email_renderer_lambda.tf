@@ -48,7 +48,7 @@ module "email_renderer_lambda" {
   lambda_role_arn      = aws_iam_role.lambda-assume-role-email-renderer.arn
   lambda_role_name     = aws_iam_role.lambda-assume-role-email-renderer.name
   s3_bucket            = data.terraform_remote_state.stack.outputs.lambdas_bucket_id
-  s3_key               = "email-renderer-${var.image_tag}.zip"
+  s3_key               = var.email_renderer_s3_key
   runtime              = "nodejs20.x"
   lambda_memory_size   = 256
   timeout              = 300
