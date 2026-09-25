@@ -14,12 +14,13 @@ resource "aws_rds_cluster" "pg-aurora-cluster" {
   skip_final_snapshot         = true
   deletion_protection         = var.default_delete_protection
   engine                      = "aurora-postgresql"
-  engine_version              = "15.12"
+  engine_version              = "15.15"
   apply_immediately           = true
   db_subnet_group_name        = aws_db_subnet_group.default.name
   storage_encrypted           = true
+  performance_insights_enabled = var.performance_insights_enabled
 
-  enable_http_endpoint        = true
+  enable_http_endpoint = true
 
   serverlessv2_scaling_configuration {
     max_capacity = var.max_acu
@@ -34,4 +35,24 @@ resource "aws_rds_cluster_instance" "pg-serverless-instance" {
   engine_version      = aws_rds_cluster.pg-aurora-cluster.engine_version
   count               = var.instances_no
   monitoring_interval = var.default_monitoring_interval
+}
+
+resource "aws_cloudwatch_metric_alarm" "pg_serverless_high_acu_utilization" {
+  count = var.instances_no
+
+  alarm_name          = "RDS ${aws_rds_cluster_instance.pg-serverless-instance[count.index].identifier} ACU utilization above 95% for 6h"
+  alarm_description   = "RDS instance ${aws_rds_cluster_instance.pg-serverless-instance[count.index].identifier} used more than 95% of its maximum Aurora Serverless ACU capacity for 6 consecutive hours."
+  namespace           = "AWS/RDS"
+  metric_name         = "ACUUtilization"
+  statistic           = "Minimum"
+  period              = 60
+  evaluation_periods  = 360
+  datapoints_to_alarm = 360
+  comparison_operator = "GreaterThanThreshold"
+  threshold           = 95
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    DBInstanceIdentifier = aws_rds_cluster_instance.pg-serverless-instance[count.index].identifier
+  }
 }

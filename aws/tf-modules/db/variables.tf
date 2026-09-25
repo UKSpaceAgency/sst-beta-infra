@@ -21,3 +21,8 @@ variable "default_monitoring_interval" {
   type    = number
   default = 0
 }
+
+variable "performance_insights_enabled" {
+  type = bool
+  default = false
+}

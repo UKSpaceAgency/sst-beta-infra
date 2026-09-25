@@ -7,4 +7,5 @@ module "db" {
   default_delete_protection   = true
   default_monitoring_interval = 60
   max_acu                     = 4
+  performance_insights_enabled = true
 }
