@@ -9,3 +9,5 @@ credentials.tfvars
 *.postman_environment.json
 .DS_Store
 /aws/e2e_tests/analysis_upload.json
+__pycache__/
+.pytest_cache/

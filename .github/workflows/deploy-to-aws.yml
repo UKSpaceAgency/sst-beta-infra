@@ -168,6 +168,10 @@ jobs:
           profile: uksa-mys-dev-env
           aws-region: eu-west-2
 
+      - name: Install uv
+        if: ${{ github.event.inputs.invoker == 'backend' }}
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
       - name: Pick Backend E2E fixtures from current dev data
         if: ${{ github.event.inputs.invoker == 'backend' }}
         timeout-minutes: 10
@@ -177,7 +181,7 @@ jobs:
           E2E_AUTH0_AUDIENCE: ${{ secrets.e2e_auth0_audience }}
           E2E_AUTH_BASE_URL: ${{ vars.e2e_auth0_base_url }}
           E2E_BASE_URL: ${{ vars.e2e_base_url }}
-        run: aws/e2e_tests/prepare_fixtures.sh
+        run: uv run aws/e2e_tests/prepare_fixtures.py
 
       - name: Execute Backend E2E API tests
         uses: matt-ball/newman-action@master
