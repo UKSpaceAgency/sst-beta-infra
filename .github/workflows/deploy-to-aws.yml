@@ -168,13 +168,28 @@ jobs:
           profile: uksa-mys-dev-env
           aws-region: eu-west-2
 
+      - name: Install uv
+        if: ${{ github.event.inputs.invoker == 'backend' }}
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: Pick Backend E2E fixtures from current dev data
+        if: ${{ github.event.inputs.invoker == 'backend' }}
+        timeout-minutes: 10
+        env:
+          E2E_CLIENT_ID: ${{ secrets.e2e_client_id }}
+          E2E_CLIENT_SECRET: ${{ secrets.e2e_client_secret }}
+          E2E_AUTH0_AUDIENCE: ${{ secrets.e2e_auth0_audience }}
+          E2E_AUTH_BASE_URL: ${{ vars.e2e_auth0_base_url }}
+          E2E_BASE_URL: ${{ vars.e2e_base_url }}
+        run: uv run aws/e2e_tests/prepare_fixtures.py
+
       - name: Execute Backend E2E API tests
         uses: matt-ball/newman-action@master
         if: ${{ github.event.inputs.invoker == 'backend' }}
         with:
           workingDir: aws/e2e_tests
           collection: aws/e2e_tests/postman_collection.json
-          environment: aws/e2e_tests/postman_environment.json
+          environment: aws/e2e_tests/run.postman_environment.json
           reporters: '["cli","junit"]'
           envVar: '[{ "key": "clientId", "value": "${{ secrets.e2e_client_id }}" },{ "key": "clientSecret", "value": "${{ secrets.e2e_client_secret }}" },{ "key": "baseUrl", "value": "${{ vars.e2e_base_url }}" },{ "key": "authBaseUrl", "value": "${{ vars.e2e_auth0_base_url }}" },{ "key": "testSatellitePrimaryName", "value": "${{ vars.e2e_satellite_name }}" }, { "key": "authAudience", "value": "${{ secrets.e2e_auth0_audience }}" }]'
 

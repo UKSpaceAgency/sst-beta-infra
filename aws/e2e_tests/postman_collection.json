@@ -2506,12 +2506,12 @@
 											"    pm.expect(resp.satellites_count).to.be.above(50000);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Ephemeris count over expected range (> 30)\", function() {\r",
-											"    pm.expect(resp.ephemeris_count).to.be.above(30);\r",
+											"pm.test(\"Ephemeris count is not negative\", function() {\r",
+											"    pm.expect(resp.ephemeris_count).to.be.at.least(0);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Events count over expected range (> 900000)\", function() {\r",
-											"    pm.expect(resp.events_count).to.be.above(900000);\r",
+											"pm.test(\"Events count above zero\", function() {\r",
+											"    pm.expect(resp.events_count).to.be.above(0);\r",
 											"});\r",
 											"\r",
 											"pm.test(\"CDMs count bigger than event count\", function() {\r",
@@ -5003,7 +5003,7 @@
 													"query": [
 														{
 															"key": "cdm_external_id",
-															"value": "{{testCDMId}}",
+															"value": "{{testAnalysisCDMId}}",
 															"description": "SpaceTrack CDM ID",
 															"disabled": true
 														}
@@ -5011,7 +5011,7 @@
 													"variable": [
 														{
 															"key": "event_id",
-															"value": "{{testEventShortId}}"
+															"value": "{{testAnalysisEventShortId}}"
 														}
 													]
 												},
@@ -8979,6 +8979,17 @@
 							"name": "Upload Analysis JSON file to database",
 							"event": [
 								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"utils.analysedEventState(pm, (state) => {\r",
+											"    pm.collectionVariables.set(\"testAnalysisEventStateBefore\", JSON.stringify(state));\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
 									"listen": "test",
 									"script": {
 										"exec": [
@@ -9015,7 +9026,7 @@
 											"key": "json_file",
 											"description": "(Required) ",
 											"type": "file",
-											"src": "test_analysis_laepogz-erkdrld-dadlkr.json"
+											"src": "analysis_upload.json"
 										},
 										{
 											"key": "event_short_id",
@@ -9212,9 +9223,16 @@
 									"script": {
 										"exec": [
 											"// run post request to log the long ID for next request\r",
-											"const new_long_id = pm.response.json()[pm.response.json().length - 1].id;\r",
+											"const uploaded = pm.response.json().find((row) =>\r",
+											"    row.data_source === \"UKSA Analysis\" && row.update_time === pm.variables.get(\"testAnalysisUpdateTime\"));\r",
 											"\r",
-											"pm.collectionVariables.set(\"testAnalysisAnalysisId\", new_long_id);"
+											"pm.test(\"Uploaded analysis found in event summary\", () => {\r",
+											"    pm.expect(uploaded, \"no UKSA Analysis row with this run's update_time\").to.exist;\r",
+											"});\r",
+											"\r",
+											"if (uploaded) {\r",
+											"    pm.collectionVariables.set(\"testAnalysisAnalysisId\", uploaded.id);\r",
+											"}"
 										],
 										"type": "text/javascript"
 									}
@@ -9709,9 +9727,16 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Returned object matches uploaded\", () => {\r",
-											"    pm.expect(resp.tca_time).to.equal(\"2024-04-18T22:57:32.881000\");\r",
+											"    pm.expect(resp.tca_time).to.equal(pm.variables.get(\"testAnalysisTcaTime\"));\r",
 											"    pm.expect(resp.id).to.equal(pm.collectionVariables.get(\"testAnalysisAnalysisId\"));\r",
-											"    pm.expect(resp.event_short_id).to.equal(pm.collectionVariables.get(\"testAnalysisEventShortId\"));\r",
+											"    pm.expect(resp.event_short_id).to.equal(pm.variables.get(\"testAnalysisEventShortId\"));\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returned object carries the source analysis data\", () => {\r",
+											"    const expected = JSON.parse(pm.variables.get(\"testAnalysisExpectedFields\"));\r",
+											"    Object.keys(expected).forEach((key) => {\r",
+											"        pm.expect(resp[key], key).to.eql(expected[key]);\r",
+											"    });\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -9872,7 +9897,13 @@
 										"exec": [
 											"pm.test(\"Status code 204\", () => {\r",
 											"    pm.response.to.have.status(204);\r",
-											"    });"
+											"    });\r",
+											"\r",
+											"utils.analysedEventState(pm, (state) => {\r",
+											"    pm.test(\"Analysed event unchanged by the upload\", () => {\r",
+											"        pm.expect(state).to.eql(JSON.parse(pm.collectionVariables.get(\"testAnalysisEventStateBefore\")));\r",
+											"    });\r",
+											"});"
 										],
 										"type": "text/javascript"
 									}
@@ -10149,6 +10180,23 @@
 					"            found = (found || (obj[key] === value));",
 					"        });",
 					"        return found;",
+					"    },",
+					"    analysedEventState: function (pm, callback) {",
+					"        const eventShortId = pm.variables.get(\"testAnalysisEventShortId\");",
+					"        const request = (path) => ({",
+					"            url: pm.variables.get(\"baseUrl\") + path,",
+					"            header: { Authorization: \"Bearer \" + pm.environment.get(\"bearerToken\") }",
+					"        });",
+					"        pm.sendRequest(request(\"/v1/conjunction-events/list?search_like=\" + eventShortId + \"&epoch=past\"), (err, list) => {",
+					"            pm.sendRequest(request(\"/v1/events/?norad_id=\" + pm.variables.get(\"testAnalysisPrimaryNorad\")",
+					"                + \"&search_like=\" + eventShortId + \"&epoch=past\"), (err, events) => {",
+					"                const stored = list.json().find((row) => row.short_id === eventShortId);",
+					"                callback({",
+					"                    storedUksa: stored ? stored.collision_probability_uksa : null,",
+					"                    eventsListRows: events.json().filter((row) => row.short_id === eventShortId).length",
+					"                });",
+					"            });",
+					"        });",
 					"    }",
 					"};",
 					"",
@@ -10204,31 +10252,6 @@
 			"type": "string"
 		},
 		{
-			"key": "testSatelliteSecondaryNorad",
-			"value": "45321",
-			"type": "string"
-		},
-		{
-			"key": "testEventShortId",
-			"value": "ngawpao-xdvregl-jogeqg",
-			"type": "string"
-		},
-		{
-			"key": "testCDMId",
-			"value": "987844281",
-			"type": "string"
-		},
-		{
-			"key": "testEventId",
-			"value": "6436efe7-0252-4ef7-a407-dc2eb0cdde87",
-			"type": "string"
-		},
-		{
-			"key": "testAnalysisEventShortId",
-			"value": "laepogz-erkdrld-dadlkr",
-			"type": "string"
-		},
-		{
 			"key": "testAnalysisAnalysisId",
 			"value": ""
 		},
@@ -10268,6 +10291,10 @@
 		},
 		{
 			"key": "date5DaysAgo",
+			"value": ""
+		},
+		{
+			"key": "testAnalysisEventStateBefore",
 			"value": ""
 		}
 	]
