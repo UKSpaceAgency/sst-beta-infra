@@ -14,6 +14,10 @@ on:
         description: 'image ecr sha tag'
         required: true
         default: 'latest'
+      email-renderer-key:
+        description: 'email-renderer lambda S3 key'
+        required: false
+        default: ''
 
 jobs:
   called_with_by:
@@ -71,6 +75,13 @@ jobs:
           terraform init
           echo "image_tag = \"${{ github.event.inputs.image-tag }}\"" >> terraform.tfvars
           echo "env_name = \"${{ github.event.inputs.env }}\"" >> terraform.tfvars
+          if [ "${{ github.event.inputs.invoker }}" = "backend" ]; then
+            key="${{ github.event.inputs.email-renderer-key }}"
+            if [ -z "$key" ]; then
+              key="email-renderer-${{ github.event.inputs.image-tag }}.zip"
+            fi
+            echo "email_renderer_s3_key = \"$key\"" >> terraform.tfvars
+          fi
           cat terraform.tfvars
           terraform apply -auto-approve
 

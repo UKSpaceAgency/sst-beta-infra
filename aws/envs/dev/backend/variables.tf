@@ -24,6 +24,10 @@ variable "ses_email_reply_to" {
 }
 
 variable "data_cache_sqs_arn" {
-  type = string
+  type    = string
   default = "arn:aws:sqs:eu-west-2:915338536460:data-cache-client-dev"
+}
+
+variable "email_renderer_s3_key" {
+  type = string
 }

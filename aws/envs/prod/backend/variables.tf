@@ -22,3 +22,7 @@ variable "ses_email_reply_to" {
   type    = string
   default = "monitorspacehazards@ukspaceagency.gov.uk"
 }
+
+variable "email_renderer_s3_key" {
+  type = string
+}

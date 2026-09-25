@@ -22,3 +22,7 @@ variable "ses_email_reply_to" {
   type    = string
   default = "ukspaceagency.support@thepsc.co.uk"
 }
+
+variable "email_renderer_s3_key" {
+  type = string
+}
