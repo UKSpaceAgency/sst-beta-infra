@@ -1,6 +1,8 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = []
+# dependencies = [
+#   "httpx>=0.28,<1",
+# ]
 # ///
 # Dev retention deletes events and analyses after 180 days, so every run targets data that exists now.
 import json
@@ -11,9 +13,8 @@ from collections.abc import Mapping
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+
+import httpx
 
 PAGE_SIZE = 200
 MAX_PAGES = 20
@@ -48,41 +49,26 @@ class FixtureError(Exception):
     pass
 
 
-def http_json(url: str, *, token: str | None = None, body: Mapping[str, Any] | None = None) -> Any:
-    headers = {"Accept": "application/json"}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    data = None
-    if body is not None:
-        data = json.dumps(body).encode()
-        headers["Content-Type"] = "application/json"
+def request_json(client: httpx.Client, method: str, url: str, **kwargs: Any) -> Any:
     for attempt in range(RETRIES + 1):
         try:
-            with urlopen(Request(url, data=data, headers=headers), timeout=TIMEOUT_SECONDS) as response:
-                return json.load(response)
-        except HTTPError as error:
-            if error.code not in RETRYABLE_STATUSES or attempt == RETRIES:
-                raise
-        except (URLError, TimeoutError):
+            response = client.request(method, url, **kwargs)
+        except httpx.TransportError:
             if attempt == RETRIES:
                 raise
+        else:
+            if response.status_code not in RETRYABLE_STATUSES or attempt == RETRIES:
+                return response.raise_for_status().json()
         time.sleep(2**attempt)
     raise AssertionError("unreachable")
 
 
-class Api:
-    def __init__(self, base_url: str, token: str) -> None:
-        self.base_url = base_url
-        self.token = token
-
-    def get(self, path: str, **params: Any) -> Any:
-        return http_json(f"{self.base_url}{path}?{urlencode(params)}", token=self.token)
-
-
-def fetch_token(env: Mapping[str, str]) -> str:
-    response = http_json(
+def fetch_token(client: httpx.Client, env: Mapping[str, str]) -> str:
+    response = request_json(
+        client,
+        "POST",
         f"{env['E2E_AUTH_BASE_URL']}/oauth/token",
-        body={
+        json={
             "grant_type": "client_credentials",
             "client_id": env["E2E_CLIENT_ID"],
             "client_secret": env["E2E_CLIENT_SECRET"],
@@ -95,8 +81,9 @@ def fetch_token(env: Mapping[str, str]) -> str:
     return token
 
 
-def pick_event(api: Api, norad_id: str) -> dict[str, Any]:
-    events = api.get("/v1/events/", norad_id=norad_id, epoch="past", sort_by="tca_time", sort_order="desc", limit=1)
+def pick_event(client: httpx.Client, norad_id: str) -> dict[str, Any]:
+    params = {"norad_id": norad_id, "epoch": "past", "sort_by": "tca_time", "sort_order": "desc", "limit": 1}
+    events = request_json(client, "GET", "/v1/events/", params=params)
     if not events:
         raise FixtureError(f"no past event for NORAD {norad_id} on dev")
     event: dict[str, Any] = events[0]
@@ -105,13 +92,12 @@ def pick_event(api: Api, norad_id: str) -> dict[str, Any]:
     return event
 
 
-def past_tca_candidates(api: Api, cutoff: datetime) -> list[dict[str, Any]]:
+def past_tca_candidates(client: httpx.Client, cutoff: datetime) -> list[dict[str, Any]]:
     candidates: dict[str, dict[str, Any]] = {}
     scanned = 0
     for page in range(MAX_PAGES):
-        batch = api.get(
-            "/v1/analyses/", sort_by="tca_time", sort_order="desc", limit=PAGE_SIZE, offset=page * PAGE_SIZE
-        )
+        params = {"sort_by": "tca_time", "sort_order": "desc", "limit": PAGE_SIZE, "offset": page * PAGE_SIZE}
+        batch = request_json(client, "GET", "/v1/analyses/", params=params)
         if not batch:
             break
         scanned += len(batch)
@@ -127,18 +113,19 @@ def past_tca_candidates(api: Api, cutoff: datetime) -> list[dict[str, Any]]:
     return list(candidates.values())[:CANDIDATE_EVENTS]
 
 
-def stored_uksa(api: Api, short_id: str) -> float | None:
-    for event in api.get("/v1/conjunction-events/list", search_like=short_id, epoch="past"):
+def stored_uksa(client: httpx.Client, short_id: str) -> float | None:
+    params = {"search_like": short_id, "epoch": "past"}
+    for event in request_json(client, "GET", "/v1/conjunction-events/list", params=params):
         if event["short_id"] == short_id:
             probability: float | None = event["collision_probability_uksa"]
             return probability
     return None
 
 
-def pick_analysis(api: Api, candidates: list[dict[str, Any]]) -> tuple[dict[str, Any], float]:
+def pick_analysis(client: httpx.Client, candidates: list[dict[str, Any]]) -> tuple[dict[str, Any], float]:
     # A copy of a past-TCA analysis, carrying its event's stored UKSA probability, changes nothing on that event.
     for analysis in candidates:
-        probability = stored_uksa(api, analysis["event_short_id"])
+        probability = stored_uksa(client, analysis["event_short_id"])
         if probability is not None:
             return analysis, probability
     raise FixtureError(f"none of the {len(candidates)} analysed events picked has a stored UKSA probability")
@@ -209,14 +196,19 @@ def build_environment(
     return {**base, "values": [*base["values"], *({"key": k, "value": v} for k, v in values.items())]}
 
 
-def prepare(directory: Path, env: Mapping[str, str], now: datetime) -> str:
+def prepare(
+    directory: Path, env: Mapping[str, str], now: datetime, transport: httpx.BaseTransport | None = None
+) -> str:
     collection = json.loads((directory / "postman_collection.json").read_text())
     norad_id = next(v["value"] for v in collection["variable"] if v["key"] == "testSatellitePrimaryNorad")
-    api = Api(env["E2E_BASE_URL"], fetch_token(env))
 
-    event = pick_event(api, norad_id)
-    candidates = past_tca_candidates(api, now.replace(tzinfo=None) - TCA_MARGIN)
-    analysis, uksa = pick_analysis(api, candidates)
+    with httpx.Client(
+        base_url=env["E2E_BASE_URL"], timeout=TIMEOUT_SECONDS, follow_redirects=True, transport=transport
+    ) as client:
+        client.headers["Authorization"] = f"Bearer {fetch_token(client, env)}"
+        event = pick_event(client, norad_id)
+        candidates = past_tca_candidates(client, now.replace(tzinfo=None) - TCA_MARGIN)
+        analysis, uksa = pick_analysis(client, candidates)
 
     update_time = now.strftime(TIMESTAMP_FORMAT)
     base_environment = json.loads((directory / "postman_environment.json").read_text())
@@ -235,10 +227,10 @@ def main() -> None:
         print(prepare(Path(__file__).parent, os.environ, datetime.now(UTC)))
     except FixtureError as error:
         sys.exit(f"prepare_fixtures: {error}")
-    except HTTPError as error:
-        sys.exit(f"prepare_fixtures: {error.url} returned HTTP {error.code}")
-    except URLError as error:
-        sys.exit(f"prepare_fixtures: request failed: {error.reason}")
+    except httpx.HTTPStatusError as error:
+        sys.exit(f"prepare_fixtures: {error.request.url} returned HTTP {error.response.status_code}")
+    except httpx.RequestError as error:
+        sys.exit(f"prepare_fixtures: request to {error.request.url} failed: {error!r}")
 
 
 if __name__ == "__main__":

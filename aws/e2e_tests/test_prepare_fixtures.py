@@ -1,10 +1,8 @@
-import io
 import json
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.error import HTTPError
-from urllib.parse import parse_qs, urlparse
 
+import httpx
 import pytest
 
 import prepare_fixtures
@@ -77,24 +75,28 @@ class FakeDev:
         self.stored_uksa = stored_uksa if stored_uksa is not None else {"kgpebal-vrddrbe-wrojld": 0.0000021}
         self.token = token
         self.uksa_lookups = []
+        self.api_authorization = set()
 
-    def __call__(self, url, *, token=None, body=None):
-        parsed = urlparse(url)
-        query = {key: values[0] for key, values in parse_qs(parsed.query).items()}
-        if parsed.path == "/oauth/token":
-            return {"access_token": self.token} if self.token else {"error": "access_denied"}
-        if parsed.path == "/v1/events/":
-            return self.events
-        if parsed.path == "/v1/analyses/":
-            page = int(query["offset"]) // prepare_fixtures.PAGE_SIZE
-            return self.analysis_pages[page] if page < len(self.analysis_pages) else []
-        if parsed.path == "/v1/conjunction-events/list":
-            short_id = query["search_like"]
+    def __call__(self, request: httpx.Request) -> httpx.Response:
+        path, params = request.url.path, request.url.params
+        if path == "/oauth/token":
+            return httpx.Response(200, json={"access_token": self.token} if self.token else {"error": "denied"})
+        self.api_authorization.add(request.headers.get("Authorization"))
+        if path == "/v1/events/":
+            return httpx.Response(301, headers={"Location": str(request.url.copy_with(path="/v1/conjunction-events/"))})
+        if path == "/v1/conjunction-events/":
+            return httpx.Response(200, json=self.events)
+        if path == "/v1/analyses/":
+            page = int(params["offset"]) // prepare_fixtures.PAGE_SIZE
+            return httpx.Response(200, json=self.analysis_pages[page] if page < len(self.analysis_pages) else [])
+        if path == "/v1/conjunction-events/list":
+            short_id = params["search_like"]
             self.uksa_lookups.append(short_id)
-            if short_id not in self.stored_uksa:
-                return []
-            return [{"short_id": short_id, "collision_probability_uksa": self.stored_uksa[short_id]}]
-        raise AssertionError(f"unexpected request {url}")
+            rows = []
+            if short_id in self.stored_uksa:
+                rows = [{"short_id": short_id, "collision_probability_uksa": self.stored_uksa[short_id]}]
+            return httpx.Response(200, json=rows)
+        raise AssertionError(f"unexpected request {request.url}")
 
 
 @pytest.fixture
@@ -107,9 +109,8 @@ def e2e_dir(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def run(mocker, e2e_dir: Path, dev: FakeDev) -> str:
-    mocker.patch("prepare_fixtures.http_json", side_effect=dev)
-    return prepare_fixtures.prepare(e2e_dir, ENV, NOW)
+def run(e2e_dir: Path, dev: FakeDev) -> str:
+    return prepare_fixtures.prepare(e2e_dir, ENV, NOW, transport=httpx.MockTransport(dev))
 
 
 def environment_values(e2e_dir: Path) -> dict:
@@ -117,12 +118,12 @@ def environment_values(e2e_dir: Path) -> dict:
     return {value["key"]: value["value"] for value in environment["values"]}
 
 
-def test_upload_is_a_copy_of_the_picked_analysis_with_cdm_zero_and_the_stored_probability(mocker, e2e_dir):
+def test_upload_is_a_copy_of_the_picked_analysis_with_cdm_zero_and_the_stored_probability(e2e_dir):
     # given
     dev = FakeDev()
 
     # when
-    summary = run(mocker, e2e_dir, dev)
+    summary = run(e2e_dir, dev)
 
     # then
     upload = json.loads((e2e_dir / "analysis_upload.json").read_text())
@@ -150,12 +151,23 @@ def test_upload_is_a_copy_of_the_picked_analysis_with_cdm_zero_and_the_stored_pr
     assert upload["secondary_object"]["HBR"] == 1.35
 
 
-def test_environment_carries_both_picked_events_and_the_fields_the_round_trip_test_compares(mocker, e2e_dir):
+def test_api_requests_carry_the_fetched_token(e2e_dir):
+    # given
+    dev = FakeDev(token="dev-token")
+
+    # when
+    run(e2e_dir, dev)
+
+    # then
+    assert dev.api_authorization == {"Bearer dev-token"}
+
+
+def test_environment_carries_both_picked_events_and_the_fields_the_round_trip_test_compares(e2e_dir):
     # given
     dev = FakeDev()
 
     # when
-    run(mocker, e2e_dir, dev)
+    run(e2e_dir, dev)
 
     # then
     values = environment_values(e2e_dir)
@@ -172,7 +184,7 @@ def test_environment_carries_both_picked_events_and_the_fields_the_round_trip_te
     assert values["baseUrl"].startswith("<")
 
 
-def test_analyses_less_than_a_day_past_tca_are_skipped(mocker, e2e_dir):
+def test_analyses_less_than_a_day_past_tca_are_skipped(e2e_dir):
     # given
     dev = FakeDev(
         analysis_pages=[[analysis("future", FUTURE_TCA), analysis("recent", RECENT_TCA), analysis("old", PAST_TCA)]],
@@ -180,13 +192,13 @@ def test_analyses_less_than_a_day_past_tca_are_skipped(mocker, e2e_dir):
     )
 
     # when
-    run(mocker, e2e_dir, dev)
+    run(e2e_dir, dev)
 
     # then
     assert dev.uksa_lookups == ["old"]
 
 
-def test_candidates_are_distinct_events_collected_across_pages(mocker, e2e_dir):
+def test_candidates_are_distinct_events_collected_across_pages(e2e_dir):
     # given
     dev = FakeDev(
         analysis_pages=[
@@ -197,13 +209,13 @@ def test_candidates_are_distinct_events_collected_across_pages(mocker, e2e_dir):
     )
 
     # when
-    run(mocker, e2e_dir, dev)
+    run(e2e_dir, dev)
 
     # then
     assert dev.uksa_lookups == ["pk", "q1", "q2", "q3", "q4"]
 
 
-def test_candidates_are_found_past_pages_of_future_analyses(mocker, e2e_dir):
+def test_candidates_are_found_past_pages_of_future_analyses(e2e_dir):
     # given
     future_page = [analysis("future", FUTURE_TCA)] * 2
     dev = FakeDev(
@@ -212,30 +224,30 @@ def test_candidates_are_found_past_pages_of_future_analyses(mocker, e2e_dir):
     )
 
     # when
-    run(mocker, e2e_dir, dev)
+    run(e2e_dir, dev)
 
     # then
     assert environment_values(e2e_dir)["testAnalysisEventShortId"] == "deep"
 
 
-def test_first_candidate_without_stored_probability_falls_back_to_the_next(mocker, e2e_dir):
+def test_first_candidate_without_stored_probability_falls_back_to_the_next(e2e_dir):
     # given
     dev = FakeDev(analysis_pages=[[analysis("no-uksa"), analysis("has-uksa")]], stored_uksa={"has-uksa": 0.6})
 
     # when
-    run(mocker, e2e_dir, dev)
+    run(e2e_dir, dev)
 
     # then
     assert dev.uksa_lookups == ["no-uksa", "has-uksa"]
     assert json.loads((e2e_dir / "analysis_upload.json").read_text())["event_id"] == "has-uksa"
 
 
-def test_a_stored_probability_of_zero_counts_as_stored(mocker, e2e_dir):
+def test_a_stored_probability_of_zero_counts_as_stored(e2e_dir):
     # given
     dev = FakeDev(analysis_pages=[[analysis("zero")]], stored_uksa={"zero": 0.0})
 
     # when
-    run(mocker, e2e_dir, dev)
+    run(e2e_dir, dev)
 
     # then
     assert json.loads((e2e_dir / "analysis_upload.json").read_text())["collision_probability"] == 0.0
@@ -257,69 +269,77 @@ def test_a_stored_probability_of_zero_counts_as_stored(mocker, e2e_dir):
         ),
     ],
 )
-def test_missing_data_fails_with_a_named_reason(mocker, e2e_dir, dev, message):
+def test_missing_data_fails_with_a_named_reason(e2e_dir, dev, message):
     # given
-    mocker.patch("prepare_fixtures.http_json", side_effect=dev)
+    transport = httpx.MockTransport(dev)
 
     # when
     with pytest.raises(prepare_fixtures.FixtureError) as error:
-        prepare_fixtures.prepare(e2e_dir, ENV, NOW)
+        prepare_fixtures.prepare(e2e_dir, ENV, NOW, transport=transport)
 
     # then
     assert str(error.value) == message
     assert not (e2e_dir / "analysis_upload.json").exists()
 
 
-def http_error(code: int) -> HTTPError:
-    return HTTPError("https://api.example/v1/events/", code, "error", {}, io.BytesIO(b"{}"))
+def replaying(*outcomes):
+    calls = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        outcome = outcomes[len(calls)]
+        calls.append(request)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    return httpx.Client(base_url="https://api.example", transport=httpx.MockTransport(handler)), calls
 
 
-def test_transient_http_errors_are_retried(mocker):
+def test_transient_failures_are_retried(mocker):
     # given
-    urlopen = mocker.patch(
-        "prepare_fixtures.urlopen", side_effect=[http_error(503), http_error(502), io.BytesIO(b'{"ok": true}')]
-    )
     mocker.patch("prepare_fixtures.time.sleep")
+    client, calls = replaying(httpx.Response(503), httpx.ConnectTimeout("slow"), httpx.Response(200, json={"ok": True}))
 
     # when
-    result = prepare_fixtures.http_json("https://api.example/v1/events/", token="token")
+    result = prepare_fixtures.request_json(client, "GET", "/v1/events/")
 
     # then
     assert result == {"ok": True}
-    assert urlopen.call_args_list[0].args[0].get_header("Authorization") == "Bearer token"
-    assert urlopen.call_args_list[0].kwargs == {"timeout": prepare_fixtures.TIMEOUT_SECONDS}
+    assert len(calls) == 3
 
 
 def test_client_errors_are_not_retried(mocker):
     # given
-    urlopen = mocker.patch("prepare_fixtures.urlopen", side_effect=[http_error(401)])
     mocker.patch("prepare_fixtures.time.sleep")
+    client, calls = replaying(httpx.Response(401))
 
     # when
-    with pytest.raises(HTTPError) as error:
-        prepare_fixtures.http_json("https://api.example/v1/events/", token="token")
+    with pytest.raises(httpx.HTTPStatusError) as error:
+        prepare_fixtures.request_json(client, "GET", "/v1/events/")
 
     # then
-    assert error.value.code == 401
-    assert urlopen.call_count == 1
+    assert error.value.response.status_code == 401
+    assert len(calls) == 1
 
 
 def test_retries_give_up_after_the_limit(mocker):
     # given
-    urlopen = mocker.patch("prepare_fixtures.urlopen", side_effect=[http_error(503)] * 3)
     mocker.patch("prepare_fixtures.time.sleep")
+    client, calls = replaying(*[httpx.Response(503)] * (prepare_fixtures.RETRIES + 1))
 
     # when
-    with pytest.raises(HTTPError):
-        prepare_fixtures.http_json("https://api.example/v1/events/")
+    with pytest.raises(httpx.HTTPStatusError):
+        prepare_fixtures.request_json(client, "GET", "/v1/events/")
 
     # then
-    assert urlopen.call_count == prepare_fixtures.RETRIES + 1
+    assert len(calls) == prepare_fixtures.RETRIES + 1
 
 
 def test_http_failures_exit_with_the_url_and_status(mocker):
     # given
-    mocker.patch("prepare_fixtures.prepare", side_effect=http_error(500))
+    request = httpx.Request("GET", "https://api.example/v1/events/")
+    error = httpx.HTTPStatusError("boom", request=request, response=httpx.Response(500, request=request))
+    mocker.patch("prepare_fixtures.prepare", side_effect=error)
 
     # when
     with pytest.raises(SystemExit) as exit_:
