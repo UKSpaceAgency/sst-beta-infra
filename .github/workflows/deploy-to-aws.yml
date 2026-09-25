@@ -170,6 +170,7 @@ jobs:
 
       - name: Pick Backend E2E fixtures from current dev data
         if: ${{ github.event.inputs.invoker == 'backend' }}
+        timeout-minutes: 10
         env:
           E2E_CLIENT_ID: ${{ secrets.e2e_client_id }}
           E2E_CLIENT_SECRET: ${{ secrets.e2e_client_secret }}

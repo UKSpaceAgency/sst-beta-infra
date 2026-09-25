@@ -8979,6 +8979,17 @@
 							"name": "Upload Analysis JSON file to database",
 							"event": [
 								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"utils.analysedEventState(pm, (state) => {\r",
+											"    pm.collectionVariables.set(\"testAnalysisEventStateBefore\", JSON.stringify(state));\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
 									"listen": "test",
 									"script": {
 										"exec": [
@@ -9719,6 +9730,13 @@
 											"    pm.expect(resp.tca_time).to.equal(pm.variables.get(\"testAnalysisTcaTime\"));\r",
 											"    pm.expect(resp.id).to.equal(pm.collectionVariables.get(\"testAnalysisAnalysisId\"));\r",
 											"    pm.expect(resp.event_short_id).to.equal(pm.variables.get(\"testAnalysisEventShortId\"));\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returned object carries the source analysis data\", () => {\r",
+											"    const expected = JSON.parse(pm.variables.get(\"testAnalysisExpectedFields\"));\r",
+											"    Object.keys(expected).forEach((key) => {\r",
+											"        pm.expect(resp[key], key).to.eql(expected[key]);\r",
+											"    });\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -9879,7 +9897,13 @@
 										"exec": [
 											"pm.test(\"Status code 204\", () => {\r",
 											"    pm.response.to.have.status(204);\r",
-											"    });"
+											"    });\r",
+											"\r",
+											"utils.analysedEventState(pm, (state) => {\r",
+											"    pm.test(\"Analysed event unchanged by the upload\", () => {\r",
+											"        pm.expect(state).to.eql(JSON.parse(pm.collectionVariables.get(\"testAnalysisEventStateBefore\")));\r",
+											"    });\r",
+											"});"
 										],
 										"type": "text/javascript"
 									}
@@ -10156,6 +10180,23 @@
 					"            found = (found || (obj[key] === value));",
 					"        });",
 					"        return found;",
+					"    },",
+					"    analysedEventState: function (pm, callback) {",
+					"        const eventShortId = pm.variables.get(\"testAnalysisEventShortId\");",
+					"        const request = (path) => ({",
+					"            url: pm.variables.get(\"baseUrl\") + path,",
+					"            header: { Authorization: \"Bearer \" + pm.environment.get(\"bearerToken\") }",
+					"        });",
+					"        pm.sendRequest(request(\"/v1/conjunction-events/list?search_like=\" + eventShortId + \"&epoch=past\"), (err, list) => {",
+					"            pm.sendRequest(request(\"/v1/events/?norad_id=\" + pm.variables.get(\"testAnalysisPrimaryNorad\")",
+					"                + \"&search_like=\" + eventShortId + \"&epoch=past\"), (err, events) => {",
+					"                const stored = list.json().find((row) => row.short_id === eventShortId);",
+					"                callback({",
+					"                    storedUksa: stored ? stored.collision_probability_uksa : null,",
+					"                    eventsListRows: events.json().filter((row) => row.short_id === eventShortId).length",
+					"                });",
+					"            });",
+					"        });",
 					"    }",
 					"};",
 					"",
@@ -10250,6 +10291,10 @@
 		},
 		{
 			"key": "date5DaysAgo",
+			"value": ""
+		},
+		{
+			"key": "testAnalysisEventStateBefore",
 			"value": ""
 		}
 	]
