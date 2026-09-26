@@ -25,4 +25,9 @@ variable "ses_email_reply_to" {
 
 variable "email_renderer_s3_key" {
   type = string
+
+  validation {
+    condition     = length(var.email_renderer_s3_key) > 0
+    error_message = "email_renderer_s3_key must name the email-renderer bundle in the lambdas bucket; pass the backend run's email-renderer-key output."
+  }
 }
