@@ -1,3 +1,7 @@
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = var.lambda_role_name
   policy_arn = var.lambda_policy_arn
@@ -8,12 +12,17 @@ resource "aws_cloudwatch_log_group" "lambda_lg" {
   retention_in_days = 14
 }
 
+data "aws_ecr_image" "service_image" {
+  repository_name = var.ecr_app_name
+  image_tag       = var.image_tag
+}
+
 resource "aws_lambda_function" "public_lambda_as_docker_image" {
   function_name = var.lambda_function_name
   architectures = ["x86_64"]
   role          = var.lambda_role_arn
   package_type  = "Image"
-  image_uri     = var.ecr_image
+  image_uri     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_app_name}@${data.aws_ecr_image.service_image.image_digest}"
   timeout       = var.default_timeout
   memory_size   = var.memory_size
 
