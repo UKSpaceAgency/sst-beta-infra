@@ -3,7 +3,7 @@
 # on prod's shared SES daily quota (exhausted by the 2026-07-28 flood).
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
-# Release: a human can send one caught message onward to @thepsc.co.uk addresses they type in the UI.
+# Release: a human can send one caught message onward to @thepsc.co.uk, @dsit.gov.uk or @ukspaceagency.gov.uk addresses they type in the UI.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -123,7 +123,7 @@ resource "aws_ecs_task_definition" "mailpit" {
         # OVERRIDE_FROM leaves the captured Return-Path header (the app's prod-domain sender) in place.
         { name = "MP_SMTP_RELAY_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
         # Anchored, and ASCII classes not (?i): Go's (?i) also matches U+017F for s and U+212A for k.
-        { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = "^[^@\\s]+@[tT][hH][eE][pP][sS][cC]\\.[cC][oO]\\.[uU][kK]$" },
+        { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = "^[^@\\s]+@(?:[tT][hH][eE][pP][sS][cC]\\.[cC][oO]\\.[uU][kK]|[dD][sS][iI][tT]\\.[gG][oO][vV]\\.[uU][kK]|[uU][kK][sS][pP][aA][cC][eE][aA][gG][eE][nN][cC][yY]\\.[gG][oO][vV]\\.[uU][kK])$" },
       ]
 
       secrets = [
