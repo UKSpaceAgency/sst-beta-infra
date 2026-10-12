@@ -123,8 +123,8 @@ resource "aws_ecs_task_definition" "mailpit" {
         { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
         # OVERRIDE_FROM leaves the captured Return-Path header (the app's prod-domain sender) in place.
         { name = "MP_SMTP_RELAY_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
-        # Anchored, and ASCII classes not (?i): Go's (?i) also matches U+017F for s and U+212A for k.
-        { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = "^[^@\\s]+@(?:[tT][hH][eE][pP][sS][cC]\\.[cC][oO]\\.[uU][kK]|[dD][sS][iI][tT]\\.[gG][oO][vV]\\.[uU][kK]|[uU][kK][sS][pP][aA][cC][eE][aA][gG][eE][nN][cC][yY]\\.[gG][oO][vV]\\.[uU][kK])$" },
+        # Anchored. Known gap: Go's (?i) also matches U+017F for s and U+212A for k.
+        { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = "(?i)^[^@\\s]+@(?:thepsc\\.co\\.uk|dsit\\.gov\\.uk|ukspaceagency\\.gov\\.uk)$" },
       ]
 
       secrets = [
