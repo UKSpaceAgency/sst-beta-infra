@@ -3,7 +3,8 @@
 # on prod's shared SES daily quota (exhausted by the 2026-07-28 flood).
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
-# Release: a human sends one caught message on to @thepsc.co.uk, @dsit.gov.uk or @ukspaceagency.gov.uk.
+# Release: a human can send one caught message onward to addresses they type in the UI,
+# limited to @thepsc.co.uk, @dsit.gov.uk and @ukspaceagency.gov.uk.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
