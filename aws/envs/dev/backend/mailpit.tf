@@ -4,7 +4,7 @@
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
 # Release: a human can send one caught message onward to addresses they type in the UI,
-# limited to @thepsc.co.uk, @dsit.gov.uk and @ukspaceagency.gov.uk.
+# limited to @thepsc.co.uk, @dsit.gov.uk, @ukspaceagency.gov.uk, @gmail.com and @outlook.com.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -124,7 +124,7 @@ resource "aws_ecs_task_definition" "mailpit" {
         # OVERRIDE_FROM leaves the captured Return-Path header (the app's prod-domain sender) in place.
         { name = "MP_SMTP_RELAY_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
         # Known gap: Go's (?i) also matches U+017F for s and U+212A for k.
-        { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = "(?i)^[^@\\s]+@(?:thepsc\\.co\\.uk|dsit\\.gov\\.uk|ukspaceagency\\.gov\\.uk)$" },
+        { name = "MP_SMTP_RELAY_ALLOWED_RECIPIENTS", value = "(?i)^[^@\\s]+@(?:thepsc\\.co\\.uk|dsit\\.gov\\.uk|ukspaceagency\\.gov\\.uk|gmail\\.com|outlook\\.com)$" },
       ]
 
       secrets = [
