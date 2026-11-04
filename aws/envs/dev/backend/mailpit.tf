@@ -4,7 +4,7 @@
 # UI: https://mailpit.<dev-domain> (basic auth, secret `dev-mailpit-ui-auth`).
 # SMTP: mailpit.dev.internal:1025 (VPC-internal only).
 # Release: a human can send one caught message onward to any address they type in the UI.
-# Auto-release: mail to orbitalanalysts@ukspaceagency.gov.uk is relayed on arrival, to it alone.
+# Auto-release: mail to @dsit.gov.uk and @ukspaceagency.gov.uk is relayed on arrival, to those recipients alone.
 
 resource "random_password" "mailpit_ui" {
   length  = 24
@@ -111,8 +111,8 @@ resource "aws_ecs_task_definition" "mailpit" {
         }
       ]
 
-      # Never set MP_SMTP_RELAY_ALL, and keep MP_SMTP_RELAY_MATCHING to exact addresses: both relay
-      # caught mail onward to its original recipients unasked.
+      # Never set MP_SMTP_RELAY_ALL, and keep MP_SMTP_RELAY_MATCHING anchored to
+      # named domains: both relay caught mail onward to its original recipients unasked.
       environment = [
         { name = "MP_MAX_MESSAGES", value = "5000" },
         { name = "MP_SMTP_RELAY_HOST", value = "email-smtp.${data.aws_region.current.name}.amazonaws.com" },
@@ -123,7 +123,7 @@ resource "aws_ecs_task_definition" "mailpit" {
         { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
         # OVERRIDE_FROM leaves the captured Return-Path header (the app's prod-domain sender) in place.
         { name = "MP_SMTP_RELAY_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
-        { name = "MP_SMTP_RELAY_MATCHING", value = "^orbitalanalysts@ukspaceagency\\.gov\\.uk$" },
+        { name = "MP_SMTP_RELAY_MATCHING", value = "(?i)^[^@\\s]+@(dsit|ukspaceagency)\\.gov\\.uk$" },
       ]
 
       secrets = [
