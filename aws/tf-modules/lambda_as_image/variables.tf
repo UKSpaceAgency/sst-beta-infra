@@ -8,7 +8,8 @@ variable "env_vars" {
   type = map(any)
 }
 
-variable "ecr_image" { type = string }
+variable "ecr_app_name" { type = string }
+variable "image_tag" { type = string }
 
 variable "image_command" {
   type    = list(string)

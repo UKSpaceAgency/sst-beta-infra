@@ -19,11 +19,11 @@ resource "aws_iam_policy" "lambda-iam-policy-selenium" {
           Effect : "Allow"
         },
         {
-          "Action": [
+          "Action" : [
             "s3:*"
           ],
-          "Effect": "Allow",
-          "Resource": [
+          "Effect" : "Allow",
+          "Resource" : [
             data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn,
             "${data.terraform_remote_state.stack.outputs.s3_reentry_bucket_arn}/*"
           ]
@@ -54,12 +54,6 @@ resource "aws_iam_role" "lambda-assume-role-selenium-lambda" {
   )
 }
 
-data "aws_ecr_image" "service_image" {
-  repository_name = "selenium-lambda"
-  image_tag       = var.image_tag
-  #image_tag = "latest"
-}
-
 data "aws_secretsmanager_secret" "frontend_secret" {
   name = "${var.env_name}-frontend"
 }
@@ -79,13 +73,14 @@ module "selenium_lambda" {
   lambda_policy_arn    = aws_iam_policy.lambda-iam-policy-selenium.arn
   lambda_role_arn      = aws_iam_role.lambda-assume-role-selenium-lambda.arn
   lambda_role_name     = aws_iam_role.lambda-assume-role-selenium-lambda.name
-  ecr_image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${data.aws_ecr_image.service_image.repository_name}:${data.aws_ecr_image.service_image.image_tag}"
+  ecr_app_name         = "selenium-lambda"
+  image_tag            = var.image_tag
 
   env_vars = {
-    "ENVIRONMENT_NAME" = upper(var.env_name),
-    "BUCKET_NAME" = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id,
+    "ENVIRONMENT_NAME"    = upper(var.env_name),
+    "BUCKET_NAME"         = data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id,
     "MAPBOX_ACCESS_TOKEN" = local.secret_data["nextPublicMapboxAccessToken"],
-    "SENTRY_DSN" = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["appSentryDSN"]
+    "SENTRY_DSN"          = jsondecode(data.aws_secretsmanager_secret_version.backend_secret_version.secret_string)["appSentryDSN"]
   }
 }
 
@@ -106,8 +101,8 @@ resource "aws_cloudwatch_event_rule" "schedule_rule" {
 
 # Event target to invoke Lambda
 resource "aws_cloudwatch_event_target" "lambda_target" {
-  rule      = aws_cloudwatch_event_rule.schedule_rule.name
-  arn       = module.selenium_lambda.public_lambda_arn
+  rule = aws_cloudwatch_event_rule.schedule_rule.name
+  arn  = module.selenium_lambda.public_lambda_arn
 }
 
 # Grant CloudWatch Events permission to invoke the Lambda function
