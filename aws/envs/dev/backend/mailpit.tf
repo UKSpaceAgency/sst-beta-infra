@@ -124,9 +124,9 @@ resource "aws_ecs_task_definition" "mailpit" {
         { name = "MP_SMTP_RELAY_PORT", value = "587" },
         { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
         { name = "MP_SMTP_RELAY_AUTH", value = "plain" },
-        # SES rejects a From that is not a verified identity here; var.ses_email_from is prod's.
+        # SES rejects a From that is not a verified identity here.
         { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
-        # UI release only: OVERRIDE_FROM leaves the captured Return-Path header in place.
+        # Applied by UI release only; auto-relay keeps the captured Return-Path.
         { name = "MP_SMTP_RELAY_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
         { name = "MP_SMTP_RELAY_MATCHING", value = "(?i)^[^@\\s]+@(dsit|ukspaceagency)\\.gov\\.uk$" },
       ]
