@@ -73,6 +73,7 @@ locals {
     "APP_SES_SMTP_HOST"                      = "${aws_service_discovery_service.mailpit.name}.${aws_service_discovery_private_dns_namespace.internal.name}"
     "APP_SES_SMTP_PORT"                      = "1025"
     "APP_SES_SMTP_USE_SSL"                   = "False"
+    "APP_SES_SENDER_EMAIL"                   = local.mailpit_app_sender_email
   }
 }
 

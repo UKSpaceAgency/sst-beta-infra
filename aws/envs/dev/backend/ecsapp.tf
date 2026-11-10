@@ -25,7 +25,7 @@ module "backend" {
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "S3_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_bucket_id },
     { "name" : "S3_REENTRY_EVENT_REPORTS_BUCKET_NAME", "value" : data.terraform_remote_state.stack.outputs.s3_reentry_bucket_id },
-    { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
+    { "name" : "APP_SES_SENDER_EMAIL", "value" : local.mailpit_app_sender_email },
     { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
     { "name" : "APP_SES_SMTP_HOST", "value" : "${aws_service_discovery_service.mailpit.name}.${aws_service_discovery_private_dns_namespace.internal.name}" },
     { "name" : "APP_SES_SMTP_PORT", "value" : "1025" },
