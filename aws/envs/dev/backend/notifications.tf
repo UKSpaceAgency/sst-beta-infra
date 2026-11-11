@@ -25,7 +25,7 @@ module "notifications_worker" {
     { "name" : "APP_ENVIRONMENT", "value" : var.env_name },
     { "name" : "APP_SENTRY_SAMPLE_RATE", "value" : "0.05" },
     { "name" : "APP_FRONTEND_URL", "value" : "https://www.${local.local_r53_domain}" },
-    { "name" : "APP_SES_SENDER_EMAIL", "value" : var.ses_email_from },
+    { "name" : "APP_SES_SENDER_EMAIL", "value" : local.mailpit_app_sender_email },
     { "name" : "APP_SES_REPLY_TO_EMAIL", "value" : var.ses_email_reply_to },
     { "name" : "APP_SES_SMTP_HOST", "value" : "${aws_service_discovery_service.mailpit.name}.${aws_service_discovery_private_dns_namespace.internal.name}" },
     { "name" : "APP_SES_SMTP_PORT", "value" : "1025" },

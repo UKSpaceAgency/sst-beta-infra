@@ -6,6 +6,11 @@
 # Release: a human can send one caught message onward to any address they type in the UI.
 # Auto-release: mail to @dsit.gov.uk and @ukspaceagency.gov.uk is relayed on arrival, to those recipients alone.
 
+locals {
+  # Auto-relay keeps the app's envelope sender as Return-Path, which SES authorizes too.
+  mailpit_app_sender_email = "DEV Monitor Space Hazards <dev-notifications@${local.local_r53_domain}>"
+}
+
 resource "random_password" "mailpit_ui" {
   length  = 24
   special = false
@@ -119,9 +124,9 @@ resource "aws_ecs_task_definition" "mailpit" {
         { name = "MP_SMTP_RELAY_PORT", value = "587" },
         { name = "MP_SMTP_RELAY_STARTTLS", value = "true" },
         { name = "MP_SMTP_RELAY_AUTH", value = "plain" },
-        # SES rejects a From that is not a verified identity here; var.ses_email_from is prod's.
+        # SES rejects a From that is not a verified identity here.
         { name = "MP_SMTP_RELAY_OVERRIDE_FROM", value = "mailpit@${local.local_r53_domain}" },
-        # OVERRIDE_FROM leaves the captured Return-Path header (the app's prod-domain sender) in place.
+        # Applied by UI release only; auto-relay keeps the captured Return-Path.
         { name = "MP_SMTP_RELAY_RETURN_PATH", value = "mailpit@${local.local_r53_domain}" },
         { name = "MP_SMTP_RELAY_MATCHING", value = "(?i)^[^@\\s]+@(dsit|ukspaceagency)\\.gov\\.uk$" },
       ]
